@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qtquickcontrols2.conf</file>
+        <file>BackgroundBase.qml</file>
+        <file>IntroForm.ui.qml</file>
+        <file>main.qml</file>
+        <file>MainForm.ui.qml</file>
+        <file>MedicMain.ui.qml</file>
+        <file>MedInvAdjustment.ui.qml</file>
+        <file>MedInventory.ui.qml</file>
+        <file>MedMiDoc.ui.qml</file>
+        <file>MedViewInventory.ui.qml</file>
+        <file>Prompt.qml</file>
+    </qresource>
+</RCC>
