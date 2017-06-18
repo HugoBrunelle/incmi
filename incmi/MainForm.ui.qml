@@ -13,6 +13,7 @@ BackgroundBase {
     property alias uadmin: administrateur
     property alias rpassword: acodebox
     property alias submitbut: subbut
+    property alias ll: columnLayout
     property alias form: cmain
     property int sy: acodebox.y
     visible: true
@@ -72,16 +73,18 @@ BackgroundBase {
         id: acodebox
         x: 100
         y: 250
-        visible: true
         color: colorlp
+        anchors.topMargin: 140
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 140
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.left: parent.left
         border.color: colorb
-        border.width: 2.5
+        border.width: 1
         Material.elevation: 40
         anchors.rightMargin: 40
         anchors.leftMargin: 40
-        anchors.bottomMargin: 150
-        anchors.topMargin: 150
-        anchors.fill: parent
         ColumnLayout {
             id: columnLayout1
             anchors.rightMargin: 20
@@ -94,19 +97,21 @@ BackgroundBase {
             Label {
                 id: label
                 text: qsTr("Enter Access Code")
+                Layout.fillHeight: true
                 font.pointSize: 27 * fontscale
                 bottomPadding: 15
                 topPadding: 15
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
                 Layout.fillWidth: true
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             }
 
             TextField {
                 id: textField
                 height: 60
                 text: qsTr("")
+                Layout.maximumHeight: 150
                 font.pointSize: 36 * fontscale
                 Material.foreground: colorst
                 bottomPadding: 0
@@ -116,22 +121,23 @@ BackgroundBase {
                 Layout.fillHeight: true
                 Layout.columnSpan: 1
                 Layout.rowSpan: 0
-                topPadding: 150
+                topPadding: 0
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
             }
 
             Button {
                 id: subbut
                 text: qsTr("Soumettre")
+                Layout.maximumHeight: 65535
                 font.pointSize: 24 * fontscale
-                topPadding: -8
-                bottomPadding: -8
+                topPadding: 0
+                bottomPadding: 0
                 padding: 0
                 leftPadding: -4
                 Material.foreground: colorlt
                 Layout.fillHeight: true
                 Layout.fillWidth: true
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 Material.background: colordp
             }
         }
