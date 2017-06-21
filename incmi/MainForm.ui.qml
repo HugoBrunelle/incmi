@@ -16,6 +16,7 @@ BackgroundBase {
     property alias ll: columnLayout
     property alias form: cmain
     property int sy: acodebox.y
+
     visible: true
 
     ColumnLayout {
@@ -35,13 +36,8 @@ BackgroundBase {
             y: 160
             height: 59
             text: qsTr("Utilisateur de Base")
-            rightPadding: 0
-            leftPadding: 0
             font.family: "Arial"
             font.pointSize: 26 * fontscale
-            bottomPadding: padding
-            topPadding: padding
-            padding: 0
             Layout.fillHeight: true
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
@@ -54,12 +50,7 @@ BackgroundBase {
             height: 60
             text: qsTr("Administrateur")
             Layout.minimumHeight: 0
-            rightPadding: 0
-            leftPadding: 0
-            bottomPadding: 0
-            topPadding: 0
             font.pointSize: 26 * fontscale
-            padding: 0
             Layout.fillHeight: true
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
@@ -114,14 +105,10 @@ BackgroundBase {
                 Layout.maximumHeight: 150
                 font.pointSize: 36 * fontscale
                 Material.foreground: colorst
-                bottomPadding: 0
-                rightPadding: 0
-                leftPadding: 0
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 Layout.columnSpan: 1
                 Layout.rowSpan: 0
-                topPadding: 0
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
             }
 
@@ -130,10 +117,6 @@ BackgroundBase {
                 text: qsTr("Soumettre")
                 Layout.maximumHeight: 65535
                 font.pointSize: 24 * fontscale
-                topPadding: 0
-                bottomPadding: 0
-                padding: 0
-                leftPadding: -4
                 Material.foreground: colorlt
                 Layout.fillHeight: true
                 Layout.fillWidth: true

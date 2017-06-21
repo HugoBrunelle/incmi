@@ -3,8 +3,10 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.2
 
 Rectangle {
-    width: 500
-    height: 1000
+    property alias incbutton: incendie
+    property alias medbutton: medical
+    width: 360
+    height: 640
 
     RowLayout {
         id: rowLayout

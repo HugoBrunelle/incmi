@@ -4,8 +4,9 @@ import QtQuick.Controls.Material 2.1
 import Qt.labs.settings 1.0
 
 Window {
-
     id: window
+    height: 640
+    width: 360
     visible: true
     title: qsTr("Inc. Med.")
 
@@ -13,13 +14,10 @@ Window {
     //                              All global properties
     property string textcolor: "white"
     property var currentwindow
+    property string lastrotation
     property bool changes
-
-    //Gets the device screen dimensions, always 0,0 (x,y) for position in android.
     property int wheight
     property int wwidth
-
-    // Default global font size. We have to find a way to change the default font.
     property real fontscale: 1
     property real mscale: 1
 
@@ -46,6 +44,15 @@ Window {
     Material.accent: colora
     Material.primary: colorp
 
+    onHeightChanged: {
+        setscales();
+        rotate();
+    }
+
+    onWidthChanged: {
+        rotate;
+        setscales();
+    }
 
     //Saves the applications setting for what type of user is the admin or not
     Settings {
@@ -61,31 +68,88 @@ Window {
     }
 
 
+
+    // Calculates the scale based on the window size
+    /*
+      Basic logic is that we compare the aspect ratio to get a base for the scaling
+      we then find the average distance difference of all sides of the window (margins will correct the distance)
+      area - area / 4 gives the average distance of each side.. this with the aspect ratio gives us the scaling factor
+    */
+    // Verifies access to show the correct form.
+
+    function setscales() {
+        var scalefactor = (((wheight/wwidth)-(640/360)) * (((wheight/wwidth) * ((640/360)))/4));
+        mscale = 1 + scalefactor;
+        fontscale = 1 - (scalefactor * 4);
+        if (mscale <= 0) mscale = 1;
+        if (fontscale <= 0) fontscale = 0.1;
+    }
+
+    function orientationToString(o) {
+            switch (o) {
+            case Qt.PrimaryOrientation:
+                return "primary";
+            case Qt.PortraitOrientation:
+                return "portrait";
+            case Qt.LandscapeOrientation:
+                return "landscape";
+            case Qt.InvertedPortraitOrientation:
+                return "inverted portrait";
+            case Qt.InvertedLandscapeOrientation:
+                return "inverted landscape";
+            }
+            return "unknown";
+        }
+
+    // Do the orientation...
+    function rotate() {
+        if (Screen.primaryOrientation !== lastrotation)
+        {
+            if (orientationToString(Screen.primaryOrientation) === "landscape"){
+                console.log("landscape");
+            }else if (orientationToString(Screen.primaryOrientation) === "portrait") {
+                console.log("portrait");
+            }
+        }
+        lastrotation = Screen.primaryOrientation
+    }
+
+    function setPortrait() {
+        //Do all the portrait modification code necessary here.
+    }
+
+    function setLandscape() {
+        // Do all the landscape modification code necessary here.
+
+
+    }
+
+    function setAccess() {
+        // Do all the code changes related to the access being set.
+        if (accessSetting.acess != 0){
+
+        }else{
+            //Load the login form.
+            windowloader.sourceComponent = login;
+        }
+    }
+
+
     // Window events
     Component.onCompleted:
     {
         wwidth = Screen.width
         wheight = Screen.height
-        // Calculates the scale based on the window size
-        /*
-          Basic logic is that we compare the aspect ratio to get a base for the scaling
-          we then find the average distance difference of all sides of the window (margins will correct the distance)
-          area - area / 4 gives the average distance of each side.. this with the aspect ratio gives us the scaling factor
-        */
-        var scalefactor = (((wheight/wwidth)-(640/360)) * (((wheight/wwidth) * ((640/360)))/4));
-        mscale = 1 + scalefactor;
-        fontscale = 1 - (scalefactor * 4);
-        if (mscale == 0) mscale = 1;
-        // Verifies access to show the correct form.
-        if (accessSetting.acess != 0){
-            //login.main.visible = false;
-        }else{
-            windowloader.sourceComponent = login;
+        //Sets rotation values initially
+        var orien = Screen.primaryOrientation
+        if (orientationToString(orien) === "landscape") {
+            rotate();
+        }else
+        {
+            lastrotation = orien;
         }
-        console.log("window height" + wheight.toString());
-        console.log("window width" + wwidth.toString());
-        console.log("window scale factor" + mscale.toString());
-        console.log("text scale factor" + fontscale.toString());
+        setscales();
+        setAccess();
     }
 
     BackgroundBase {
@@ -126,13 +190,16 @@ Window {
 
 
     // All different pages (Placed in components so we can dynamically load them and avoid using system ram on cheap devices lol...
+
+
+
+    //The fo
     Component {
         id : login
         MainForm {
             id: main
             scale: mscale
             anchors.fill: parent
-            //calls the alias of the submit button
             ubase.onClicked: {
                 //set accessSetting
                 winchange(inform);
@@ -141,29 +208,34 @@ Window {
             submitbut.onClicked: {
                 rpassword.visible = false;
                 ll.enabled = true;
-                //accessSetting.acess = 1;
+                //set accessSetting
             }
             uadmin.onClicked: {
                 rpassword.visible = true;
                 ll.enabled = false;
-                console.log(rpassword.state.toString());
             }
         }
     }
-
+    // The form between verifying the medical or incendinary database
     Component {
         id: inform
         IntroForm {
+            incbutton.onClicked: {
+                winchange(login);
+            }
+            medbutton.onClicked: {
 
+            }
 
         }
 
     }
-    // All different windows and their logic
+
+    // The main medical form.
     Component {
         id: medimain
         MedicMain {
-
+            id: medmain
         }
     }
 
