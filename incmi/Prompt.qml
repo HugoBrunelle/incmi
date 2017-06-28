@@ -1,24 +1,36 @@
 import QtQuick 2.8
 import QtQuick.Window 2.0
+import QtQuick.Controls 2.1
 
-Rectangle {
+Pane {
     id: base
     visible: false
     opacity: 0.0
-    onVisibleChanged: {
-        if (visible)
-        {
-           opacity = 1.0;
-        }
-        else {
-           opacity = 0.0;
-        }
 
+    function checkstate(){
+        if (opacity == 0.0){
+            visible = false;
+        }
     }
+
+    function show() {
+        visible = true;
+        opacity = 1.0;
+    }
+
+    function hide() {
+        opacity = 0.0;
+    }
+
     Behavior on opacity {
+        SequentialAnimation{
         NumberAnimation {
-            duration: 250
+            duration: 350
             easing.type: Easing.InSine
+        }
+        ScriptAction {
+            script: checkstate();
+        }
         }
     }
 }

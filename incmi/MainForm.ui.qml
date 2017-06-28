@@ -15,20 +15,16 @@ BackgroundBase {
     property alias submitbut: subbut
     property alias ll: columnLayout
     property alias form: cmain
-    property int sy: acodebox.y
 
     visible: true
 
     ColumnLayout {
         id: columnLayout
-        anchors.rightMargin: 20
-        anchors.leftMargin: 20
-        anchors.bottomMargin: 120
-        anchors.topMargin: 120
+        anchors.rightMargin: parent.width / 8
+        anchors.leftMargin: parent.width / 8
+        anchors.bottomMargin: parent.height / 5.5
+        anchors.topMargin: parent.height / 5.5
         anchors.fill: parent
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        anchors.left: parent.left
         spacing: 15
 
         Button {
@@ -37,12 +33,12 @@ BackgroundBase {
             height: 59
             text: qsTr("Utilisateur de Base")
             font.family: "Arial"
-            font.pointSize: 26 * fontscale
+            font.pointSize: 16
             Layout.fillHeight: true
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
             Material.foreground: colorlt
-            Material.background: colorp
+            Material.background: colora
         }
 
         Button {
@@ -50,7 +46,7 @@ BackgroundBase {
             height: 60
             text: qsTr("Administrateur")
             Layout.minimumHeight: 0
-            font.pointSize: 26 * fontscale
+            font.pointSize: 16
             Layout.fillHeight: true
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
@@ -62,36 +58,28 @@ BackgroundBase {
 
     Prompt {
         id: acodebox
-        x: 100
-        y: 250
-        color: colorlp
-        anchors.topMargin: 140
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 140
-        anchors.top: parent.top
-        anchors.right: parent.right
-        anchors.left: parent.left
-        border.color: colorb
-        border.width: 1
-        Material.elevation: 40
-        anchors.rightMargin: 40
-        anchors.leftMargin: 40
+        x: parent.width / 10
+        y: parent.height / 4.5
+        width: parent.width - 2*x
+        height: parent.height - 2*y
+        Material.background: Material.Amber
+        //border.color: colorb
+        //border.width: 1
+        Material.elevation: 8
         ColumnLayout {
             id: columnLayout1
-            anchors.rightMargin: 20
-            anchors.leftMargin: 20
-            anchors.bottomMargin: 20
-            anchors.topMargin: 20
+            anchors.leftMargin: 5
+            anchors.rightMargin: 5
+            anchors.bottomMargin: 10
             anchors.fill: parent
-            spacing: 15
+            spacing: 5
 
             Label {
                 id: label
                 text: qsTr("Enter Access Code")
+                fontSizeMode: Text.Fit
                 Layout.fillHeight: true
-                font.pointSize: 27 * fontscale
-                bottomPadding: 15
-                topPadding: 15
+                font.pointSize: 20
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
                 Layout.fillWidth: true
@@ -100,10 +88,9 @@ BackgroundBase {
 
             TextField {
                 id: textField
-                height: 60
                 text: qsTr("")
-                Layout.maximumHeight: 150
-                font.pointSize: 36 * fontscale
+                Layout.maximumHeight: 60
+                font.pointSize: 20
                 Material.foreground: colorst
                 Layout.fillWidth: true
                 Layout.fillHeight: true
@@ -115,8 +102,9 @@ BackgroundBase {
             Button {
                 id: subbut
                 text: qsTr("Soumettre")
-                Layout.maximumHeight: 65535
-                font.pointSize: 24 * fontscale
+                Layout.maximumHeight: 100
+                Layout.minimumHeight: 50
+                font.pointSize: 24
                 Material.foreground: colorlt
                 Layout.fillHeight: true
                 Layout.fillWidth: true

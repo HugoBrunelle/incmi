@@ -1,6 +1,7 @@
 import QtQuick 2.4
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.2
+import QtQuick.Controls.Material 2.1
 
 Rectangle {
     property alias incbutton: incendie
@@ -10,37 +11,30 @@ Rectangle {
 
     RowLayout {
         id: rowLayout
-        anchors.rightMargin: 50
-        anchors.leftMargin: 50
-        anchors.bottomMargin: 200
-        anchors.topMargin: 200
-        spacing: 25
+        anchors.bottomMargin: parent.height / 4.5
+        anchors.rightMargin: parent.width / 12
+        anchors.leftMargin: parent.width / 12
+        anchors.topMargin: parent.height / 4.5
+        spacing: 5
         anchors.fill: parent
 
         Button {
+            Material.foreground: "white"
+            Material.background: colora
             id: incendie
-            highlighted: false
-            rightPadding: 12
-            leftPadding: 12
-            padding: 250
-            bottomPadding: 250
-            topPadding: 250
+            font.pointSize: 18*fontscale
             Layout.fillHeight: true
             Layout.fillWidth: true
+            text: "Incendie"
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
         }
 
         Button {
+            Material.foreground: "white"
+            Material.background: colora
             id: medical
-            padding: 20
-            autoExclusive: false
-            checkable: false
-            checked: false
-            highlighted: false
-            leftPadding: 12
-            rightPadding: 12
-            bottomPadding: 250
-            topPadding: 250
+            text: "Medical"
+            font.pointSize: 18 * fontscale
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter

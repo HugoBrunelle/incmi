@@ -2,6 +2,7 @@ import QtQuick 2.8
 import QtQuick.Window 2.2
 import QtQuick.Controls.Material 2.1
 import Qt.labs.settings 1.0
+import QtQuick.Controls 2.1
 
 Window {
     id: window
@@ -20,6 +21,7 @@ Window {
     property int wwidth
     property real fontscale: 1
     property real mscale: 1
+    property bool landscape: false
 
     /*  Main material color scheme (to be applied to all controls.
         colorb  Border color / seperator /
@@ -35,23 +37,20 @@ Window {
     property color colorst: "#757575"
     property color colort: "#212121"
     property color colorlt: "#FFFFFF"
-    property color colorp: "#607D8B"
-    property color colorlp: "#CFD8DC"
-    property color colordp: "#455A64"
-    property color colora: "#FF5252"
+    property color colorp: "#03A9F4"
+    property color colorlp: "#B3E5FC"
+    property color colordp: "#0288D1"
+    property color colora: "#607D8B"
 
     //Sets the global color accents and primary
-    Material.accent: colora
-    Material.primary: colorp
+
 
     onHeightChanged: {
-        setscales();
         rotate();
     }
 
     onWidthChanged: {
         rotate;
-        setscales();
     }
 
     //Saves the applications setting for what type of user is the admin or not
@@ -67,23 +66,12 @@ Window {
         windowloader.opacity = 0.0;
     }
 
-
-
-    // Calculates the scale based on the window size
-    /*
-      Basic logic is that we compare the aspect ratio to get a base for the scaling
-      we then find the average distance difference of all sides of the window (margins will correct the distance)
-      area - area / 4 gives the average distance of each side.. this with the aspect ratio gives us the scaling factor
-    */
-    // Verifies access to show the correct form.
-
-    function setscales() {
-        var scalefactor = (((wheight/wwidth)-(640/360)) * (((wheight/wwidth) * ((640/360)))/4));
-        mscale = 1 + scalefactor;
-        fontscale = 1 - (scalefactor * 4);
-        if (mscale <= 0) mscale = 1;
-        if (fontscale <= 0) fontscale = 0.1;
+    onActiveChanged: {
+        if (!window.active) {
+            Qt.quit();
+        }
     }
+
 
     function orientationToString(o) {
             switch (o) {
@@ -101,36 +89,37 @@ Window {
             return "unknown";
         }
 
+    function forcerotate(){
+        if (landscape) {
+            landscape = false;
+        }else{
+            landscape = true;
+        }
+        toolbutton.x = window.width - 40
+        toolbutton.y = window.height - 30
+        console.log(landscape.toString());
+    }
+
     // Do the orientation...
     function rotate() {
         if (Screen.primaryOrientation !== lastrotation)
         {
             if (orientationToString(Screen.primaryOrientation) === "landscape"){
+                landscape = true;
                 console.log("landscape");
             }else if (orientationToString(Screen.primaryOrientation) === "portrait") {
+                landscape = false;
                 console.log("portrait");
             }
         }
         lastrotation = Screen.primaryOrientation
     }
 
-    function setPortrait() {
-        //Do all the portrait modification code necessary here.
-    }
-
-    function setLandscape() {
-        // Do all the landscape modification code necessary here.
-
-
-    }
-
     function setAccess() {
-        // Do all the code changes related to the access being set.
         if (accessSetting.acess != 0){
 
         }else{
-            //Load the login form.
-            windowloader.sourceComponent = login;
+            windowloader.sourceComponent = medimain;
         }
     }
 
@@ -138,17 +127,14 @@ Window {
     // Window events
     Component.onCompleted:
     {
-        wwidth = Screen.width
-        wheight = Screen.height
         //Sets rotation values initially
-        var orien = Screen.primaryOrientation
+        var orien = Screen.primaryOrientation;
         if (orientationToString(orien) === "landscape") {
             rotate();
         }else
         {
             lastrotation = orien;
         }
-        setscales();
         setAccess();
     }
 
@@ -172,7 +158,7 @@ Window {
             id: anime
             SequentialAnimation {
                 NumberAnimation {
-                    duration: 1000
+                    duration: 600
                     easing.type: Easing.InSine
                 }
                 ScriptAction {
@@ -185,6 +171,18 @@ Window {
                     }
                 }
             }
+        }
+    }
+
+    Button {
+        id: toolbutton
+        height: 30
+        width: 40
+        text: "Frotate"
+        x: parent.width - 40
+        y: parent.height - 50
+        onClicked: {
+            forcerotate();
         }
     }
 
@@ -206,12 +204,12 @@ Window {
 
             }
             submitbut.onClicked: {
-                rpassword.visible = false;
+                rpassword.hide();
                 ll.enabled = true;
                 //set accessSetting
             }
             uadmin.onClicked: {
-                rpassword.visible = true;
+                rpassword.show();
                 ll.enabled = false;
             }
         }
@@ -224,7 +222,7 @@ Window {
                 winchange(login);
             }
             medbutton.onClicked: {
-
+                winchange(medimain);
             }
 
         }
@@ -235,7 +233,51 @@ Window {
     Component {
         id: medimain
         MedicMain {
-            id: medmain
+            back.onClicked: {
+                winchange(inform);
+            }
+            inv.onClicked: {
+                winchange(medinventory);
+            }
+            ndossier.onClicked: {
+                ndprompt.show();
+                medimainll.enabled = false;
+            }
+            bleger.onClicked: {
+                ndprompt.hide();
+                medimainll.enabled = true;
+            }
+            bmoderer.onClicked: {
+
+            }
+            bsever.onClicked: {
+
+            }
+        }
+    }
+
+    Component {
+        id: medinventory
+        MedViewInventory {
+            invback.onClicked: {
+                winchange(medimain);
+            }
+            invadjust.onClicked: {
+                winchange(adjinv);
+            }
+        }
+    }
+
+    Component {
+        id: adjinv
+        MedInvAdjustment {
+            adjcancel.onClicked: {
+                winchange(medinventory);
+            }
+            adjsave.onClicked: {
+                winchange(medinventory);
+                // Show matricule and name
+            }
         }
     }
 

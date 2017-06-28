@@ -7,9 +7,17 @@
         <file>MainForm.ui.qml</file>
         <file>MedicMain.ui.qml</file>
         <file>MedInvAdjustment.ui.qml</file>
-        <file>MedInventory.ui.qml</file>
         <file>MedMiDoc.ui.qml</file>
         <file>MedViewInventory.ui.qml</file>
+        <file>MediViewDelegate.qml</file>
+        <file>MediViewHeader.qml</file>
         <file>Prompt.qml</file>
+        <file>MediViewModel.qml</file>
+        <file>DebugColorPicker.qml</file>
+        <file>MedInvViewDelegate.qml</file>
+        <file>MedInvViewHeader.qml</file>
+        <file>MedInvViewModel.qml</file>
+        <file>AdjViewModel.qml</file>
+        <file>AdjViewDelegate.qml</file>
     </qresource>
 </RCC>
