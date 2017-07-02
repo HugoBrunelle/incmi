@@ -39,7 +39,7 @@ Window {
     property color colorlt: "#FFFFFF"
     property color colorp: "#03A9F4"
     property color colorlp: "#B3E5FC"
-    property color colordp: "#0288D1"
+    property color colordp: "#006da9"
     property color colora: "#607D8B"
 
     //Sets the global color accents and primary
@@ -119,7 +119,7 @@ Window {
         if (accessSetting.acess != 0){
 
         }else{
-            windowloader.sourceComponent = medimain;
+            windowloader.sourceComponent = meddocrs;
         }
     }
 
@@ -278,6 +278,13 @@ Window {
                 winchange(medinventory);
                 // Show matricule and name
             }
+        }
+    }
+
+    Component {
+        id:meddocrs
+        MedDocRapportPremierSoins {
+
         }
     }
 

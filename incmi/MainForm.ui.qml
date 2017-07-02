@@ -38,7 +38,7 @@ BackgroundBase {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
             Material.foreground: colorlt
-            Material.background: colora
+            Material.background: colordp
         }
 
         Button {
@@ -51,7 +51,7 @@ BackgroundBase {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
             Material.foreground: colorlt
-            Material.background: colora
+            Material.background: colordp
         }
 
     }

@@ -98,7 +98,7 @@ Rectangle {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     Material.foreground: colorlt
-                    Material.background: colora
+                    Material.background: colordp
                 }
             }
         }

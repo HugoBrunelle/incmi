@@ -19,10 +19,10 @@ Rectangle {
         anchors.fill: parent
 
         Button {
-            Material.foreground: "white"
-            Material.background: colora
+            Material.foreground: colorlt
+            Material.background: colordp
             id: incendie
-            font.pointSize: 18*fontscale
+            font.pointSize: 18
             Layout.fillHeight: true
             Layout.fillWidth: true
             text: "Incendie"
@@ -30,11 +30,11 @@ Rectangle {
         }
 
         Button {
-            Material.foreground: "white"
-            Material.background: colora
+            Material.foreground: colorlt
+            Material.background: colordp
             id: medical
             text: "Medical"
-            font.pointSize: 18 * fontscale
+            font.pointSize: 18
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter

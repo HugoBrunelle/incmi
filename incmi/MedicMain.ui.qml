@@ -61,7 +61,7 @@ Rectangle {
                         Layout.fillHeight: true
                         Layout.fillWidth: true
                         Material.foreground: colorlt
-                        Material.background: colora
+                        Material.background: colordp
                     }
 
                     Button {
@@ -71,7 +71,7 @@ Rectangle {
                         Layout.fillHeight: true
                         Layout.fillWidth: true
                         Material.foreground: colorlt
-                        Material.background: colora
+                        Material.background: colordp
                     }
                 }
 
@@ -115,7 +115,7 @@ Rectangle {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     Material.foreground: colorlt
-                    Material.background: colora
+                    Material.background: colordp
                 }
             }
         }
@@ -143,7 +143,7 @@ Rectangle {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 Material.foreground: colorlt
-                Material.background: colora
+                Material.background: colordp
             }
 
             Button {
@@ -152,7 +152,7 @@ Rectangle {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 Material.foreground: colorlt
-                Material.background: colora
+                Material.background: colordp
             }
 
             Button {
@@ -161,7 +161,7 @@ Rectangle {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 Material.foreground: colorlt
-                Material.background: colora
+                Material.background: colordp
             }
 
         }
