@@ -35,14 +35,14 @@ Rectangle {
             GridLayout {
                 id: gridLayout
                 anchors.fill: parent
-
                 Image {
+                    Layout.maximumWidth: 150
+                    fillMode: Image.PreserveAspectFit
+                    source: "Images/ucmu_100h.png"
                     Layout.minimumWidth: 100
-                    Layout.maximumWidth: 250
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-
                 }
 
                 ColumnLayout {
@@ -130,11 +130,11 @@ Rectangle {
         width: parent.width - 2*x
         height: parent.height - 2*y
         GridLayout {
-            anchors.rightMargin: parent.width / 8
-            anchors.leftMargin: parent.width / 8
+            anchors.rightMargin: parent.width / 16
+            anchors.leftMargin: parent.width / 16
             anchors.bottomMargin: parent.height / 6
             anchors.topMargin: parent.height / 6
-            flow: landscape ? GridLayout.LeftToRight : GridLayout.TopToBottom
+            flow: GridLayout.TopToBottom
             anchors.fill: parent
             Button {
                 id: blegers

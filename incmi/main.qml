@@ -89,27 +89,14 @@ Window {
             return "unknown";
         }
 
-    function forcerotate(){
-        if (landscape) {
-            landscape = false;
-        }else{
-            landscape = true;
-        }
-        toolbutton.x = window.width - 40
-        toolbutton.y = window.height - 30
-        console.log(landscape.toString());
-    }
-
     // Do the orientation...
     function rotate() {
         if (Screen.primaryOrientation !== lastrotation)
         {
             if (orientationToString(Screen.primaryOrientation) === "landscape"){
                 landscape = true;
-                console.log("landscape");
             }else if (orientationToString(Screen.primaryOrientation) === "portrait") {
                 landscape = false;
-                console.log("portrait");
             }
         }
         lastrotation = Screen.primaryOrientation
@@ -119,7 +106,7 @@ Window {
         if (accessSetting.acess != 0){
 
         }else{
-            windowloader.sourceComponent = meddocrs;
+            windowloader.sourceComponent = login;
         }
     }
 
@@ -171,18 +158,6 @@ Window {
                     }
                 }
             }
-        }
-    }
-
-    Button {
-        id: toolbutton
-        height: 30
-        width: 40
-        text: "Frotate"
-        x: parent.width - 40
-        y: parent.height - 50
-        onClicked: {
-            forcerotate();
         }
     }
 
@@ -248,7 +223,7 @@ Window {
                 medimainll.enabled = true;
             }
             bmoderer.onClicked: {
-
+                winchange(meddocrs);
             }
             bsever.onClicked: {
 
@@ -284,7 +259,9 @@ Window {
     Component {
         id:meddocrs
         MedDocRapportPremierSoins {
-
+            meddoccancel.onClicked: {
+                winchange(medimain);
+            }
         }
     }
 

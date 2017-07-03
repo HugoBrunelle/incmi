@@ -2,12 +2,12 @@
     <qresource prefix="/">
         <file>qtquickcontrols2.conf</file>
         <file>BackgroundBase.qml</file>
-        <file>IntroForm.ui.qml</file>
+        <file>IntroForm.qml</file>
         <file>main.qml</file>
-        <file>MainForm.ui.qml</file>
-        <file>MedicMain.ui.qml</file>
-        <file>MedInvAdjustment.ui.qml</file>
-        <file>MedViewInventory.ui.qml</file>
+        <file>MainForm.qml</file>
+        <file>MedicMain.qml</file>
+        <file>MedInvAdjustment.qml</file>
+        <file>MedViewInventory.qml</file>
         <file>MediViewDelegate.qml</file>
         <file>MediViewHeader.qml</file>
         <file>Prompt.qml</file>
@@ -19,5 +19,8 @@
         <file>AdjViewModel.qml</file>
         <file>AdjViewDelegate.qml</file>
         <file>MedDocRapportPremierSoins.qml</file>
+        <file>Images/ucmu_100h.png</file>
+        <file>Images/ucmu_250h.png</file>
+        <file>Images/ucmu_full.png</file>
     </qresource>
 </RCC>

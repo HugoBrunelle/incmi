@@ -30,6 +30,8 @@ Rectangle {
                 id: gridLayout
                 anchors.fill: parent
                 Image {
+                    fillMode: Image.PreserveAspectFit
+                    source: "Images/ucmu_100h.png"
                     Layout.minimumWidth: 100
                     Layout.maximumWidth: 250
                     Layout.fillWidth: true
@@ -54,7 +56,7 @@ Rectangle {
                         Layout.fillHeight: true
                         Layout.fillWidth: true
                         Material.foreground: colorlt
-                        Material.background: colora
+                        Material.background: colordp
                     }
                 }
             }

@@ -8,6 +8,8 @@ import QtQuick.Layouts 1.3
 
 BackgroundBase {    
     id: cmain
+    width: 360
+    height: 640
     Material.background: colorlp
     property alias ubase: utilisateurbase
     property alias uadmin: administrateur
@@ -15,15 +17,36 @@ BackgroundBase {
     property alias submitbut: subbut
     property alias ll: columnLayout
     property alias form: cmain
-
-    visible: true
-
+    Material.accent: colora
+    Pane {
+        id: header
+        width: parent.width
+        height: 100
+        Layout.minimumHeight: 50
+        Layout.fillHeight: true
+        Layout.maximumHeight: 100
+        Layout.fillWidth: true
+        Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+        Material.elevation: 4
+        Material.background: colorp
+        GridLayout {
+            id: gridLayout
+            anchors.fill: parent
+            Image {
+                fillMode: Image.PreserveAspectFit
+                source: "Images/ucmu_100h.png"
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            }
+        }
+    }
     ColumnLayout {
         id: columnLayout
         anchors.rightMargin: parent.width / 8
         anchors.leftMargin: parent.width / 8
         anchors.bottomMargin: parent.height / 5.5
-        anchors.topMargin: parent.height / 5.5
+        anchors.topMargin: parent.height / 5.5 + 100
         anchors.fill: parent
         spacing: 15
 
@@ -55,6 +78,8 @@ BackgroundBase {
         }
 
     }
+
+
 
     Prompt {
         id: acodebox
@@ -91,7 +116,6 @@ BackgroundBase {
                 text: qsTr("")
                 Layout.maximumHeight: 60
                 font.pointSize: 20
-                Material.foreground: colorst
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 Layout.columnSpan: 1

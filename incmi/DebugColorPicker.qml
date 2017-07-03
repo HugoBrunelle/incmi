@@ -4,5 +4,5 @@ import QtQuick.Controls 2.1
 Rectangle{
     width: 360
     height: 640
-    color: "#006da9"
+    color: "#efefef"
 }
