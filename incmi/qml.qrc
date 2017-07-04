@@ -1,7 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>qtquickcontrols2.conf</file>
-        <file>BackgroundBase.qml</file>
         <file>IntroForm.qml</file>
         <file>main.qml</file>
         <file>MainForm.qml</file>

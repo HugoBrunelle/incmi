@@ -5,23 +5,13 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 Rectangle {
-
-    property alias back: cancel
-    property alias inv: inventaire
-    property alias ndossier: nouveaudossier
-    property alias ndprompt: newdprompt
-    property alias bleger: blegers
-    property alias bmoderer: bmoderers
-    property alias bsever: bsevers
-    property alias medimainll: columnLayout
     width: 360
     height: 640
 
     ColumnLayout {
-        id: columnLayout
+        id: mview
         spacing: 6
         anchors.fill: parent
-
         Pane {
             width: 360
             height: 140
@@ -33,7 +23,6 @@ Rectangle {
             Material.background: colorp
             Material.elevation: 4
             GridLayout {
-                id: gridLayout
                 anchors.fill: parent
                 Image {
                     Layout.maximumWidth: 150
@@ -46,32 +35,35 @@ Rectangle {
                 }
 
                 ColumnLayout {
-                    id: actionslayout
                     width: 100
                     height: 100
                     Layout.maximumWidth: 500
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-
                     Button {
-                        id: inventaire
                         text: qsTr("Inventaire")
                         Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                         Layout.fillHeight: true
                         Layout.fillWidth: true
                         Material.foreground: colorlt
                         Material.background: colordp
+                        onClicked: {
+                            winchange(medinventory);
+                        }
                     }
 
                     Button {
-                        id: nouveaudossier
                         text: qsTr("Nouveau Dossier")
                         Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                         Layout.fillHeight: true
                         Layout.fillWidth: true
                         Material.foreground: colorlt
                         Material.background: colordp
+                        onClicked: {
+                            mview.enabled = false;
+                            newdprompt.show();
+                        }
                     }
                 }
 
@@ -108,7 +100,6 @@ Rectangle {
             GridLayout {
                 anchors.fill: parent
                 Button {
-                    id: cancel
                     text: qsTr("Retour")
                     Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
                     Layout.maximumWidth: 150
@@ -116,6 +107,9 @@ Rectangle {
                     Layout.fillHeight: true
                     Material.foreground: colorlt
                     Material.background: colordp
+                    onClicked: {
+                        winchange(inform);
+                    }
                 }
             }
         }
@@ -132,36 +126,55 @@ Rectangle {
         GridLayout {
             anchors.rightMargin: parent.width / 16
             anchors.leftMargin: parent.width / 16
-            anchors.bottomMargin: parent.height / 6
-            anchors.topMargin: parent.height / 6
+            anchors.bottomMargin: parent.height / 8
+            anchors.topMargin: parent.height / 8
             flow: GridLayout.TopToBottom
+            columnSpacing: 2
             anchors.fill: parent
             Button {
-                id: blegers
                 text: qsTr("Leger")
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 Material.foreground: colorlt
                 Material.background: colordp
+                onClicked: {
+                    winchange(meddocrs);
+                }
             }
 
             Button {
-                id: bmoderers
                 text: qsTr("Moderer")
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 Material.foreground: colorlt
                 Material.background: colordp
+                onClicked: {
+                     winchange(meddocrs);
+                }
             }
 
             Button {
-                id: bsevers
                 text: qsTr("Sever")
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 Material.foreground: colorlt
                 Material.background: colordp
+                onClicked: {
+                    winchange(meddocrs);
+                }
+            }
+
+            Button {
+                text: qsTr("Annuler")
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                Material.foreground: colorlt
+                Material.background: colordp
+                onClicked: {
+                    mview.enabled = true;
+                    newdprompt.hide();
+                }
             }
 
         }

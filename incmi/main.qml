@@ -13,15 +13,8 @@ Window {
 
 
     //                              All global properties
-    property string textcolor: "white"
     property var currentwindow
-    property string lastrotation
     property bool changes
-    property int wheight
-    property int wwidth
-    property real fontscale: 1
-    property real mscale: 1
-    property bool landscape: false
 
     /*  Main material color scheme (to be applied to all controls.
         colorb  Border color / seperator /
@@ -42,17 +35,6 @@ Window {
     property color colordp: "#006da9"
     property color colora: "#607D8B"
 
-    //Sets the global color accents and primary
-
-
-    onHeightChanged: {
-        rotate();
-    }
-
-    onWidthChanged: {
-        rotate;
-    }
-
     //Saves the applications setting for what type of user is the admin or not
     Settings {
         id: accessSetting
@@ -72,36 +54,6 @@ Window {
         }
     }
 
-
-    function orientationToString(o) {
-            switch (o) {
-            case Qt.PrimaryOrientation:
-                return "primary";
-            case Qt.PortraitOrientation:
-                return "portrait";
-            case Qt.LandscapeOrientation:
-                return "landscape";
-            case Qt.InvertedPortraitOrientation:
-                return "inverted portrait";
-            case Qt.InvertedLandscapeOrientation:
-                return "inverted landscape";
-            }
-            return "unknown";
-        }
-
-    // Do the orientation...
-    function rotate() {
-        if (Screen.primaryOrientation !== lastrotation)
-        {
-            if (orientationToString(Screen.primaryOrientation) === "landscape"){
-                landscape = true;
-            }else if (orientationToString(Screen.primaryOrientation) === "portrait") {
-                landscape = false;
-            }
-        }
-        lastrotation = Screen.primaryOrientation
-    }
-
     function setAccess() {
         if (accessSetting.acess != 0){
 
@@ -114,20 +66,12 @@ Window {
     // Window events
     Component.onCompleted:
     {
-        //Sets rotation values initially
-        var orien = Screen.primaryOrientation;
-        if (orientationToString(orien) === "landscape") {
-            rotate();
-        }else
-        {
-            lastrotation = orien;
-        }
         setAccess();
     }
 
-    BackgroundBase {
+    Rectangle {
         anchors.fill: parent
-        color: "white"
+        color: colorlt
         // Just to always have a basic window background between loads
     }
 
@@ -169,101 +113,26 @@ Window {
     //The fo
     Component {
         id : login
-        MainForm {
-            id: main
-            scale: mscale
-            anchors.fill: parent
-            ubase.onClicked: {
-                //set accessSetting
-                winchange(inform);
-
-            }
-            submitbut.onClicked: {
-                rpassword.hide();
-                ll.enabled = true;
-                //set accessSetting
-            }
-            uadmin.onClicked: {
-                rpassword.show();
-                ll.enabled = false;
-            }
-        }
+        MainForm { }
     }
-    // The form between verifying the medical or incendinary database
     Component {
         id: inform
-        IntroForm {
-            incbutton.onClicked: {
-                winchange(login);
-            }
-            medbutton.onClicked: {
-                winchange(medimain);
-            }
-
-        }
-
+        IntroForm { }
     }
-
-    // The main medical form.
     Component {
         id: medimain
-        MedicMain {
-            back.onClicked: {
-                winchange(inform);
-            }
-            inv.onClicked: {
-                winchange(medinventory);
-            }
-            ndossier.onClicked: {
-                ndprompt.show();
-                medimainll.enabled = false;
-            }
-            bleger.onClicked: {
-                ndprompt.hide();
-                medimainll.enabled = true;
-            }
-            bmoderer.onClicked: {
-                winchange(meddocrs);
-            }
-            bsever.onClicked: {
-
-            }
-        }
+        MedicMain { }
     }
-
     Component {
         id: medinventory
-        MedViewInventory {
-            invback.onClicked: {
-                winchange(medimain);
-            }
-            invadjust.onClicked: {
-                winchange(adjinv);
-            }
-        }
+        MedViewInventory { }
     }
-
     Component {
         id: adjinv
-        MedInvAdjustment {
-            adjcancel.onClicked: {
-                winchange(medinventory);
-            }
-            adjsave.onClicked: {
-                winchange(medinventory);
-                // Show matricule and name
-            }
-        }
+        MedInvAdjustment { }
     }
-
     Component {
         id:meddocrs
-        MedDocRapportPremierSoins {
-            meddoccancel.onClicked: {
-                winchange(medimain);
-            }
-        }
+        MedDocRapportPremierSoins { }
     }
-
-
 }

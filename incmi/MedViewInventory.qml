@@ -5,8 +5,6 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 Rectangle {
-    property alias invback: cancel
-    property alias invadjust: ajusInventaire
     width: 360
     height: 640
 
@@ -16,7 +14,6 @@ Rectangle {
         anchors.fill: parent
 
         Pane {
-            id: pane
             width: 360
             height: 100
             Layout.minimumHeight: 50
@@ -27,7 +24,6 @@ Rectangle {
             Material.elevation: 4
             Material.background: colorp
             GridLayout {
-                id: gridLayout
                 anchors.fill: parent
                 Image {
                     fillMode: Image.PreserveAspectFit
@@ -41,7 +37,6 @@ Rectangle {
                 }
 
                 ColumnLayout {
-                    id: actionslayout
                     width: 100
                     height: 100
                     Layout.maximumWidth: 500
@@ -50,13 +45,15 @@ Rectangle {
                     Layout.fillHeight: true
 
                     Button {
-                        id: ajusInventaire
                         text: qsTr("+ Inventaire")
                         Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                         Layout.fillHeight: true
                         Layout.fillWidth: true
                         Material.foreground: colorlt
                         Material.background: colordp
+                        onClicked: {
+                            winchange(adjinv);
+                        }
                     }
                 }
             }
@@ -93,7 +90,6 @@ Rectangle {
             GridLayout {
                 anchors.fill: parent
                 Button {
-                    id: cancel
                     text: qsTr("Retour")
                     Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
                     Layout.maximumWidth: 150
@@ -101,6 +97,9 @@ Rectangle {
                     Layout.fillHeight: true
                     Material.foreground: colorlt
                     Material.background: colordp
+                    onClicked: {
+                        winchange(medimain);
+                    }
                 }
             }
         }
