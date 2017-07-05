@@ -3,6 +3,8 @@ import QtQuick.Window 2.2
 import QtQuick.Controls.Material 2.1
 import Qt.labs.settings 1.0
 import QtQuick.Controls 2.1
+import QtQuick.LocalStorage 2.0
+import FileIO 1.0
 
 Window {
     id: window
@@ -10,7 +12,6 @@ Window {
     width: 360
     visible: true
     title: qsTr("Inc. Med.")
-
 
     //                              All global properties
     property var currentwindow
