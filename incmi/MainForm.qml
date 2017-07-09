@@ -71,7 +71,7 @@ Rectangle {
             Material.background: colordp
             onClicked: {
                 mview.enabled = false;
-                rpassword.show();
+                acodebox.show();
             }
         }
 
@@ -129,7 +129,7 @@ Rectangle {
                 Material.background: colordp
                 onClicked: {
                     mview.enabled = true;
-                    rpassword.hide();
+                    acodebox.hide();
                 }
             }
         }

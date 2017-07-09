@@ -4,7 +4,7 @@ import QtQuick.Controls.Material 2.1
 import Qt.labs.settings 1.0
 import QtQuick.Controls 2.1
 import QtQuick.LocalStorage 2.0
-import FileIO 1.0
+
 
 Window {
     id: window
@@ -62,18 +62,16 @@ Window {
             windowloader.sourceComponent = login;
         }
     }
+    Rectangle {
+        anchors.fill: parent
+        Material.background: colorlt
+    }
 
 
     // Window events
     Component.onCompleted:
     {
         setAccess();
-    }
-
-    Rectangle {
-        anchors.fill: parent
-        color: colorlt
-        // Just to always have a basic window background between loads
     }
 
     Loader {
@@ -87,10 +85,9 @@ Window {
             }
         }
         Behavior on opacity {
-            id: anime
             SequentialAnimation {
                 NumberAnimation {
-                    duration: 600
+                    duration: 300
                     easing.type: Easing.InSine
                 }
                 ScriptAction {

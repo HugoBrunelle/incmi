@@ -2,5 +2,18 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>qtquickcontrols2.conf</file>
+        <file>CollapsingRectangle.qml</file>
+        <file>MainWindow.qml</file>
+        <file>Prompt.qml</file>
+        <file>AsyncQAnimatedLoader.qml</file>
+        <file>LoginWindow.qml</file>
+        <file>LogView.qml</file>
+        <file>InventoryView.qml</file>
+        <file>DocumentsView.qml</file>
+        <file>OptionsWindow.qml</file>
+        <file>SettingsCategoryModel.qml</file>
+        <file>AcountSettingsView.qml</file>
+        <file>ServerSettingsView.qml</file>
+        <file>InventoryListModel.qml</file>
     </qresource>
 </RCC>
