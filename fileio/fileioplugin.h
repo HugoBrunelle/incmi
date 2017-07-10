@@ -6,7 +6,7 @@
 class FileIOPlugin : public QQmlExtensionPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "incmi_plugins.FileIO")
+    Q_PLUGIN_METADATA(IID "incmi.FileIOPlugin")
 
 public:
     void registerTypes(const char *uri);

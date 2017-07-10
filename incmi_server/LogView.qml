@@ -8,31 +8,31 @@ Item {
     width: 1280
     height: 495
 
-        TextArea {
-            id: textArea
-            text: qsTr("Text Area")
-            anchors.rightMargin: 10
-            anchors.leftMargin: 10
-            anchors.bottomMargin: 10
-            anchors.topMargin: 10
-            wrapMode: Text.WordWrap
-            font.pointSize: 10
-            anchors.fill: parent
-            enabled: false
-        }
+    TextArea {
+        id: textArea
+        text: qsTr("Text Area")
+        anchors.rightMargin: 10
+        anchors.leftMargin: 10
+        anchors.bottomMargin: 10
+        anchors.topMargin: 10
+        wrapMode: Text.WordWrap
+        font.pointSize: 10
+        anchors.fill: parent
+        enabled: false
+    }
 
-        ScrollBar {
-                  id: vbar
-                  hoverEnabled: true
-                  active: hovered || pressed
-                  orientation: Qt.Vertical
-                  size: parent.height / textArea.contentHeight
-                  anchors.top: parent.top
-                  anchors.right: parent.right
-                  anchors.bottom: parent.bottom
-              }
+    ScrollBar {
+        id: vbar
+        hoverEnabled: true
+        active: hovered || pressed
+        orientation: Qt.Vertical
+        size: parent.height / textArea.contentHeight
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+    }
 
-        function addline(val){
-            textArea.append(val);
-        }
+    function addline(val){
+        textArea.append(val);
+    }
 }

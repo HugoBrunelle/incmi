@@ -5,8 +5,11 @@ import QtQuick.Controls.Material 2.2
 Item {
     width: 1280
     height: 495
-    anchors.margins: 15
+
     property int xd: 2
+    Rectangle{
+        anchors.fill: parent
+        anchors.margins: 15
     Rectangle{
         x:0
         y:0
@@ -436,6 +439,7 @@ Item {
             Material.foreground: colorlt
             Material.background: colordp
         }
+    }
     }
 
 }

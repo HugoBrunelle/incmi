@@ -1,2 +1,2 @@
 module FileIO
-plugin FileIOPlugin
+plugin fileioplugin

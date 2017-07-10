@@ -7,6 +7,11 @@ Item {
     width: 1280
     height: 720
 
+
+    function logmess(message){
+        lview.addline(message);
+    }
+
     Pane {
         id:header
         width: parent.width
@@ -54,10 +59,10 @@ Item {
         y: header.height + 8
         width: parent.width
         height: (parent.height/32)*22
-        AsyncQAnimatedLoader {
+        StackView {
             id: ld
             anchors.fill: parent
-            sourceComponent: log
+            initialItem: log
         }
     }
 
@@ -90,6 +95,7 @@ Item {
                             Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
                             Layout.fillWidth: true
                             Layout.fillHeight: true
+                            enabled: !senabled
                             Material.foreground: colorlt
                             Material.background: colordp
                             onClicked: {
@@ -101,6 +107,7 @@ Item {
                             Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
                             Layout.fillWidth: true
                             Layout.fillHeight: true
+                            enabled: senabled
                             Material.foreground: colorlt
                             Material.background: colordp
                             onClicked: {
@@ -128,6 +135,34 @@ Item {
                             x: 30
                             id: statuslabel
                             text: "-- Disabled"
+                            font.pointSize: 10
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignHCenter
+                            Material.foreground: colorlt
+                        }
+
+
+                    }
+                    Item {
+                        Layout.fillHeight: true
+                        Layout.fillWidth: true
+                        Label {
+                            x: 15
+                            y: 10
+                            id: stip
+                            text: "IP: "
+                            font.pointSize: 10
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignHCenter
+                            Material.foreground: colorlt
+                        }
+
+                        Label
+                        {
+                            y: stip.implicitHeight + stip.y + 3
+                            x: 15
+                            id: stport
+                            text: "Port: "
                             font.pointSize: 10
                             verticalAlignment: Text.AlignVCenter
                             horizontalAlignment: Text.AlignHCenter
@@ -168,13 +203,13 @@ Item {
                     onCurrentIndexChanged: {
                         switch(tabBar.currentIndex){
                         case 0:
-                            ld.changeComponent(log);
+                            ld.push(log);
                             break;
                         case 1:
-                            ld.changeComponent(inv);
+                            ld.push(inv);
                             break;
                         case 2:
-                            ld.changeComponent(doc);
+                            ld.push(doc);
                             break;
                         }
                     }
@@ -207,15 +242,15 @@ Item {
 
     Component {
         id: log
-        LogView { anchors.fill: parent}
+        LogView { id: lview}
     }
     Component {
         id: inv
-        InventoryView { anchors.fill: parent }
+        InventoryView {id: linv}
     }
     Component {
         id: doc
-        DocumentsView { anchors.fill: parent }
+        DocumentsView {id: ldoc}
     }
 
 

@@ -2,22 +2,32 @@
 #include <QFile>
 #include <QTextStream>
 #include <QDir>
+#include <QTextCodec>
 
-QByteArray FileIO::readFileArray(const QString &filename)
-{
-QFile file(filename);
-if (!file.open(QIODevice::ReadOnly))
-    return QByteArray();
+// Static methods, no overide required:
 
-return file.readAll();
+QString FileIO::getApplicationPath(){
+    return QDir::currentPath();
 }
 
-bool FileIO::writeFile(const QString& data)
+
+// All methods linked to the working directory
+QString FileIO::readFile(const QString &filename)
 {
-if (sDir.isEmpty())
+QFile file(cDir.path() + cDir.separator() + filename);
+if (!file.open(QIODevice::ReadOnly))
+    return "cant read";
+QByteArray data = file.readAll();
+QString result = QString(data);
+return result;
+}
+
+bool FileIO::writeFile(const QString& data, const QString& filename)
+{
+if (filename.isEmpty())
     return false;
 
-QFile file(sDir);
+QFile file(cDir.path() + cDir.separator() + filename);
 if (!file.open(QFile::WriteOnly | QFile::Truncate))
     return false;
 
@@ -29,15 +39,15 @@ file.close();
 return true;
 }
 
+QString FileIO::getPath(){
+    return cDir.path();
+}
+
 bool FileIO::removeFile(const QString& filename){
     if (filename.isEmpty())
         return false;
 
     return cDir.remove(filename);
-}
-
-QString FileIO::getCurrentPath(){
-    return QDir::currentPath();
 }
 
 bool FileIO::makeDirectory(const QString& dirname){
@@ -70,35 +80,7 @@ QStringList FileIO::getDirectoryNames(){
 }
 
 bool FileIO::removeDirectoryFromDir(QDir dir){
-    if (dir.entryList(QDir::Files,QDir::NoSort).isEmpty() && dir.entryList(QDir::AllDirs,QDir::NoSort).isEmpty()){
-        QString bdir = dir.dirName();
-        dir.cdUp();
-        return dir.remove(bdir);
-    }
-    else {
-        QStringList files = dir.entryList(QDir::Files,QDir::NoSort);
-        if (!files.isEmpty()){
-            for(int a = 0; a < files.count();a++){
-                cDir.remove(files[a]);
-            }
-        }
-        QStringList dirs = dir.entryList(QDir::AllDirs,QDir::NoSort);
-        if(!dirs.isEmpty()){
-            for(int b = 0; b<dirs.count();b++){
-                QString idir = dir.currentPath() + dir.separator() + dirs[b];
-                removeDirectory(idir);
-            }
-        }
-        QString bdir = dir.dirName();
-        dir.cdUp();
-        return dir.remove(bdir);
-    }
-    return false;
-}
-
-bool FileIO::removeDirectory(const QString& dirpath){
-     QDir dir = QDir(dirpath);
-     return removeDirectoryFromDir(dir);
+    return dir.removeRecursively();
 }
 
 bool FileIO::removeCurrentDirectory(){
@@ -107,4 +89,20 @@ bool FileIO::removeCurrentDirectory(){
 
 QString FileIO::getCurrentDirName(){
     return cDir.dirName();
+}
+
+bool FileIO::dirExist(const QString& dirname){
+    return cDir.exists(dirname);
+}
+
+void FileIO::resetDirectory(){
+    cDir = QDir::current();
+}
+
+
+// Insert all methods with overloads to do the functions but from a specified path...
+
+bool FileIO::removeDirectory(const QString& dirpath){
+     QDir dir = QDir(dirpath);
+    return removeDirectoryFromDir(dir);
 }
