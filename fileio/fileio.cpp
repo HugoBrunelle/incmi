@@ -7,6 +7,7 @@
 // Static methods, no overide required:
 
 FileIO::FileIO() {
+    
     // List all the filter flags
     m_filterFlags = {
         { "dirs", QDir::Dirs },
