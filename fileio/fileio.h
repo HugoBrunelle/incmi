@@ -9,8 +9,6 @@ class FileIO: public QObject
     Q_OBJECT
 
 public:
-    Q_INVOKABLE FileIO();
-    Q_INVOKABLE ~FileIO();
     Q_INVOKABLE QString readFile(const QString &filename);
     Q_INVOKABLE bool writeFile(const QString &data, const QString &filename);
     Q_INVOKABLE bool removeFile(const QString &filename);
@@ -36,8 +34,37 @@ private:
         QString sDir;
         QDir cDir = QDir::current();
         bool removeDirectoryFromDir(QDir dir);
-        QDir::Filter m_filterFlags;
-        QDir::SortFlag m_sortFlags;
+        std::map<QString, QDir::Filter> m_filterFlags = {
+                    { "dirs", QDir::Dirs },
+                    { "alldirs", QDir::AllDirs },
+                    { "files", QDir::Files },
+                    { "drives", QDir::Drives },
+                    { "nosymlinks", QDir::NoSymLinks },
+                    { "nodotanddotdot", QDir::NoDotAndDotDot },
+                    { "nodot", QDir::NoDot },
+                    { "nodotdot", QDir::NoDotDot },
+                    { "allentries", QDir::AllEntries },
+                    { "readable", QDir::Readable },
+                    { "writable", QDir::Writable },
+                    { "Executable", QDir::Executable },
+                    { "modified", QDir::Modified },
+                    { "hidden", QDir::Hidden },
+                    { "system", QDir::System },
+                    { "casesensitive", QDir::CaseSensitive }
+                };
+        std::map<QString, QDir::SortFlag> m_sortFlags = {
+                    { "name", QDir::Name },
+                    { "time", QDir::Time },
+                    { "size", QDir::Size },
+                    { "type", QDir::Type },
+                    { "unsorted", QDir::Unsorted },
+                    { "nosort", QDir::NoSort },
+                    { "dirsfirst", QDir::DirsFirst },
+                    { "dirslast", QDir::DirsLast },
+                    { "reversed", QDir::Reversed },
+                    { "ignorecase", QDir::IgnoreCase },
+                    { "localeaware", QDir::LocaleAware }
+                };
 };
 
 #endif // FILEIO_H

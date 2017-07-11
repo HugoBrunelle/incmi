@@ -6,48 +6,6 @@
 
 // Static methods, no overide required:
 
-FileIO::FileIO() {
-    
-    // List all the filter flags
-    m_filterFlags = {
-        { "dirs", QDir::Dirs },
-        { "alldirs", QDir::AllDirs },
-        { "files", QDir::Files },
-        { "drives", QDir::Drives },
-        { "nosymlinks", QDir::NoSymLinks },
-        { "nodotanddotdot", QDir::NoDotAndDotDot },
-        { "nodot", QDir::NoDot },
-        { "nodotdot", QDir::NoDotDot },
-        { "allentries", QDir::AllEntries },
-        { "readable", QDir::Readable },
-        { "writable", QDir::Writable },
-        { "Executable", QDir::Executable },
-        { "modified", QDir::Modified },
-        { "hidden", QDir::Hidden },
-        { "system", QDir::System },
-        { "casesensitive", QDir::CaseSensitive }
-    };
-
-    // List all the sort flags
-    m_sortFlags = {
-        { "name", QDir::Name },
-        { "time", QDir::Time },
-        { "size", QDir::Size },
-        { "type", QDir::Type },
-        { "unsorted", QDir::Unsorted },
-        { "nosort", QDir::NoSort },
-        { "dirsfirst", QDir::DirsFirst },
-        { "dirslast", QDir::DirsLast },
-        { "reversed", QDir::Reversed },
-        { "ignorecase", QDir::IgnoreCase },
-        { "localeaware", QDir::LocaleAware }
-    };
-}
-
-FileIO::~FileIO() {
-
-}
-
 QString FileIO::getApplicationPath(){
     return QDir::currentPath();
 }
