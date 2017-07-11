@@ -8,6 +8,14 @@ Item {
     width: 1280
     height: 495
 
+    Connections {
+        target: mainwindow
+        onLogMessage: {
+            addline(mess);
+        }
+    }
+
+
     TextArea {
         id: textArea
         text: qsTr("Text Area")

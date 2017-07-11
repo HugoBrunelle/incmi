@@ -9,7 +9,7 @@ Item {
 
 
     function logmess(message){
-        lview.addline(message);
+        log.child.logconsole.append(message);
     }
 
     Pane {
@@ -242,7 +242,7 @@ Item {
 
     Component {
         id: log
-        LogView { id: lview}
+        LogView { id: lview }
     }
     Component {
         id: inv

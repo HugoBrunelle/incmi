@@ -5,6 +5,13 @@ import QtQuick.Controls.Material 2.2
 Item {
     width: 1280
     height: 495
+    Component.onCompleted: {
+        var jobj = JSON.parse(createInventoryMessage());
+        for (var i = 0; i < jobj.items.length; i++){
+            var obj = jobj.items[i];
+            mod.append(JSON.parse('{ "name" : "' + obj.name + '", "count" : "' + obj.count + '", "rcount" : "' + obj.count + '", "tag" : "' + obj.tag + '"}'));
+        }
+    }
 
     property int xd: 2
     Rectangle{
@@ -28,11 +35,10 @@ Item {
         clip: true
         width: parent.width*3 / 5
         height: parent.height - 20
-        model: InventoryListModel {}
+        model: InventoryListModel { id: mod}
         delegate: settypedel
         
         onCurrentIndexChanged: {
-            // Change the values of the boxes.
         }
     }
     
@@ -43,6 +49,7 @@ Item {
             height: 38
             width: parent.width - 2*x
             Rectangle {
+                property string ttag: tag
                 border.color: "lightgrey"
                 anchors.fill: parent
                 height: parent.height
@@ -55,7 +62,7 @@ Item {
                     x: 25
                     width: (parent.width / 4)
                     height: parent.height
-                    text: type
+                    text: name
                     font.pointSize: 10
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignLeft
@@ -104,6 +111,10 @@ Item {
                 anchors.fill: parent
                 onClicked: {
                     typeview.currentIndex = index;
+                    currentName.text = name;
+                    currentCount.text = count;
+                    currentRCount.text = rcount;
+                    currentTag.text = tag;
                 }
             }
             
@@ -149,7 +160,7 @@ Item {
             id: l1
             x: xd
             y: h1.height + h1.y + 2*xd
-            text: "Host:"
+            text: "Name:"
             font.pointSize: 9
             width: (parent.width*2/5) - 2*x
             height: (parent.height / 6) - 2*xd
@@ -161,7 +172,7 @@ Item {
             id: l2
             x: xd
             y: l1.height + l1.y + 2*xd
-            text: "Port:"
+            text: "Count:"
             font.pointSize: 9
             width: (parent.width*2/5) - 2*x
             height: (parent.height / 6) - 2*xd
@@ -173,7 +184,7 @@ Item {
             id: l3
             x: xd
             y: l2.height + l2.y + 2*xd
-            text: "Maximum docs to Sync :"
+            text: "Recommended Count"
             font.pointSize: 10
             width: (parent.width*2/5) - 2*x
             height: (parent.height / 6) - 2*xd
@@ -185,7 +196,7 @@ Item {
             id: l4
             x: xd
             y: l3.height + l3.y + 2*xd
-            text: "Fabrication / Numero Series :"
+            text: "Unique Tag"
             font.pointSize: 9
             width: (parent.width*2/5) - 2*x
             height: (parent.height / 6) - 2*xd
@@ -203,12 +214,13 @@ Item {
             border.width: 1
             radius: 9
             TextInput {
+                id: currentName
                 selectByMouse: true
                 anchors.fill: parent
                 anchors.margins: 3
                 anchors.leftMargin: 15
                 font.pointSize: 9
-                text: qsTr("Text Field")
+                text: qsTr("")
                 verticalAlignment: Text.AlignVCenter
             }
         }
@@ -222,12 +234,13 @@ Item {
             border.width: 1
             radius: 9
             TextInput {
+                id: currentCount
                 selectByMouse: true
                 anchors.fill: parent
                 anchors.margins: 3
                 font.pointSize: 9
                 anchors.leftMargin: 15
-                text: qsTr("Text Field")
+                text: qsTr("")
                 verticalAlignment: Text.AlignVCenter
             }
         }
@@ -241,12 +254,13 @@ Item {
             border.width: 1
             radius: 9
             TextInput {
+                id: currentRCount
                 selectByMouse: true
                 anchors.fill: parent
                 anchors.margins: 3
                 font.pointSize: 9
                 anchors.leftMargin: 15
-                text: qsTr("Text Field")
+                text: qsTr("")
                 verticalAlignment: Text.AlignVCenter
             }
         }
@@ -260,12 +274,13 @@ Item {
             border.width: 1
             radius: 9
             TextInput {
+                id: currentTag
                 selectByMouse: true
                 anchors.fill: parent
                 anchors.margins: 3
                 font.pointSize: 9
                 anchors.leftMargin: 15
-                text: qsTr("Text Field")
+                text: qsTr("")
                 verticalAlignment: Text.AlignVCenter
             }
         }
@@ -309,7 +324,7 @@ Item {
             id: ll1
             x: xd
             y: h2.height + h2.y + 2*xd
-            text: "Host:"
+            text: "Name"
             font.pointSize: 9
             width: (parent.width*2/5) - 2*x
             height: (parent.height / 6) - 2*xd
@@ -321,7 +336,7 @@ Item {
             id: ll2
             x: xd
             y: ll1.height + ll1.y + 2*xd
-            text: "Port:"
+            text: "Count"
             font.pointSize: 9
             width: (parent.width*2/5) - 2*x
             height: (parent.height / 6) - 2*xd
@@ -333,7 +348,7 @@ Item {
             id: ll3
             x: xd
             y: ll2.height + ll2.y + 2*xd
-            text: "Maximum docs to Sync :"
+            text: "Recommended Count"
             font.pointSize: 10
             width: (parent.width*2/5) - 2*x
             height: (parent.height / 6) - 2*xd
@@ -345,7 +360,7 @@ Item {
             id: ll4
             x: xd
             y: ll3.height + ll3.y + 2*xd
-            text: "Fabrication / Numero Series :"
+            text: "Tag"
             font.pointSize: 9
             width: (parent.width*2/5) - 2*x
             height: (parent.height / 6) - 2*xd
@@ -363,12 +378,13 @@ Item {
             border.width: 1
             radius: 9
             TextInput {
+                id: nName
                 selectByMouse: true
                 anchors.fill: parent
                 anchors.margins: 3
                 anchors.leftMargin: 15
                 font.pointSize: 9
-                text: qsTr("Text Field")
+                text: qsTr("")
                 verticalAlignment: Text.AlignVCenter
             }
         }
@@ -382,12 +398,13 @@ Item {
             border.width: 1
             radius: 9
             TextInput {
+                id: nCount
                 selectByMouse: true
                 anchors.fill: parent
                 anchors.margins: 3
                 font.pointSize: 9
                 anchors.leftMargin: 15
-                text: qsTr("Text Field")
+                text: qsTr("")
                 verticalAlignment: Text.AlignVCenter
             }
         }
@@ -401,12 +418,13 @@ Item {
             border.width: 1
             radius: 9
             TextInput {
+                id: nRCount
                 selectByMouse: true
                 anchors.fill: parent
                 anchors.margins: 3
                 font.pointSize: 9
                 anchors.leftMargin: 15
-                text: qsTr("Text Field")
+                text: qsTr("")
                 verticalAlignment: Text.AlignVCenter
             }
         }
@@ -420,12 +438,13 @@ Item {
             border.width: 1
             radius: 9
             TextInput {
+                id: nTag
                 selectByMouse: true
                 anchors.fill: parent
                 anchors.margins: 3
                 font.pointSize: 9
                 anchors.leftMargin: 15
-                text: qsTr("Text Field")
+                text: qsTr("")
                 verticalAlignment: Text.AlignVCenter
             }
         }
@@ -438,6 +457,15 @@ Item {
             text: "Ajouter"
             Material.foreground: colorlt
             Material.background: colordp
+            onClicked: {
+                var obj = JSON.parse('{"name":"", "count":"", "rcount":"", "tag":""}');
+                obj.name = nName.text;
+                obj.count = nCount.text;
+                obj.rcount = nRCount.text;
+                obj.tag = nTag.text;
+                createInventoryItem(obj);
+            }
+
         }
     }
     }

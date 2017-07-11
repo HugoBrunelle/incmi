@@ -18,7 +18,7 @@ ApplicationWindow {
         property string port;
     }
 
-
+    signal logMessage(var mess)
 
     Material.accent: colora
     Connections{
@@ -47,33 +47,27 @@ ApplicationWindow {
 
     Component.onCompleted: {
         load.sourceComponent = wmain;
-        console.log(file.getCurrentDirName());
-
-        if (file.dirExist(invfolder)){
-            file.cd(invfolder);
-            var path = file.getCurrentPath();
-            var b = file.getFileNames();
-            console.log(b.length);
-            for(var i = 0; i < b.length; i++){
-                file.setSourceDir(b[i]);
-                console.log((path + "/" + invfolder + "/" + b[i]).toString());
-                var fi = file.readFile(path + "/" + invfolder + "/" + b[i]);
-                console.log(fi);
-                var jsobj = JSON.parse(fi);
-                for(var c = 0; c < jsobj.items.length; c++){
-                    var obj = jsobj.items[c];
-                    console.log(obj.name + " " + obj.count + " " + obj.rcount);
-                }
-            }
-
-            console.log("in invfolder");
-
-
-        }else {
-            console.log("Creating inv folder");
+        if (!file.dirExist(invfolder)){
             file.makeDirectory(invfolder);
-            console.log(file.dirExist(invfolder));
         }
+        if (!file.dirExist(docsfolder)){
+            file.makeDirectory(docsfolder);
+        }
+        file.cd(invfolder);
+        var names = file.getFileNames();
+        var exists;
+        for (var i = 0; i < names.length; i++){
+            var f = names[i];
+            if (f === invtotal){
+                exists = true;
+            }
+        }
+
+        if (!exists) {
+            file.writeFile('{"messageindex": "0","items": []}',invtotal);
+        }
+
+        file.resetDirectory();
     }
 
 
@@ -110,56 +104,227 @@ ApplicationWindow {
         id: server
         port: port == null ? 2345 : port
         listen: senabled
-
         onClientConnected: {
             webSocket.onTextMessageReceived.connect(messReceived(message,webSocket));
         }
         onErrorStringChanged: {
             onError(errorString);
         }
-
-    }
-
-    function messReceived(message, socket){
-        var jsonobj = JSON.parse(message);
-        switch(parseInt(jsonobj.messageindex)){
-        case 0:
-            //Request Inventory
-            if (file.dirExist(invfolder)){
-                file.cd(invfolder);
-                console.log("in invfolder");
-
-
-            }else {
-                console.log("Creating inv folder");
-                file.makeDirectory(invfolder);
-                console.log(file.dirExist(invfolder));
-            }
-
-            break;
-        case 1:
-            //Request list of latest doc and inv commits
-            break;
-        case 2:
-            //Request doc information
-            break;
-        case 3:
-            //Add document
-            break;
-        case 4:
-            //Add inventory change
-            break;
-        }
-    }
-
-    function onError(message){
-        cmain.logmess((new Date().toLocaleString(locale, "hh:mm:ss ddd yyyy-MM-dd ---")) + " Error Message:: " + message);
     }
 
     FileIO {
         id: file
     }
 
+    function messReceived(message, socket){
+        logMessage(new Date().toLocaleString(locale, "hh:mm:ss ddd yyyy-MM-dd ---") + " Message received from client, processing...");
+        var jsonobj = JSON.parse(message);
+        switch(parseInt(jsonobj.messageindex)){
+        case 0:
+            //Request Inventory
+            socket.sendTextMessage(createInventoryMessage());
+            break;
+        case 1:
+            //Request list of latest doc and inv commits
+            socket.sendTextMessage(createChangesList());
+            break;
+        case 2:
+            //Request doc information
+            socket.sendTextMessage(createDocInformation(jsonobj.filename));
+            break;
+        case 3:
+            //Add document
+            socket.sendTextMessage(createDocument(jsonobj));
+            break;
+        case 4:
+            socket.sendTextMessage(appendInventory(jsonobj));
+            //Add inventory change
+            break;
+        case 5:
+            logMessage(new Date().toLocaleString(locale, "hh:mm:ss ddd yyyy-MM-dd ---") + " Client received message succesfully...");
+            break;
+        }
+    }
+
+    function onError(message){
+        logMessage((new Date().toLocaleString(locale, "hh:mm:ss ddd yyyy-MM-dd ---")) + " Error Message:: " + message);
+    }
+
+
+    function createInventoryMessage() {
+        logMessage((new Date().toLocaleString(locale, "hh:mm:ss ddd yyyy-MM-dd ---")) + "Sending the inventory to client");
+        var result;
+        if (file.dirExist(invfolder)){
+            file.cd(invfolder);
+            var b = file.getFileNames();
+            for(var i = 0; i < b.length; i++){
+                if (b[i] === invtotal){
+                    result = file.readFile(b[i]);
+                }
+            }
+        }else {
+            file.makeDirectory(invfolder);
+        }
+        file.resetDirectory();
+        return result;
+    }
+
+    function createChangesList() {
+        logMessage((new Date().toLocaleString(locale, "hh:mm:ss ddd yyyy-MM-dd ---")) + "Sending changes list to client");
+        var jsobj = JSON.parse('{"messageindex": 1,"items" : []}');
+        if (file.dirExist(docsfolder)){
+            file.cd(docsfolder);
+            var fs = file.getFileNames();
+            for(var i = 0; i < fs.length; i++){
+                //Check the file type to make certain no idiot placed a weird item to fuck the loop
+                var ff = fs[i];
+                if (ff.split(".")[1] === "incmi"){
+                    //An incmi database file, okay to parse...
+                    var tobj = JSON.parse(file.readFile(ff));
+                    var tpush;
+                    switch (tobj.type) {
+                    case "inv":
+                        tpush ='{ "name": "' + tobj.name + '", "matricule":"' + tobj.matricule + ',"filename":"' + ff + '"}';
+                        break;
+
+                    case "docs":
+                        tpush ='{ "name": "' + tobj.name + '", "date":"' + tobj.date + '", "location":"' + tobj.location +'", "nature":"' + tobj.nature +',"filename":"' + ff + '"}';
+                        break;
+                    }
+
+                    jsobj.items.push(tpush);
+                }
+            }
+
+        }
+        file.resetDirectory();
+        return JSON.stringify(jsobj);
+    }
+
+
+    function createDocInformation(filename) {
+        logMessage((new Date().toLocaleString(locale, "hh:mm:ss ddd yyyy-MM-dd ---")) + "Sending doc information for: " + filename + " to client");
+        var jsobj;
+        if (file.dirExist(docsfolder)){
+            file.cd(docsfolder);
+            var fs = file.getFileNames();
+            for(var i = 0; i < fs.length; i++){
+                if (filename === fs[i]){
+                    // The correct file to send the date...
+                    jsobj = JSON.parse(file.readFile(filename));
+                }
+            }
+        }
+        file.resetDirectory();
+        return JSON.stringify(jsobj);
+    }
+
+    function createDocument(jsobj){
+        logMessage((new Date().toLocaleString(locale, "hh:mm:ss ddd yyyy-MM-dd ---")) + "Client sent in a new document, processing...");
+        var fname;
+        var jmess = JSON.parse('{ "messageindex": "5", "error" : "" }')
+        if (file.dirExist(docsfolder)){
+            file.cd(docsfolder);
+            fname = getRandomName() + ".incmi";
+            if(file.writeFile(JSON.stringify(jsobj),fname)){
+                jmess.message = false;
+                logMessage((new Date().toLocaleString(locale, "hh:mm:ss ddd yyyy-MM-dd ---")) + "Client document saved");
+            }else{
+                jmess.message = true;
+                logMessage((new Date().toLocaleString(locale, "hh:mm:ss ddd yyyy-MM-dd ---")) + "Error when saving client document");
+            }
+        }
+        file.resetDirectory();
+        return JSON.stringify(jmess);
+    }
+
+    function getRandomName() {
+        var check = true;
+        var name;
+        while (check){
+            name = Math.floor(Math.random(1000000)).toString();
+            var fs = file.getFileNames();
+            for (var i = 0; i < fs.length; i++){
+                var spl = fs[i].split(".")[0];
+                if (spl === name) {
+                    continue;
+                }
+            }
+            check = false;
+        }
+        return name;
+    }
+
+    function appendInventory(jsobj) {
+        logMessage((new Date().toLocaleString(locale, "hh:mm:ss ddd yyyy-MM-dd ---")) + "Client sent in new inventory commit, processing...");
+        var result;
+        var jmess = JSON.parse('{ "messageindex": "5", "error" : "" }')
+        if (file.dirExist(invfolder)){
+            file.cd(invfolder);
+            var b = file.getFileNames();
+            for(var i = 0; i < b.length; i++){
+                if (b[i] === invtotal){
+                    result = file.readFile(b[i]);
+                }
+            }
+            if (result !== "") {
+                var tobj = JSON.parse(result);
+                for (var d = 0; d < jsobj.items.length; d++){
+                    var ifrom = jsobj.items[d];
+                    for (var c = 0; c < tobj.items.length; c++){
+                        var isave = tobj.items[c];
+                        if (tp.tag === cinvitem.tag) {
+                            isave.count = ifrom.count;
+                        }
+                    }
+                }
+                if (file.writeFile(JSON.stringify(tobj),invtotal)){
+                    logMessage((new Date().toLocaleString(locale, "hh:mm:ss ddd yyyy-MM-dd ---")) + "Saved and added commit from the client");
+                } else {
+                    logMessage((new Date().toLocaleString(locale, "hh:mm:ss ddd yyyy-MM-dd ---")) + "Error adding the commit from the client");
+                }
+            }
+            file.cdUp();
+            if (file.dirExist(docsfolder)){
+                file.cd(docsfolder);
+                fname = getRandomName() + ".incmi";
+                if(file.writeFile(JSON.stringify(jsobj),fname)){
+                    jmess.message = false;
+                    logMessage((new Date().toLocaleString(locale, "hh:mm:ss ddd yyyy-MM-dd ---")) + "Client inventory commit saved");
+                }else{
+                    jmess.message = true;
+                    logMessage((new Date().toLocaleString(locale, "hh:mm:ss ddd yyyy-MM-dd ---")) + "Error when saving client inventory commit");
+                }
+            }
+        }else {
+            file.makeDirectory(invfolder);
+        }
+        file.resetDirectory();
+        return JSON.stringify(jess);
+    }
+
+    function createInventoryItem(jobj) {
+        logMessage((new Date().toLocaleString(locale, "hh:mm:ss ddd yyyy-MM-dd ---")) + "Server adding a new inventory item");
+        if (file.dirExist(invfolder)) {
+            file.cd(invfolder);
+            var names = file.getFileNames();
+            var exists = false;
+            for (var i = 0; i < names.length; i++){
+                if (names[i] === invtotal){
+                    exists = true;
+                }
+            }
+
+            if (exists){
+                var obj = JSON.parse(file.readFile(invtotal));
+                obj.items.push(jobj);
+                if (file.writeFile(JSON.stringify(obj),invtotal)){
+                    logMessage((new Date().toLocaleString(locale, "hh:mm:ss ddd yyyy-MM-dd ---")) + "Server succesfully added new inventory item");
+                }
+            }
+            file.resetDirectory();
+        }
+    }
 
 
 }
