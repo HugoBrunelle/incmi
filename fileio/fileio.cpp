@@ -6,10 +6,50 @@
 
 // Static methods, no overide required:
 
+FileIO::FileIO() {
+    // List all the filter flags
+    m_filterFlags = {
+        { "dirs", QDir::Dirs },
+        { "alldirs", QDir::AllDirs },
+        { "files", QDir::Files },
+        { "drives", QDir::Drives },
+        { "nosymlinks", QDir::NoSymLinks },
+        { "nodotanddotdot", QDir::NoDotAndDotDot },
+        { "nodot", QDir::NoDot },
+        { "nodotdot", QDir::NoDotDot },
+        { "allentries", QDir::AllEntries },
+        { "readable", QDir::Readable },
+        { "writable", QDir::Writable },
+        { "Executable", QDir::Executable },
+        { "modified", QDir::Modified },
+        { "hidden", QDir::Hidden },
+        { "system", QDir::System },
+        { "casesensitive", QDir::CaseSensitive }
+    };
+
+    // List all the sort flags
+    m_sortFlags = {
+        { "name", QDir::Name },
+        { "time", QDir::Time },
+        { "size", QDir::Size },
+        { "type", QDir::Type },
+        { "unsorted", QDir::Unsorted },
+        { "nosort", QDir::NoSort },
+        { "dirsfirst", QDir::DirsFirst },
+        { "dirslast", QDir::DirsLast },
+        { "reversed", QDir::Reversed },
+        { "ignorecase", QDir::IgnoreCase },
+        { "localeaware", QDir::LocaleAware }
+    };
+}
+
+FileIO::~FileIO() {
+
+}
+
 QString FileIO::getApplicationPath(){
     return QDir::currentPath();
 }
-
 
 // All methods linked to the working directory
 QString FileIO::readFile(const QString &filename)
@@ -97,6 +137,25 @@ bool FileIO::dirExist(const QString& dirname){
 
 void FileIO::resetDirectory(){
     cDir = QDir::current();
+}
+
+QStringList FileIO::getFilteredNames(const QString& filterString,const QString& sortString)
+{
+    // Initialise filter and sort with default value
+    QDir::Filter filter = QDir::AllEntries;
+    QDir::SortFlag sortFlag = QDir::NoSort;
+
+    // If the filter exist apply it
+    if(m_filterFlags.find(filterString) != m_filterFlags.end()) {
+        filter = m_filterFlags.at(filterString);
+    }
+
+    // If the sort flag exist apply it
+    if(m_sortFlags.find(sortString) != m_sortFlags.end()) {
+        sortFlag = m_sortFlags.at(sortString);
+    }
+
+    return cDir.entryList(filter, sortFlag);
 }
 
 
