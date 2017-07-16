@@ -5,7 +5,6 @@
 #include <QTextCodec>
 
 // Static methods, no overide required:
-
 QString FileIO::getApplicationPath(){
     return QDir::currentPath();
 }
@@ -117,6 +116,16 @@ QStringList FileIO::getFilteredNames(const QString& filterString,const QString& 
     return cDir.entryList(filter, sortFlag);
 }
 
+bool FileIO::fileExists(QString fileName)
+{
+    QFileInfo check_file(cDir.path() + QDir::separator() + fileName);
+
+    if (check_file.exists() && check_file.isFile()) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 // Insert all methods with overloads to do the functions but from a specified path...
 

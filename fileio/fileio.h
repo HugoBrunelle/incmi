@@ -26,6 +26,7 @@ public:
     Q_INVOKABLE QString getCurrentDirName();
     Q_INVOKABLE void resetDirectory();
     Q_INVOKABLE QStringList getFilteredNames(const QString& filterString,const QString& sortString);
+    Q_INVOKABLE bool fileExists(QString fileName);
     QString sourceDir() { return sDir; };
 
 public slots:
