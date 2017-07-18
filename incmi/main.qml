@@ -3,7 +3,7 @@ import QtQuick.Window 2.2
 import QtQuick.Controls.Material 2.1
 import Qt.labs.settings 1.0
 import QtQuick.Controls 2.1
-import QtQuick.LocalStorage 2.0
+import Qt.WebSockets 1.0
 
 
 Window {
@@ -12,6 +12,8 @@ Window {
     width: 360
     visible: true
     title: qsTr("Inc. Med.")
+
+
 
     //                              All global properties
     property var currentwindow
@@ -76,7 +78,7 @@ Window {
 
     Loader {
         id: windowloader
-        asynchronous: true
+        asynchronous: false
         opacity: 0.0
         anchors.fill: parent;
         onStatusChanged: {
@@ -132,5 +134,36 @@ Window {
     Component {
         id:meddocrs
         MedDocRapportPremierSoins { }
+    }
+
+
+    WebSocket {
+        id: socket
+        url: "ws://192.168.0.108:2565"
+        onStatusChanged: {
+            var message;
+            switch(status) {
+            case WebSocket.Open:
+                message = "open";
+                break;
+            case WebSocket.Connecting:
+                message = "connecting";
+                break;
+            case WebSocket.Closing:
+                message = "closing";
+                break;
+            case WebSocket.Closed:
+                message = "closed";
+                break;
+            case WebSocket.Error:
+                message = errorString;
+                break;
+            }
+            console.log(message)
+        }
+
+        onTextMessageReceived: {
+            console.log("message received");
+        }
     }
 }

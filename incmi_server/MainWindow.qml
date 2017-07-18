@@ -7,11 +7,6 @@ Item {
     width: 1280
     height: 720
 
-
-    function logmess(message){
-        log.child.logconsole.append(message);
-    }
-
     Pane {
         id:header
         width: parent.width
@@ -99,7 +94,7 @@ Item {
                             Material.foreground: colorlt
                             Material.background: colordp
                             onClicked: {
-
+                                senabled = true;
                             }
                         }
                         Button {
@@ -111,7 +106,7 @@ Item {
                             Material.foreground: colorlt
                             Material.background: colordp
                             onClicked: {
-
+                                senabled = false;
                             }
                         }
                     }
@@ -134,11 +129,11 @@ Item {
                             y: stlab.implicitHeight + stlab.y + 3
                             x: 30
                             id: statuslabel
-                            text: "-- Disabled"
+                            text: senabled ? "-- Enabled" : "-- Disabled"
                             font.pointSize: 10
                             verticalAlignment: Text.AlignVCenter
                             horizontalAlignment: Text.AlignHCenter
-                            Material.foreground: colorlt
+                            Material.foreground: senabled ? "green" : colorlt
                         }
 
 
@@ -150,7 +145,7 @@ Item {
                             x: 15
                             y: 10
                             id: stip
-                            text: "IP: "
+                            text: "IP: " + server.host
                             font.pointSize: 10
                             verticalAlignment: Text.AlignVCenter
                             horizontalAlignment: Text.AlignHCenter
@@ -162,7 +157,18 @@ Item {
                             y: stip.implicitHeight + stip.y + 3
                             x: 15
                             id: stport
-                            text: "Port: "
+                            text: "Port: " + settings.sport
+                            font.pointSize: 10
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignHCenter
+                            Material.foreground: colorlt
+                        }
+                        Label
+                        {
+                            y: stport.implicitHeight + stport.y + 3
+                            x: 15
+                            id: sturl
+                            text: "Url: " + server.url
                             font.pointSize: 10
                             verticalAlignment: Text.AlignVCenter
                             horizontalAlignment: Text.AlignHCenter
@@ -226,6 +232,7 @@ Item {
                     id: obutton
                     x: 15
                     y: parent.height - obutton.height - 5
+                    height: parent.height *3 / 5
                     width: parent.width - 30
                     text: qsTr("Options")
                     Material.foreground: colorlt

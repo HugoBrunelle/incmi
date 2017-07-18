@@ -3,10 +3,37 @@ import QtQuick.Window 2.0
 import QtQuick.Controls.Material 2.1
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
+import Qt.WebSockets 1.0
 
 Rectangle {
     width: 360
     height: 640
+    Connections {
+        target: socket
+        onTextMessageReceived: {
+            var obj = JSON.parse(message);
+            if (obj.messageindex == "0"){
+                //Correct object..
+                for (var i = 0; i < obj.items.length; i++) {
+                    var item = obj.items[i];
+                    mod.append(JSON.parse('{"name":"'+item.name+'","count":"'+item.count+'","recommendedCount":"'+item.rcount+'","tag":"'+item.tag+'"}'));
+                }
+            }
+            socket.active = false;
+        }
+        onStatusChanged: {
+            switch (status) {
+            case WebSocket.Open:
+                socket.sendTextMessage('{"messageindex": "0"}');
+                break;
+            }
+
+        }
+    }
+
+    Component.onCompleted: {
+        socket.active = true;
+    }
 
     ColumnLayout {
         id: columnLayout
@@ -74,7 +101,7 @@ Rectangle {
             Layout.fillHeight: true
             Layout.fillWidth: true
             delegate: MedInvViewDelegate {}
-            model: MedInvViewModel {}
+            model: MedInvViewModel { id: mod}
         }
 
         Pane {

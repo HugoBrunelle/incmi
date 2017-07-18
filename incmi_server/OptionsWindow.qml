@@ -5,8 +5,9 @@ import QtQuick.Controls.Material 2.2
 Item {
     width: 1280
     height: 720
+    visible: false
+    opacity: 0.0
     property int xd: 10
-    /*
     function checkstate(){
         if (opacity == 0.0){
             visible = false;
@@ -33,7 +34,6 @@ Item {
             }
         }
     }
-    */
     Rectangle {
         anchors.fill: parent
         opacity: 0.42
@@ -96,7 +96,7 @@ Item {
                         anchors.fill: parent
                         height: parent.height
                         width: parent.width
-                        color: typeview.currentIndex == index ? "whitesmoke" : "white"
+                        color: typeview.currentIndex == index ? "gainsboro" : "white"
                         anchors.margins: 2
                         border.width: 1
                         Label {
@@ -141,6 +141,7 @@ Item {
             Component {
                 id: accview
                 AcountSettingsView {
+                    id: apage
                 anchors.fill: parent
                 }
             }
@@ -148,22 +149,11 @@ Item {
             Component {
                 id: servview
                 ServerSettingsView {
+                    id: spage
                 anchors.fill: parent
                 }
             }
 
-        }
-        Label {
-            id: ld
-            x: xd
-            y: ret.y
-            height: ret.height
-            width: saveb.x - xd
-            text: "Teststatus label"
-            font.pointSize: 10
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignRight
-            rightPadding: xd*4
         }
 
         Button {
@@ -176,7 +166,7 @@ Item {
             Material.background: colordp
             Material.foreground: colorlt
             onClicked: {
-
+                sview.currentItem.save();
             }
         }
 
@@ -190,7 +180,8 @@ Item {
             Material.background: colordp
             Material.foreground: colorlt
             onClicked: {
-                options.visible = false;
+                load.enabled = true;
+                options.hide();
             }
         }
     }

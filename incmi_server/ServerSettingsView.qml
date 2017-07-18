@@ -80,18 +80,20 @@ Item {
                 y: l1.y
                 width: (parent.width*3/5) - 2*xd
                 height: (parent.height/3)-2*xd
-                color: "whitesmoke"
+                color: "white"
                 border.color: "lightgrey"
                 border.width: 1
                 radius: 9
                 TextInput {
+                    id: host
                     selectByMouse: true
                     font.pointSize: 10
                     anchors.fill: parent
                     anchors.margins: 3
                     anchors.leftMargin: 15
                     verticalAlignment: Text.AlignVCenter
-                    text: qsTr("Text Field")
+                    KeyNavigation.tab: port
+                    text: settings.shost
                 }
             }
             Rectangle{
@@ -99,18 +101,20 @@ Item {
                 y: l2.y
                 width: (parent.width*3/5) - 2*xd
                 height: (parent.height/3)-2*xd
-                color: "whitesmoke"
+                color: "white"
                 border.color: "lightgrey"
                 border.width: 1
                 radius: 9
                 TextInput {
+                    id: port
                     selectByMouse: true
                     anchors.fill: parent
                     anchors.margins: 3
                     anchors.leftMargin: 15
                     verticalAlignment: Text.AlignVCenter
                     font.pointSize: 10
-                    text: qsTr("Text Field")
+                    KeyNavigation.tab: mcount
+                    text: settings.sport
                 }
             }
             Rectangle {
@@ -118,25 +122,29 @@ Item {
                 y: l3.y
                 width: (parent.width*3/5) - 2*xd
                 height: (parent.height/3)-2*xd
-                color: "whitesmoke"
+                color: "white"
                 border.color: "lightgrey"
                 border.width: 1
                 radius: 9
                 TextInput {
+                    id: mcount
                     selectByMouse: true
                     font.pointSize: 10
                     anchors.fill: parent
                     anchors.margins: 3
                     anchors.leftMargin: 15
                     verticalAlignment: Text.AlignVCenter
-                    text: qsTr("Text Field")
+                    KeyNavigation.tab: host
+                    text: ""
                 }
             }
         }
     }
 
     function save() {
-
+        settings.sport = port.text;
+        settings.shost = host.text;
+        settings.smpush = mcount.text;
     }
 
 

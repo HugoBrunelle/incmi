@@ -7,7 +7,7 @@ import Qt.labs.settings 1.0
 import FileIO 1.0
 
 ApplicationWindow {
-    id: mainwindow
+    id: applic
     visible: true
     width: 1280
     height: 720
@@ -15,21 +15,32 @@ ApplicationWindow {
     property bool senabled: false;
 
     Settings {
-        property string port;
+        id: settings
+        property string sport: "443"
+        property string shost: "localhost"
+        property string saccount: "admin"
+        property string spass: "incmi2017"
+        property string smpush: "30"
     }
 
-    signal logMessage(var mess)
+
+    function logMessage(mess) {
+        textboxt += ("\n" + mess);
+    }
 
     Material.accent: colora
+    /*
     Connections{
-        target: mainwindow
+        target: applic
         onActiveChanged: {
-            if (!mainwindow.active) {
+            if (!applic.active) {
                 Qt.quit();
             }
         }
     }
-
+    */
+    property string ipv4: "null"
+    property string subnetmask: "null"
     property color colorb: "#BDBDBD"
     property color colorst: "#757575"
     property color colort: "#212121"
@@ -38,15 +49,15 @@ ApplicationWindow {
     property color colorlp: "#B3E5FC"
     property color colordp: "#006da9"
     property color colora: "#607D8B"
-
-
+    property string textboxt: ""
     property string invfolder: "invitems"
     property string backupfolder: "backups"
     property string docsfolder: "docs"
     property string invtotal: "invtots.incmi"
 
+
     Component.onCompleted: {
-        load.sourceComponent = wmain;
+        load.sourceComponent = login;
         if (!file.dirExist(invfolder)){
             file.makeDirectory(invfolder);
         }
@@ -66,7 +77,6 @@ ApplicationWindow {
         if (!exists) {
             file.writeFile('{"messageindex": "0","items": []}',invtotal);
         }
-
         file.resetDirectory();
     }
 
@@ -102,10 +112,14 @@ ApplicationWindow {
 
     WebSocketServer {
         id: server
-        port: port == null ? 2345 : port
+        port: settings.sport == null ? 2565 : settings.sport
+        host: settings.shost == "localhost" ? ipv4 : settings.shost
         listen: senabled
         onClientConnected: {
-            webSocket.onTextMessageReceived.connect(messReceived(message,webSocket));
+            console.log("client connected");
+            webSocket.onTextMessageReceived.connect(function(message) {
+                messReceived(message,webSocket)
+            });
         }
         onErrorStringChanged: {
             onError(errorString);
@@ -116,13 +130,16 @@ ApplicationWindow {
         id: file
     }
 
+
+
     function messReceived(message, socket){
+        console.log("received a message");
         logMessage(new Date().toLocaleString(locale, "hh:mm:ss ddd yyyy-MM-dd ---") + " Message received from client, processing...");
         var jsonobj = JSON.parse(message);
         switch(parseInt(jsonobj.messageindex)){
         case 0:
             //Request Inventory
-            socket.sendTextMessage(createInventoryMessage());
+            socket.sendTextMessage(createInventoryClient());
             break;
         case 1:
             //Request list of latest doc and inv commits
@@ -151,7 +168,7 @@ ApplicationWindow {
     }
 
 
-    function createInventoryMessage() {
+    function createInventoryClient() {
         logMessage((new Date().toLocaleString(locale, "hh:mm:ss ddd yyyy-MM-dd ---")) + "Sending the inventory to client");
         var result;
         if (file.dirExist(invfolder)){
@@ -168,6 +185,23 @@ ApplicationWindow {
         file.resetDirectory();
         return result;
     }
+    function createInventoryServer() {
+        var result;
+        if (file.dirExist(invfolder)){
+            file.cd(invfolder);
+            var b = file.getFileNames();
+            for(var i = 0; i < b.length; i++){
+                if (b[i] === invtotal){
+                    result = file.readFile(b[i]);
+                }
+            }
+        }else {
+            file.makeDirectory(invfolder);
+        }
+        file.resetDirectory();
+        return result;
+    }
+
 
     function createChangesList() {
         logMessage((new Date().toLocaleString(locale, "hh:mm:ss ddd yyyy-MM-dd ---")) + "Sending changes list to client");
@@ -184,11 +218,11 @@ ApplicationWindow {
                     var tpush;
                     switch (tobj.type) {
                     case "inv":
-                        tpush ='{ "name": "' + tobj.name + '", "matricule":"' + tobj.matricule + ',"filename":"' + ff + '"}';
+                        tpush ='{ "name": "' + tobj.name + '", "matricule":"' + tobj.matricule + '", "type":"' + tobj.type + ',"filename":"' + ff + '"}';
                         break;
 
                     case "docs":
-                        tpush ='{ "name": "' + tobj.name + '", "date":"' + tobj.date + '", "location":"' + tobj.location +'", "nature":"' + tobj.nature +',"filename":"' + ff + '"}';
+                        tpush ='{ "name": "' + tobj.name + '", "date":"' + tobj.date + '", "location":"' + tobj.location +'", "nature":"' + tobj.nature + '", "type":"' + tobj.type +',"filename":"' + ff + '"}';
                         break;
                     }
 
@@ -242,7 +276,7 @@ ApplicationWindow {
         var check = true;
         var name;
         while (check){
-            name = Math.floor(Math.random(1000000)).toString();
+            name = Math.floor(Math.random() * 1000000).toString();
             var fs = file.getFileNames();
             for (var i = 0; i < fs.length; i++){
                 var spl = fs[i].split(".")[0];
@@ -326,5 +360,120 @@ ApplicationWindow {
         }
     }
 
+    function removeInventoryItem(jobj){
+        logMessage((new Date().toLocaleString(locale,"hh:mm:ss ddd yyyy-MM-dd ---")) + "Server request to remove an inventory item");
+        var result = false;
+        if (file.dirExist(invfolder)) {
+            file.cd(invfolder);
+            var names = file.getFileNames();
+            var exists = false;
+            for (var i = 0; i < names.length; i++) {
+                if (names[i] === invtotal){
+                    exists = true;
+                }
+            }
+            if (exists) {
+                var obj = JSON.parse(file.readFile(invtotal));
+                var index = -1;
+                for (var b = 0; b < obj.items.length; b++){
+                    var item = obj.items[b];
+                    console.log(item.tag);
+                    console.log(jobj.tag);
+                    if (item.tag == jobj.tag){
+                        index = b;
+                    }
+                }
+                console.log(index);
 
+                if (index != -1) {
+                    obj.items.splice(index, 1);
+                    if (file.writeFile(JSON.stringify(obj),invtotal)){
+                        logMessage((new Date().toLocaleString(locale, "hh:mm:ss ddd yyyy-MM-dd ---")) + "Server succesfully removed inventory item");
+                        result = true;
+                    }
+                    else {
+                        logMessage((new Date().toLocaleString(locale, "hh:mm:ss ddd yyyy-MM-dd ---")) + "Server failed to remove inventory item");
+                    }
+                }
+            }
+        }
+        file.resetDirectory();
+        return result;
+    }
+
+    function editInventoryItem(jobj) {
+        logMessage((new Date().toLocaleString(locale,"hh:mm:ss ddd yyyy-MM-dd ---")) + "Server request to edit an inventory item");
+        var result = false;
+        if (file.dirExist(invfolder)) {
+            file.cd(invfolder);
+            var names = file.getFileNames();
+            var exists = false;
+            for (var i = 0; i < names.length; i++) {
+                if (names[i] === invtotal){
+                    exists = true;
+                }
+            }
+            if (exists) {
+                var obj = JSON.parse(file.readFile(invtotal));
+                for (var b = 0; b < obj.items.length; b++){
+                    var item = obj.items[b];
+                    if (item.tag == jobj.tag){
+                        item.name = jobj.name;
+                        item.count = jobj.count;
+                        item.rcount = jobj.rcount;
+                    }
+                }
+                if (file.writeFile(JSON.stringify(obj),invtotal)){
+                    logMessage((new Date().toLocaleString(locale, "hh:mm:ss ddd yyyy-MM-dd ---")) + "Server succesfully edited inventory item");
+                    result = true;
+                }
+                else {
+                    logMessage((new Date().toLocaleString(locale, "hh:mm:ss ddd yyyy-MM-dd ---")) + "Server failed to edit inventory item");
+                }
+            }
+        }
+        file.resetDirectory();
+        return result;
+    }
+    function getRandomTag(){
+        var tag = Math.floor(Math.random() * 1000000);
+        if (file.dirExist(invfolder)) {
+            file.cd(invfolder);
+            var names = file.getFileNames();
+            var exists = false;
+            for (var i = 0; i < names.length; i++) {
+                if (names[i] === invtotal) {
+                    exists = true;
+                }
+            }
+
+            if (exists) {
+                var obj = JSON.parse(file.readFile(invtotal));
+                var cont = true;
+                while (cont) {
+                    var same = false;
+                    for (var b = 0; b < obj.items.length; b++) {
+                        if (obj.items[b].tag == tag) {
+                            tag = Math.floor(Math.random() * 1000000);
+                            same = true;
+                        }
+                    }
+                    if (!same) {
+                        cont = false;
+                    }
+                }
+            }
+        }
+        file.resetDirectory();
+        return tag;
+    }
+
+    function generateDocument(obj) {
+        // Generate the document using a QtObject or a component
+
+    }
+
+    function exportDocument(obj) {
+        // Export the document to pdf, and ask the server where to save the object
+    }
 }

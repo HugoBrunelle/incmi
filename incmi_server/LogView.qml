@@ -4,43 +4,43 @@ import QtQuick.Controls 2.2
 import Qt.labs.calendar 1.0
 
 Item {
-    property alias logconsole: textArea
-    width: 1280
-    height: 495
-
-    Connections {
-        target: mainwindow
-        onLogMessage: {
-            addline(mess);
+    width: parent.width
+    height: parent.height
+    Rectangle {
+        id: rect
+        anchors.fill: parent
+        anchors.margins: 25
+        radius: 9
+        border.color: "lightgrey"
+        antialiasing: false
+        border.width: 1
+        color: "white"
+        clip: true
+        TextEdit {
+            id: textArea
+            text: textboxt
+            x: 10
+            y: 10
+            width: parent.width - 20
+            height: parent.height - 20
+            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+            font.pointSize: 10
+            enabled: false
+            onContentHeightChanged: {
+                if (contentHeight > height) {
+                    y = height - contentHeight;
+                }else {
+                    y = 0;
+                }
+            }
+            onHeightChanged: {
+                if (contentHeight > height) {
+                    y = height - contentHeight;
+                }else {
+                    y = 0;
+                }
+            }
         }
     }
-
-
-    TextArea {
-        id: textArea
-        text: qsTr("Text Area")
-        anchors.rightMargin: 10
-        anchors.leftMargin: 10
-        anchors.bottomMargin: 10
-        anchors.topMargin: 10
-        wrapMode: Text.WordWrap
-        font.pointSize: 10
-        anchors.fill: parent
-        enabled: false
-    }
-
-    ScrollBar {
-        id: vbar
-        hoverEnabled: true
-        active: hovered || pressed
-        orientation: Qt.Vertical
-        size: parent.height / textArea.contentHeight
-        anchors.top: parent.top
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-    }
-
-    function addline(val){
-        textArea.append(val);
-    }
 }
+

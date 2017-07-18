@@ -72,7 +72,7 @@ Item {
             }
             Text {
                 id: account
-                text: acount
+                text: count
                 Layout.maximumWidth: 50
                 Layout.minimumWidth: 50
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -94,7 +94,7 @@ Item {
             }
             Text {
                 id: tvcount
-                text: vcount
+                text: "0"
                 Layout.maximumWidth: 50
                 Layout.minimumWidth: 50
                 fontSizeMode: Text.HorizontalFit

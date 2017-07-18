@@ -8,10 +8,4 @@ ListModel {
     ListElement{
         type: "Server Settings"
     }
-    ListElement{
-        type: "Access and Password"
-    }
-    ListElement{
-        type: "Access and Password"
-    }
 }

@@ -68,18 +68,20 @@ Item {
                 y: l1.y
                 width: (parent.width*3/4) - 2*xd
                 height: (parent.height/2)-2*xd
-                color: "whitesmoke"
+                color: "white"
                 border.color: "lightgrey"
                 border.width: 1
                 radius: 9
             TextInput {
+                id: acc
                 selectByMouse: true
                 anchors.fill: parent
                 anchors.margins: 3
                 anchors.leftMargin: 15
                 verticalAlignment: Text.AlignVCenter
                 font.pointSize: 10
-                text: qsTr("Text Field")
+                KeyNavigation.tab: pass
+                text: settings.saccount
             }
             }
             Rectangle {
@@ -87,25 +89,29 @@ Item {
                 y: l2.y
                 width: (parent.width*3/4) - 2*xd
                 height: (parent.height/2)-2*xd
-                color: "whitesmoke"
+                color: "white"
                 border.color: "lightgrey"
                 border.width: 1
                 radius: 9
             TextInput{
+                id: pass
                 selectByMouse: true
                 anchors.fill: parent
                 anchors.margins: 3
                 anchors.leftMargin: 15
                 verticalAlignment: Text.AlignVCenter
                 font.pointSize: 10
-                text: qsTr("Text Field")
+                KeyNavigation.tab: acc
+                text: settings.spass
             }
             }
         }
     }
 
     function save() {
-
+        console.log("Saving");
+        settings.saccount = acc.text;
+        settings.spass = pass.text;
     }
 
 

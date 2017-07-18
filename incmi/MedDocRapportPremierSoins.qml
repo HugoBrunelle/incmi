@@ -467,14 +467,23 @@ Rectangle {
                                     Layout.fillHeight: true
                                     Layout.fillWidth: false
                                 }
-                                TextField {
-                                    leftPadding: 5
-                                    bottomPadding: 8
+                                Rectangle {
                                     Layout.maximumHeight: 40
-                                    horizontalAlignment: Text.AlignLeft
+                                    Layout.margins: 3
                                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                                    Layout.fillHeight: true
                                     Layout.fillWidth: true
+                                    Layout.fillHeight: true
+                                    border.color: "silver"
+                                    radius: 3
+                                    antialiasing: false
+                                    border.width: 1
+                                TextInput {
+                                    anchors.fill: parent
+                                    anchors.margins: 4
+                                    leftPadding: 5
+                                    verticalAlignment: Text.AlignVCenter
+                                    font.pointSize: 11
+                                }
                                 }
                             }
                         }
@@ -495,14 +504,23 @@ Rectangle {
                                     Layout.fillHeight: true
                                     Layout.fillWidth: false
                                 }
-                                TextField {
-                                    leftPadding: 5
-                                    bottomPadding: 8
+                                Rectangle {
                                     Layout.maximumHeight: 40
-                                    horizontalAlignment: Text.AlignLeft
+                                    Layout.margins: 3
                                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                                     Layout.fillHeight: true
                                     Layout.fillWidth: true
+                                    radius: 3
+                                    border.color: "silver"
+                                    border.width: 1
+                                    antialiasing: false
+                                TextInput {
+                                    anchors.fill: parent
+                                    anchors.margins: 4
+                                    leftPadding: 5
+                                    verticalAlignment: Text.AlignVCenter
+                                    font.pointSize: 11
+                                }
                                 }
                             }
                         }
@@ -523,14 +541,23 @@ Rectangle {
                                     Layout.fillHeight: true
                                     Layout.fillWidth: false
                                 }
-                                TextField {
-                                    leftPadding: 5
-                                    bottomPadding: 8
+                                Rectangle {
                                     Layout.maximumHeight: 40
-                                    horizontalAlignment: Text.AlignLeft
+                                    Layout.margins: 3
                                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                                     Layout.fillHeight: true
                                     Layout.fillWidth: true
+                                    radius: 3
+                                    border.color: "silver"
+                                    border.width: 1
+                                    antialiasing: false
+                                TextInput {
+                                    anchors.fill: parent
+                                    anchors.margins: 4
+                                    leftPadding: 5
+                                    verticalAlignment: Text.AlignVCenter
+                                    font.pointSize: 11
+                                }
                                 }
                             }
                         }
@@ -551,14 +578,23 @@ Rectangle {
                                     Layout.fillHeight: true
                                     Layout.fillWidth: false
                                 }
-                                TextField {
-                                    leftPadding: 5
-                                    bottomPadding: 8
+                                Rectangle {
                                     Layout.maximumHeight: 40
-                                    horizontalAlignment: Text.AlignLeft
                                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                                     Layout.fillHeight: true
+                                    Layout.margins: 3
                                     Layout.fillWidth: true
+                                    radius: 3
+                                    border.color: "silver"
+                                    border.width: 1
+                                    antialiasing: false
+                                TextInput {
+                                    anchors.fill: parent
+                                    anchors.margins: 4
+                                    leftPadding: 5
+                                    verticalAlignment: Text.AlignVCenter
+                                    font.pointSize: 11
+                                }
                                 }
                             }
                         }
@@ -579,14 +615,23 @@ Rectangle {
                                     Layout.fillHeight: true
                                     Layout.fillWidth: false
                                 }
-                                TextField {
-                                    leftPadding: 5
-                                    bottomPadding: 8
+                                Rectangle {
                                     Layout.maximumHeight: 40
-                                    horizontalAlignment: Text.AlignLeft
+                                    Layout.margins: 3
                                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                                     Layout.fillHeight: true
                                     Layout.fillWidth: true
+                                    radius: 3
+                                    border.color: "silver"
+                                    border.width: 1
+                                    antialiasing: false
+                                TextInput {
+                                    anchors.fill: parent
+                                    anchors.margins: 4
+                                    leftPadding: 5
+                                    verticalAlignment: Text.AlignVCenter
+                                    font.pointSize: 11
+                                }
                                 }
                             }
                         }
@@ -653,15 +698,23 @@ Rectangle {
                                     Layout.fillHeight: true
                                     Layout.fillWidth: false
                                 }
-                                TextField {
-                                    leftPadding: 5
-                                    bottomPadding: 8
+                                Rectangle {
                                     Layout.maximumHeight: 40
-                                    horizontalAlignment: Text.AlignLeft
+                                    Layout.margins: 3
                                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                                     Layout.fillHeight: true
                                     Layout.fillWidth: true
-                                    Material.accent: colora
+                                    radius: 3
+                                    border.color: "silver"
+                                    border.width: 1
+                                    antialiasing: false
+                                TextInput {
+                                    anchors.fill: parent
+                                    anchors.margins: 4
+                                    leftPadding: 5
+                                    verticalAlignment: Text.AlignVCenter
+                                    font.pointSize: 11
+                                }
                                 }
                             }
                         }
@@ -682,15 +735,23 @@ Rectangle {
                                     Layout.fillHeight: true
                                     Layout.fillWidth: false
                                 }
-                                TextField {
-                                    leftPadding: 5
-                                    bottomPadding: 8
+                                Rectangle {
                                     Layout.maximumHeight: 40
-                                    horizontalAlignment: Text.AlignLeft
+                                    Layout.margins: 3
                                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                                     Layout.fillHeight: true
                                     Layout.fillWidth: true
-                                    Material.accent: colora
+                                    radius: 3
+                                    border.color: "silver"
+                                    border.width: 1
+                                    antialiasing: false
+                                TextInput {
+                                    anchors.fill: parent
+                                    anchors.margins: 4
+                                    leftPadding: 5
+                                    verticalAlignment: Text.AlignVCenter
+                                    font.pointSize: 11
+                                }
                                 }
                             }
                         }
@@ -711,15 +772,23 @@ Rectangle {
                                     Layout.fillHeight: true
                                     Layout.fillWidth: false
                                 }
-                                TextField {
-                                    leftPadding: 5
-                                    bottomPadding: 8
+                                Rectangle {
                                     Layout.maximumHeight: 40
-                                    horizontalAlignment: Text.AlignLeft
+                                    Layout.margins: 3
                                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                                     Layout.fillHeight: true
                                     Layout.fillWidth: true
-                                    Material.accent: colora
+                                    radius: 3
+                                    border.color: "silver"
+                                    border.width: 1
+                                    antialiasing: false
+                                TextInput {
+                                    anchors.fill: parent
+                                    anchors.margins: 4
+                                    leftPadding: 5
+                                    verticalAlignment: Text.AlignVCenter
+                                    font.pointSize: 11
+                                }
                                 }
 
                                 RadioButton {
@@ -750,7 +819,8 @@ Rectangle {
                             RowLayout{
                                 anchors.fill: parent
                                 Label {
-                                    text: qsTr("Date de naissance (jj/mm/yy) :")
+                                    text: qsTr("Date de nais. (jj/mm/yy):")
+                                    font.pointSize: 10
                                     Layout.maximumHeight: 30
                                     verticalAlignment: Text.AlignVCenter
                                     horizontalAlignment: Text.AlignLeft
@@ -758,53 +828,80 @@ Rectangle {
                                     Layout.fillHeight: true
                                     Layout.fillWidth: false
                                 }
-                                TextField {
-                                    Layout.minimumWidth: 20
-                                    leftPadding: 5
-                                    bottomPadding: 8
+                                Rectangle {
                                     Layout.maximumHeight: 40
-                                    horizontalAlignment: Text.AlignLeft
-                                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                                    Layout.fillHeight: true
-                                    Layout.fillWidth: true
-                                }
-                                Label {
-                                    text: qsTr("/")
-                                    Layout.maximumHeight: 30
-                                    verticalAlignment: Text.AlignVCenter
-                                    horizontalAlignment: Text.AlignHCenter
-                                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                                    Layout.fillHeight: true
-                                    Layout.fillWidth: true
-                                }
-                                TextField {
-                                    Layout.minimumWidth: 20
-                                    leftPadding: 5
-                                    bottomPadding: 8
-                                    Layout.maximumHeight: 40
-                                    horizontalAlignment: Text.AlignLeft
-                                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                                    Layout.fillHeight: true
-                                    Layout.fillWidth: true
-                                }
-                                Label {
-                                    text: qsTr("/")
-                                    Layout.maximumHeight: 30
-                                    verticalAlignment: Text.AlignVCenter
-                                    horizontalAlignment: Text.AlignHCenter
-                                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                                    Layout.fillHeight: true
-                                    Layout.fillWidth: true
-                                }
-                                TextField {
                                     Layout.minimumWidth: 25
-                                    leftPadding: 5
-                                    bottomPadding: 8
-                                    Layout.maximumHeight: 40
-                                    horizontalAlignment: Text.AlignLeft
+                                    Layout.margins: 3
                                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                                     Layout.fillHeight: true
                                     Layout.fillWidth: true
+                                    radius: 3
+                                    border.color: "silver"
+                                    border.width: 1
+                                    antialiasing: false
+                                TextInput {
+                                    anchors.fill: parent
+                                    anchors.margins: 2
+                                    leftPadding: 5
+                                    verticalAlignment: Text.AlignVCenter
+                                    font.pointSize: 11
+                                }
+                                }
+                                Label {
+                                    text: qsTr("/")
+                                    Layout.maximumHeight: 30
+                                    verticalAlignment: Text.AlignVCenter
+                                    horizontalAlignment: Text.AlignHCenter
+                                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                                    Layout.fillHeight: true
+                                    Layout.fillWidth: true
+                                }
+                                Rectangle {
+                                    Layout.maximumHeight: 40
+                                    Layout.minimumWidth: 25
+                                    Layout.margins: 3
+                                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                                    Layout.fillHeight: true
+                                    Layout.fillWidth: true
+                                    radius: 3
+                                    border.color: "silver"
+                                    border.width: 1
+                                    antialiasing: false
+                                TextInput {
+                                    anchors.fill: parent
+                                    anchors.margins: 2
+                                    leftPadding: 5
+                                    verticalAlignment: Text.AlignVCenter
+                                    font.pointSize: 11
+                                }
+                                }
+                                Label {
+                                    text: qsTr("/")
+                                    Layout.maximumHeight: 30
+                                    verticalAlignment: Text.AlignVCenter
+                                    horizontalAlignment: Text.AlignHCenter
+                                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                                    Layout.fillHeight: true
+                                    Layout.fillWidth: true
+                                }
+                                Rectangle {
+                                    Layout.maximumHeight: 40
+                                    Layout.minimumWidth: 37
+                                    Layout.margins: 3
+                                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                                    Layout.fillHeight: true
+                                    Layout.fillWidth: true
+                                    radius: 3
+                                    border.color: "silver"
+                                    border.width: 1
+                                    antialiasing: false
+                                TextInput {
+                                    anchors.fill: parent
+                                    anchors.margins: 2
+                                    leftPadding: 4
+                                    verticalAlignment: Text.AlignVCenter
+                                    font.pointSize: 11
+                                }
                                 }
                             }
                         }
@@ -825,14 +922,23 @@ Rectangle {
                                     Layout.fillHeight: true
                                     Layout.fillWidth: false
                                 }
-                                TextField {
-                                    leftPadding: 5
-                                    bottomPadding: 8
+                                Rectangle {
                                     Layout.maximumHeight: 40
-                                    horizontalAlignment: Text.AlignLeft
+                                    Layout.margins: 3
                                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                                    Layout.fillHeight: false
+                                    Layout.fillHeight: true
                                     Layout.fillWidth: true
+                                    radius: 3
+                                    border.color: "silver"
+                                    border.width: 1
+                                    antialiasing: false
+                                TextInput {
+                                    anchors.fill: parent
+                                    anchors.margins: 4
+                                    leftPadding: 5
+                                    verticalAlignment: Text.AlignVCenter
+                                    font.pointSize: 11
+                                }
                                 }
                             }
                         }
@@ -853,14 +959,23 @@ Rectangle {
                                     Layout.fillHeight: true
                                     Layout.fillWidth: false
                                 }
-                                TextField {
-                                    leftPadding: 5
-                                    bottomPadding: 8
+                                Rectangle {
                                     Layout.maximumHeight: 40
-                                    horizontalAlignment: Text.AlignLeft
+                                    Layout.margins: 3
                                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                                    Layout.fillHeight: false
+                                    Layout.fillHeight: true
                                     Layout.fillWidth: true
+                                    radius: 3
+                                    border.color: "silver"
+                                    border.width: 1
+                                    antialiasing: false
+                                TextInput {
+                                    anchors.fill: parent
+                                    anchors.margins: 4
+                                    leftPadding: 5
+                                    verticalAlignment: Text.AlignVCenter
+                                    font.pointSize: 11
+                                }
                                 }
                             }
                         }
@@ -881,14 +996,23 @@ Rectangle {
                                     Layout.fillHeight: true
                                     Layout.fillWidth: false
                                 }
-                                TextField {
-                                    leftPadding: 5
-                                    bottomPadding: 8
+                                Rectangle {
                                     Layout.maximumHeight: 40
-                                    horizontalAlignment: Text.AlignLeft
+                                    Layout.margins: 3
                                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                                    Layout.fillHeight: false
+                                    Layout.fillHeight: true
                                     Layout.fillWidth: true
+                                    radius: 3
+                                    border.color: "silver"
+                                    border.width: 1
+                                    antialiasing: false
+                                TextInput {
+                                    anchors.fill: parent
+                                    anchors.margins: 4
+                                    leftPadding: 5
+                                    verticalAlignment: Text.AlignVCenter
+                                    font.pointSize: 11
+                                }
                                 }
                             }
                         }
@@ -909,14 +1033,23 @@ Rectangle {
                                     Layout.fillHeight: true
                                     Layout.fillWidth: false
                                 }
-                                TextField {
-                                    leftPadding: 5
-                                    bottomPadding: 8
+                                Rectangle {
                                     Layout.maximumHeight: 40
-                                    horizontalAlignment: Text.AlignLeft
+                                    Layout.margins: 3
                                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                                    Layout.fillHeight: false
+                                    Layout.fillHeight: true
                                     Layout.fillWidth: true
+                                    radius: 3
+                                    border.color: "silver"
+                                    border.width: 1
+                                    antialiasing: false
+                                TextInput {
+                                    anchors.fill: parent
+                                    anchors.margins: 4
+                                    leftPadding: 5
+                                    verticalAlignment: Text.AlignVCenter
+                                    font.pointSize: 11
+                                }
                                 }
                             }
                         }
@@ -937,14 +1070,23 @@ Rectangle {
                                     Layout.fillHeight: true
                                     Layout.fillWidth: false
                                 }
-                                TextField {
-                                    leftPadding: 5
-                                    bottomPadding: 8
+                                Rectangle {
                                     Layout.maximumHeight: 40
-                                    horizontalAlignment: Text.AlignLeft
+                                    Layout.margins: 3
                                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                                    Layout.fillHeight: false
+                                    Layout.fillHeight: true
                                     Layout.fillWidth: true
+                                    radius: 3
+                                    border.color: "silver"
+                                    border.width: 1
+                                    antialiasing: false
+                                TextInput {
+                                    anchors.fill: parent
+                                    anchors.margins: 4
+                                    leftPadding: 5
+                                    verticalAlignment: Text.AlignVCenter
+                                    font.pointSize: 11
+                                }
                                 }
                             }
                         }

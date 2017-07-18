@@ -8,6 +8,20 @@ Item {
     height: 720
     property real wm: 3.76
     property real hm: 3.89
+    Component.onCompleted: {
+        user.forceActiveFocus();
+    }
+
+    function dologin() {
+        if (pass.text == settings.spass && user.text == settings.saccount) {
+            load.changeComponent(wmain);
+        } else
+        {
+            lab.text = "You have entered a wrong username or password, try again.."
+            lab.font.pointSize = 12
+        }
+    }
+
     Pane {
         anchors.rightMargin: 340
         anchors.bottomMargin: 185
@@ -64,6 +78,14 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         font.pointSize: 10
                         KeyNavigation.tab: pass
+                        Keys.priority: Keys.BeforeItem
+                        Keys.onPressed: {
+                            if (event.key == Qt.Key_Enter || event.key == Qt.Key_Return) {
+                                dologin();
+                                event.accepted = true;
+                            }
+                        }
+
                         onActiveFocusChanged: {
                             if(user.activeFocus) {
                                 if (user.text == "Username") {
@@ -98,6 +120,13 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         font.pointSize: 10
                         KeyNavigation.tab: b
+                        Keys.priority: Keys.BeforeItem
+                        Keys.onPressed: {
+                            if (event.key == Qt.Key_Enter || event.key == Qt.Key_Return) {
+                                dologin();
+                                event.accepted = true;
+                            }
+                        }
                         onActiveFocusChanged: {
                             if(pass.activeFocus) {
                                 if (pass.text == "Password") {
@@ -122,15 +151,8 @@ Item {
                     Material.background: colorp
                     Material.foreground: colorlt
                     KeyNavigation.tab: user
-
                     onClicked: {
-                        if (pass.text == "incmi2017" && user.text == "admin") {
-                            load.changeComponent(main);
-                        } else
-                        {
-                            lab.text = "You have entered a wrong username or password, try again.."
-                            lab.font.pointSize = 12
-                        }
+                        dologin();
                     }
                 }
             }
