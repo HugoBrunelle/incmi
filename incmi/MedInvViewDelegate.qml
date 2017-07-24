@@ -7,16 +7,17 @@ Item {
     x: 5
     width: parent.width - 10
     height: 45
-    Pane {
-        Material.elevation: 1
-        Material.background: "#F5F5F5"
-
+    Rectangle {
+        color: "white"
+        border.color: "grey"
+        border.width: 1
+        radius: 3
         anchors.fill: parent
         RowLayout {
-            anchors.rightMargin: 0
-            anchors.bottomMargin: 0
-            anchors.leftMargin: 0
-            anchors.topMargin: 0
+            anchors.rightMargin: 15
+            anchors.bottomMargin: 10
+            anchors.leftMargin: 15
+            anchors.topMargin: 10
             anchors.fill: parent
             spacing: 10
             Text {
@@ -61,7 +62,7 @@ Item {
             }
 
             Text {
-                text: recommendedCount
+                text: rcount
                 Layout.minimumWidth: 50
                 Layout.maximumWidth: 50
                 verticalAlignment: Text.AlignVCenter
@@ -82,7 +83,7 @@ Item {
     }
 
     Component.onCompleted: {
-        if (parseInt(count) < parseInt(recommendedCount)) {
+        if (parseInt(count) < parseInt(rcount)) {
             cc.color = "red";
 
         }else {

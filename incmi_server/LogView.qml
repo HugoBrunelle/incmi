@@ -10,7 +10,7 @@ Item {
         id: rect
         anchors.fill: parent
         anchors.margins: 25
-        radius: 9
+        radius: 3
         border.color: "lightgrey"
         antialiasing: false
         border.width: 1

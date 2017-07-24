@@ -18,8 +18,8 @@ Rectangle {
         Layout.maximumHeight: 100
         Layout.fillWidth: true
         Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
-        Material.elevation: 4
-        Material.background: colorp
+        Material.elevation: 2
+        Material.background: colordp
         GridLayout {
             id: gridLayout
             anchors.fill: parent
@@ -28,7 +28,19 @@ Rectangle {
                 source: "Images/ucmu_100h.png"
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+                Layout.maximumWidth: 100
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            }
+
+            Label {
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignLeft
+                text: "Incmi"
+                font.pointSize: 16
+                color: colorlt
+                font.bold: true
             }
         }
     }
@@ -81,11 +93,11 @@ Rectangle {
 
     Prompt {
         id: acodebox
-        x: parent.width / 10
+        x: parent.width / 8
         y: parent.height / 4.5
         width: parent.width - 2*x
         height: parent.height - 2*y
-        Material.background: Material.Amber
+        Material.background: colora
         Material.elevation: 8
         ColumnLayout {
             anchors.leftMargin: parent.width / 15
@@ -100,28 +112,36 @@ Rectangle {
                 fontSizeMode: Text.Fit
                 Layout.fillHeight: true
                 Layout.fillWidth: true
-                font.pointSize: 17
+                font.pointSize: 13
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                Material.foreground: colorlt
             }
 
-            TextField {
-                id: passInput
-                text: qsTr("")
-                Layout.maximumHeight: 50
-                font.pointSize: 15
-                Layout.fillWidth: true
+            Rectangle {
+                id: trectmatricule
+                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                 Layout.fillHeight: true
-                Layout.columnSpan: 1
-                Layout.rowSpan: 0
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+                Layout.maximumHeight: tfieldMatricule.implicitHeight + 15
+                Layout.minimumHeight: tfieldMatricule.implicitHeight
+                Layout.fillWidth: true
+                color: "white"
+                radius:3
+            TextInput {
+                id: tfieldMatricule
+                text: qsTr("")
+                anchors.fill: parent
+                anchors.margins: 3
+                anchors.leftMargin: 10
+                verticalAlignment: Text.AlignVCenter
+                font.pointSize: 12
+            }
             }
 
             Button {
                 text: qsTr("Soumettre")
-                Layout.maximumHeight: 60
-                font.pointSize: 24
+                Layout.maximumHeight: 50
                 Material.foreground: colorlt
                 Layout.fillHeight: true
                 Layout.fillWidth: true

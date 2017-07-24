@@ -15,16 +15,27 @@ Rectangle {
         Layout.maximumHeight: 100
         Layout.fillWidth: true
         Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
-        Material.elevation: 4
-        Material.background: colorp
+        Material.elevation: 2
+        Material.background: colordp
         GridLayout {
             anchors.fill: parent
             Image {
                 fillMode: Image.PreserveAspectFit
                 source: "Images/ucmu_100h.png"
+                Layout.maximumWidth: 100
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            }
+            Label {
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignLeft
+                text: "Incmi"
+                font.pointSize: 16
+                color: colorlt
+                font.bold: true
             }
         }
     }

@@ -3,10 +3,42 @@ import QtQuick.Window 2.0
 import QtQuick.Controls.Material 2.1
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
+import QtWebSockets 1.1
 
 Rectangle {
     width: 360
     height: 640
+
+
+
+    BaseSocket {
+        id: medsocket
+        host: settings.host
+        port: settings.port
+        onStatusChanged: {
+            switch(status) {
+            case WebSocket.Open:
+                medsocket.sendTextMessage('{"messageindex":"1"}');
+                break;
+            }
+        }
+        onTextMessageReceived: {
+            console.log(message);
+            var obj = JSON.parse(message);
+            for (var i = 0; i < obj.items.length; i++) {
+                var item = JSON.parse(obj.items[i]);
+                mod.append(item);
+            }
+            medsocket.active = false;
+
+        }
+    }
+
+    Component.onCompleted: {
+        medsocket.active = true;
+    }
+
+
 
     ColumnLayout {
         id: mview
@@ -14,14 +46,14 @@ Rectangle {
         anchors.fill: parent
         Pane {
             width: 360
-            height: 140
+            height: 110
             Layout.minimumHeight: 50
             Layout.fillHeight: true
-            Layout.maximumHeight: 140
+            Layout.maximumHeight: 110
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
-            Material.background: colorp
-            Material.elevation: 4
+            Material.background: colordp
+            Material.elevation: 2
             GridLayout {
                 anchors.fill: parent
                 Image {
@@ -37,17 +69,18 @@ Rectangle {
                 ColumnLayout {
                     width: 100
                     height: 100
-                    Layout.maximumWidth: 500
+                    Layout.maximumWidth: 300
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                     Layout.fillWidth: true
                     Layout.fillHeight: true
+                    spacing: 0
                     Button {
                         text: qsTr("Inventaire")
                         Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                         Layout.fillHeight: true
                         Layout.fillWidth: true
                         Material.foreground: colorlt
-                        Material.background: colordp
+                        Material.background: colorp
                         onClicked: {
                             winchange(medinventory);
                         }
@@ -59,7 +92,7 @@ Rectangle {
                         Layout.fillHeight: true
                         Layout.fillWidth: true
                         Material.foreground: colorlt
-                        Material.background: colordp
+                        Material.background: colorp
                         onClicked: {
                             mview.enabled = false;
                             newdprompt.show();
@@ -85,18 +118,18 @@ Rectangle {
             Layout.fillHeight: true
             Layout.fillWidth: true
             delegate: MediViewDelegate {}
-            model: MediViewModel {}
+            model: MediViewModel {id: mod}
+            add: Transition { NumberAnimation { properties: "x,y"; from: width; duration: 300; easing.type: Easing.OutQuad }}
         }
         Pane {
             width: 360
-            height: 80
+            height: 70
             Layout.minimumHeight: 50
             Layout.fillHeight: true
-            Layout.maximumHeight: 80
+            Layout.maximumHeight: 70
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
             Material.background: "#0288D1"
-            Material.elevation: 4
             GridLayout {
                 anchors.fill: parent
                 Button {
@@ -117,7 +150,7 @@ Rectangle {
 
     Prompt {
         id: newdprompt
-        Material.background: Material.Amber
+        Material.background: colora
         Material.elevation: 10
         x: parent.width / 12
         y: parent.height / 7
@@ -126,8 +159,8 @@ Rectangle {
         GridLayout {
             anchors.rightMargin: parent.width / 16
             anchors.leftMargin: parent.width / 16
-            anchors.bottomMargin: parent.height / 8
-            anchors.topMargin: parent.height / 8
+            anchors.bottomMargin: parent.height / 6.5
+            anchors.topMargin: parent.height / 6.5
             flow: GridLayout.TopToBottom
             columnSpacing: 2
             anchors.fill: parent
@@ -137,8 +170,9 @@ Rectangle {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 Material.foreground: colorlt
-                Material.background: colordp
+                Material.background: colorp
                 onClicked: {
+                    naturedoc = "1";
                     winchange(meddocrs);
                 }
             }
@@ -148,20 +182,10 @@ Rectangle {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 Material.foreground: colorlt
-                Material.background: colordp
+                Material.background: colorp
                 onClicked: {
+                     naturedoc = "2";
                      winchange(meddocrs);
-                }
-            }
-
-            Button {
-                text: qsTr("Sever")
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-                Material.foreground: colorlt
-                Material.background: colordp
-                onClicked: {
-                    winchange(meddocrs);
                 }
             }
 
@@ -170,7 +194,7 @@ Rectangle {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 Material.foreground: colorlt
-                Material.background: colordp
+                Material.background: colorp
                 onClicked: {
                     mview.enabled = true;
                     newdprompt.hide();

@@ -3,6 +3,8 @@
 #include <QTextStream>
 #include <QDir>
 #include <QTextCodec>
+#include <QtPrintSupport/qprinter.h>
+#include <qpainter.h>
 
 // Static methods, no overide required:
 QString FileIO::getApplicationPath(){
@@ -132,4 +134,21 @@ bool FileIO::fileExists(QString fileName)
 bool FileIO::removeDirectory(const QString& dirpath){
      QDir dir = QDir(dirpath);
     return removeDirectoryFromDir(dir);
+}
+
+
+// This shows a save file dialog to get the savename and path, then saves the QImage to a pdf doc
+
+bool FileIO::printToPDF(const QString& imgfilename, const QString& filename) {
+    QImage img(imgfilename, Q_NULLPTR);
+    QPrinter printer(QPrinter::HighResolution);
+    if (filename.isEmpty()) return false;
+    printer.setPaperSize(QPrinter::A4);
+    printer.setFullPage(true);
+    printer.setOutputFileName(filename + ".pdf");
+    printer.setOutputFormat(QPrinter::PdfFormat);
+    QPainter paint(&printer);
+    paint.drawImage(0,0,img);
+    paint.end();
+    return true;
 }

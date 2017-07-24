@@ -1,10 +1,12 @@
-import QtQuick 2.0
+import QtQuick 2.8
 import QtQuick.Controls 2.2
 import QtQuick.Controls.Material 2.2
 
 Item {
     width: parent.width
     height: parent.height
+
+    property real mscale: sli.position
 
     function delDocument() {
 
@@ -23,8 +25,38 @@ Item {
         return vis;
     }
 
-    Component.onCompleted: {
+    function setModel() {
+        var message = JSON.parse(createServerChangesList());
+        for (var i = 0; i < message.items.length; i++) {
+            var item = JSON.parse(message.items[i]);
+            mod.append(item);
+        }
+    }
 
+    function imageRendered(obj) {
+        if (pload.active) {
+            currentimageurl = obj.url;
+            pload.active = false;
+        }
+    }
+
+    Loader {
+        visible: false;
+        active: false;
+        id: pload;
+        sourceComponent: pcom
+
+        onStatusChanged: {
+            if (status == Loader.Ready) {
+                if (active) {
+                    pload.item.grabToImage(function(obj) {imageRendered(obj);});
+                }
+            }
+        }
+    }
+
+    Component.onCompleted: {
+        setModel();
 
     }
     property int xd: 2
@@ -51,107 +83,10 @@ Item {
             clip: true
             width: parent.width/2
             height: parent.height - 20
-            model: InventoryListModel {}
-            delegate: settypedel
-
+            model: ListModel {id: mod}
+            delegate: DocumentsViewDelegate {}
             onCurrentIndexChanged: {
                 // Change the values of the boxes.
-            }
-        }
-
-        Component {
-            id: settypedel
-            Item {
-                x: xd
-                height: 38
-                width: parent.width - 2*x
-                Rectangle {
-                    border.color: "lightgrey"
-                    anchors.fill: parent
-                    height: parent.height
-                    width: parent.width
-                    color: typeview.currentIndex == index ? "gainsboro" : "white"
-                    anchors.margins: 2
-                    border.width: 1
-                    Label {
-                        id: ld
-                        x: xd
-                        width: (parent.width / 4) - 3*xd
-                        height: parent.height
-                        text: type
-                        font.pointSize: 10
-                        verticalAlignment: Text.AlignVCenter
-                        horizontalAlignment: Text.AlignRight
-                    }
-                    Rectangle{
-                        width: 1
-                        y: 3*xd
-                        height: parent.height - 6*xd
-                        x: parent.width * 1 / 4
-                        color: "grey"
-                        visible: checkVisibility()
-                    }
-
-                    Label {
-                        id: ld2
-                        x: parent.width*1/4 - 2*xd
-                        width: parent.width / 4 - xd
-                        height: parent.height
-                        text: count
-                        font.pointSize: 10
-                        verticalAlignment: Text.AlignVCenter
-                        horizontalAlignment: Text.AlignRight
-                        visible: checkVisibility()
-                    }
-                    Rectangle{
-                        width: 1
-                        y: 3*xd
-                        height: parent.height - 6*xd
-                        x: parent.width * 2 / 4
-                        color: "grey"
-                        visible: checkVisibility()
-                    }
-
-                    Label {
-                        id: ld3
-                        x: parent.width * 2 /4 - 2*xd
-                        width: parent.width/4 - xd
-                        height: parent.height
-                        text: rcount
-                        font.pointSize: 10
-                        verticalAlignment: Text.AlignVCenter
-                        horizontalAlignment: Text.AlignRight
-                        visible: checkVisibility()
-                    }
-                    Rectangle{
-                        width: 1
-                        y: 3*xd
-                        height: parent.height - 6*xd
-                        x: parent.width * 3 / 4
-                        color: "grey"
-                        visible: checkVisibility()
-                    }
-
-                    Label {
-                        id: ld4
-                        x: parent.width * 3 /4 - 2*xd
-                        width: parent.width/4 - xd
-                        height: parent.height
-                        text: rcount
-                        font.pointSize: 10
-                        verticalAlignment: Text.AlignVCenter
-                        horizontalAlignment: Text.AlignRight
-                        visible: checkVisibility()
-                    }
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        typeview.currentIndex = index;
-                    }
-                }
-
             }
         }
         Rectangle{
@@ -196,12 +131,67 @@ Item {
                 height: parent.height - b.height - h1.height - 18*xd
                 Material.background: "whitesmoke"
                 Material.elevation: 8
+                ScrollView {
+                    anchors.fill: parent
+                    clip: true
+                    contentHeight: rec.height
+                    contentWidth: rec.width
+                    Rectangle {
+                        id: rec
+                        width: docpreivew.sourceSize.width * mscale
+                        height: docpreivew.sourceSize.height * mscale
+                        Image {
+                            fillMode: Image.Stretch
+                            anchors.fill: parent
+                            id: docpreivew
+                            source: currentimageurl
+                        }
+                    }
+                }
             }
+            Item {
+                x: 2.5*xd
+                height: (parent.height/10) - 2*xd
+                width: parent.width * 1 / 5 - 5*xd
+                y: titem.height - height - 2*xd
+                Label {
+                    id: clab
+                    leftPadding: 20
+                    font.pointSize: 12
+                    text: "Zoom: " + Math.floor(((sli.position/1) * 100)).toString() + "%"
+                    width: parent.width
+                    height: implicitHeight
+                }
 
+                Slider {
+                    id: sli
+                    y: clab.height
+                    height: parent.height - clab.height
+                    width: parent.width
+                    Material.accent: colora
+                    value: 0.5
+                }
 
+            }
 
             Button {
                 id : b
+                x: (parent.width/5) + 2.5*xd
+                width: parent.width*2/5 - 5*xd
+                height: (parent.height/10) - 2*xd
+                y: titem.height - height - 2*xd
+                text: "Exporter"
+                Material.foreground: colorlt
+                Material.background: colordp
+
+                onClicked: {
+                    file.printToPDF(currentimageurl, currentfilename);
+                }
+            }
+
+
+            Button {
+                id : c
                 x: (parent.width*3/5)
                 width: parent.width*2/5 - 5*xd
                 height: (parent.height/10) - 2*xd

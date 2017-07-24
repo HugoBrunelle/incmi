@@ -21,6 +21,7 @@ Item {
 
     function add() {
         var val = (parseInt(tvcount.text) + 1).toString()
+        change = val;
         vcolor(val);
         tvcount.text = val;
     }
@@ -32,6 +33,7 @@ Item {
             val += 1;
         }
         vcolor(val);
+        change = val.toString();
         tvcount.text = val.toString();
     }
 
@@ -40,18 +42,20 @@ Item {
     }
 
 
-    Pane {
-        Material.elevation: 1
-        Material.background:"#F5F5F5"
+    Rectangle {
+        color: "white"
+        border.color: "grey"
+        border.width: 1
+        radius: 3
 
         anchors.fill: parent
         RowLayout {
-            anchors.rightMargin: 0
-            anchors.bottomMargin: 0
-            anchors.leftMargin: 0
-            anchors.topMargin: 0
+            anchors.rightMargin: 15
+            anchors.bottomMargin: 10
+            anchors.leftMargin: 15
+            anchors.topMargin: 10
             anchors.fill: parent
-            spacing: 2
+            spacing: 4
             Text {
                 id: mheight
                 text: name
@@ -95,6 +99,7 @@ Item {
             Text {
                 id: tvcount
                 text: "0"
+                font.bold: true
                 Layout.maximumWidth: 50
                 Layout.minimumWidth: 50
                 fontSizeMode: Text.HorizontalFit
@@ -113,6 +118,8 @@ Item {
                 Layout.minimumWidth: 45
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+                Material.foreground: colorlt
+                Material.background: colordp
                 onClicked: {
                     subtract();
                 }
@@ -126,6 +133,8 @@ Item {
                 Layout.maximumWidth: 45
                 Layout.fillHeight: true
                 Layout.fillWidth: true
+                Material.foreground: colorlt
+                Material.background: colordp
                 onClicked: {
                     add();
                 }

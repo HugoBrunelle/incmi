@@ -4,9 +4,10 @@
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    QCoreApplication::setAttribute(Qt::AA_UseSoftwareOpenGL);
     QGuiApplication app(argc, argv);
-
+    QCoreApplication::setOrganizationName("ARproductions");
+    QCoreApplication::setOrganizationDomain("incmi.com");
+    QCoreApplication::setApplicationName("Incmi_Client");
     QQmlApplicationEngine engine;
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())

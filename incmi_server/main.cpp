@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
     app.setOrganizationName("AR productions");
     app.setOrganizationDomain("arproductions.com");
-    app.setApplicationName("Incmi");
+    app.setApplicationName("Incmi_Server");
     QQmlApplicationEngine engine;
     SystemInfo info;
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));

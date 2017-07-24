@@ -1,9 +1,9 @@
 import QtQuick 2.8
 import QtQuick.Window 2.2
-import QtQuick.Controls.Material 2.1
+import QtQuick.Controls.Material 2.2
 import Qt.labs.settings 1.0
-import QtQuick.Controls 2.1
-import Qt.WebSockets 1.0
+import QtQuick.Controls 2.2
+import QtWebSockets 1.1
 
 
 Window {
@@ -37,12 +37,26 @@ Window {
     property color colorlp: "#B3E5FC"
     property color colordp: "#006da9"
     property color colora: "#607D8B"
+    property string naturedoc: "0"
+    property variant mess: []
 
     //Saves the applications setting for what type of user is the admin or not
     Settings {
-        id: accessSetting
+        id: settings
         //Setting for the type of user. 0 - default, 1 - base, 2 - admin
         property int acess: 0
+        property string port: "2565"
+        property string host: "192.168.0.108"
+        property variant messages: []
+    }
+
+
+    function sendSavedInformation() {
+        if (settings.messages.length > 0) {
+            if (!msocket.active) {
+                msocket.active = true;
+            }
+        }
     }
 
     function winchange(win){
@@ -51,14 +65,8 @@ Window {
         windowloader.opacity = 0.0;
     }
 
-    onActiveChanged: {
-        if (!window.active) {
-            Qt.quit();
-        }
-    }
-
     function setAccess() {
-        if (accessSetting.acess != 0){
+        if (settings.acess != 0){
 
         }else{
             windowloader.sourceComponent = login;
@@ -78,7 +86,7 @@ Window {
 
     Loader {
         id: windowloader
-        asynchronous: false
+        asynchronous: true
         opacity: 0.0
         anchors.fill: parent;
         onStatusChanged: {
@@ -89,8 +97,8 @@ Window {
         Behavior on opacity {
             SequentialAnimation {
                 NumberAnimation {
-                    duration: 300
-                    easing.type: Easing.InSine
+                    duration: 450
+                    easing.type: Easing.InCubic
                 }
                 ScriptAction {
                     script: {
@@ -107,10 +115,6 @@ Window {
 
 
     // All different pages (Placed in components so we can dynamically load them and avoid using system ram on cheap devices lol...
-
-
-
-    //The fo
     Component {
         id : login
         MainForm { }
@@ -137,33 +141,26 @@ Window {
     }
 
 
-    WebSocket {
-        id: socket
-        url: "ws://192.168.0.108:2565"
+    BaseSocket {
+        id: msocket
+        port: settings.port
+        host: settings.host
         onStatusChanged: {
-            var message;
             switch(status) {
             case WebSocket.Open:
-                message = "open";
-                break;
-            case WebSocket.Connecting:
-                message = "connecting";
-                break;
-            case WebSocket.Closing:
-                message = "closing";
-                break;
-            case WebSocket.Closed:
-                message = "closed";
+                for (var i = 0; i < mess.length; i++) {
+                    msocket.sendTextMessage(mess[i]);
+                }
+                for (var b = mess.length; b > 0; b--) {
+                    mess.splice(b-1,1);
+                }
+                settings.messages = mess;
+                msocket.active = false;
                 break;
             case WebSocket.Error:
-                message = errorString;
+                console.log(errorString);
                 break;
             }
-            console.log(message)
-        }
-
-        onTextMessageReceived: {
-            console.log("message received");
         }
     }
 }

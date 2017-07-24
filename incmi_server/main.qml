@@ -54,6 +54,8 @@ ApplicationWindow {
     property string backupfolder: "backups"
     property string docsfolder: "docs"
     property string invtotal: "invtots.incmi"
+    property string currentfilename: ""
+    property string currentimageurl: ""
 
 
     Component.onCompleted: {
@@ -104,6 +106,13 @@ ApplicationWindow {
         }
     }
 
+    Component {
+        id: pcom
+        DocAjustementPrint {
+            id: pdocajust
+        }
+    }
+
     OptionsWindow {
         id: options
         anchors.fill: parent
@@ -118,7 +127,7 @@ ApplicationWindow {
         onClientConnected: {
             console.log("client connected");
             webSocket.onTextMessageReceived.connect(function(message) {
-                messReceived(message,webSocket)
+                messReceived(message,webSocket);
             });
         }
         onErrorStringChanged: {
@@ -156,9 +165,6 @@ ApplicationWindow {
         case 4:
             socket.sendTextMessage(appendInventory(jsonobj));
             //Add inventory change
-            break;
-        case 5:
-            logMessage(new Date().toLocaleString(locale, "hh:mm:ss ddd yyyy-MM-dd ---") + " Client received message succesfully...");
             break;
         }
     }
@@ -208,25 +214,74 @@ ApplicationWindow {
         var jsobj = JSON.parse('{"messageindex": 1,"items" : []}');
         if (file.dirExist(docsfolder)){
             file.cd(docsfolder);
-            var fs = file.getFileNames();
+            var fs = file.getFilteredNames("files","time");
             for(var i = 0; i < fs.length; i++){
                 //Check the file type to make certain no idiot placed a weird item to fuck the loop
                 var ff = fs[i];
                 if (ff.split(".")[1] === "incmi"){
                     //An incmi database file, okay to parse...
                     var tobj = JSON.parse(file.readFile(ff));
-                    var tpush;
+                    var tpush = JSON.parse('{"messageindex":"1","name":"","matricule":"","type":"","filename":"","dateint":"","ville":"","nature":""}');
                     switch (tobj.type) {
                     case "inv":
-                        tpush ='{ "name": "' + tobj.name + '", "matricule":"' + tobj.matricule + '", "type":"' + tobj.type + ',"filename":"' + ff + '"}';
+                        tpush.name = tobj.name;
+                        tpush.matricule = tobj.matricule;
+                        tpush.type = tobj.type;
+                        tpush.filename = ff.split(".")[0];
                         break;
 
                     case "docs":
-                        tpush ='{ "name": "' + tobj.name + '", "date":"' + tobj.date + '", "location":"' + tobj.location +'", "nature":"' + tobj.nature + '", "type":"' + tobj.type +',"filename":"' + ff + '"}';
+                        tpush.name = tobj.name;
+                        tpush.matricule = tobj.matricule;
+                        tpush.type = tobj.type;
+                        tpush.filename = ff.split(".")[0];
+                        tpush.ville = tobj.ville;
+                        tpush.date = tobj.dateint;
+                        tpush.nature = tobj.nature
                         break;
                     }
 
-                    jsobj.items.push(tpush);
+                    jsobj.items.push(JSON.stringify(tpush));
+                }
+            }
+
+        }
+        file.resetDirectory();
+        return JSON.stringify(jsobj);
+    }
+
+    function createServerChangesList() {
+        var jsobj = JSON.parse('{"messageindex": 1,"items" : []}');
+        if (file.dirExist(docsfolder)){
+            file.cd(docsfolder);
+            var fs = file.getFilteredNames("files","time");
+            for(var i = 0; i < fs.length; i++){
+                //Check the file type to make certain no idiot placed a weird item to fuck the loop
+                var ff = fs[i];
+                if (ff.split(".")[1] === "incmi"){
+                    //An incmi database file, okay to parse...
+                    var tobj = JSON.parse(file.readFile(ff));
+                    var tpush = JSON.parse('{"messageindex":"1","name":"","matricule":"","type":"","filename":"","dateint":"","ville":"","nature":""}');
+                    switch (tobj.type) {
+                    case "inv":
+                        tpush.name = tobj.name;
+                        tpush.matricule = tobj.matricule;
+                        tpush.type = tobj.type;
+                        tpush.filename = ff.split(".")[0];
+                        break;
+
+                    case "docs":
+                        tpush.name = tobj.name;
+                        tpush.matricule = tobj.matricule;
+                        tpush.type = tobj.type;
+                        tpush.filename = ff.split(".")[0];
+                        tpush.ville = tobj.ville;
+                        tpush.date = tobj.dateint;
+                        tpush.nature = tobj.nature
+                        break;
+                    }
+
+                    jsobj.items.push(JSON.stringify(tpush));
                 }
             }
 
@@ -236,6 +291,7 @@ ApplicationWindow {
     }
 
 
+
     function createDocInformation(filename) {
         logMessage((new Date().toLocaleString(locale, "hh:mm:ss ddd yyyy-MM-dd ---")) + "Sending doc information for: " + filename + " to client");
         var jsobj;
@@ -243,14 +299,31 @@ ApplicationWindow {
             file.cd(docsfolder);
             var fs = file.getFileNames();
             for(var i = 0; i < fs.length; i++){
-                if (filename === fs[i]){
+                if (filename === fs[i].split(".")[0]){
                     // The correct file to send the date...
-                    jsobj = JSON.parse(file.readFile(filename));
+                    jsobj = JSON.parse(file.readFile(fs[i]));
                 }
             }
         }
         file.resetDirectory();
         return JSON.stringify(jsobj);
+    }
+
+    function createServerDocInformation(filename) {
+        var jsobj;
+        if (file.dirExist(docsfolder)){
+            file.cd(docsfolder);
+            var fs = file.getFileNames();
+            for(var i = 0; i < fs.length; i++){
+                if (filename === fs[i].split(".")[0]){
+                    // The correct file to send the date...
+                    jsobj = file.readFile(fs[i]);
+                }
+            }
+        }
+        file.resetDirectory();
+        console.log(jsobj);
+        return jsobj;
     }
 
     function createDocument(jsobj){
@@ -292,22 +365,24 @@ ApplicationWindow {
     function appendInventory(jsobj) {
         logMessage((new Date().toLocaleString(locale, "hh:mm:ss ddd yyyy-MM-dd ---")) + "Client sent in new inventory commit, processing...");
         var result;
-        var jmess = JSON.parse('{ "messageindex": "5", "error" : "" }')
+        var jess = JSON.parse('{ "messageindex": "5", "didsave" : "" }')
+        var jmess = false;
         if (file.dirExist(invfolder)){
             file.cd(invfolder);
             var b = file.getFileNames();
             for(var i = 0; i < b.length; i++){
-                if (b[i] === invtotal){
+                if (b[i] == invtotal){
                     result = file.readFile(b[i]);
                 }
             }
+
             if (result !== "") {
                 var tobj = JSON.parse(result);
                 for (var d = 0; d < jsobj.items.length; d++){
-                    var ifrom = jsobj.items[d];
+                    var ifrom = JSON.parse(jsobj.items[d]);
                     for (var c = 0; c < tobj.items.length; c++){
                         var isave = tobj.items[c];
-                        if (tp.tag === cinvitem.tag) {
+                        if (isave.tag == ifrom.tag) {
                             isave.count = ifrom.count;
                         }
                     }
@@ -321,18 +396,19 @@ ApplicationWindow {
             file.cdUp();
             if (file.dirExist(docsfolder)){
                 file.cd(docsfolder);
-                fname = getRandomName() + ".incmi";
+                var fname = getRandomName() + ".incmi";
                 if(file.writeFile(JSON.stringify(jsobj),fname)){
                     jmess.message = false;
-                    logMessage((new Date().toLocaleString(locale, "hh:mm:ss ddd yyyy-MM-dd ---")) + "Client inventory commit saved");
+                    logMessage((new Date().toLocaleString(locale, "hh:mm:ss ddd yyyy-MM-dd ---")) + "Client inventory commit saved to storage");
                 }else{
                     jmess.message = true;
-                    logMessage((new Date().toLocaleString(locale, "hh:mm:ss ddd yyyy-MM-dd ---")) + "Error when saving client inventory commit");
+                    logMessage((new Date().toLocaleString(locale, "hh:mm:ss ddd yyyy-MM-dd ---")) + "Error when saving client inventory commit to storage");
                 }
             }
         }else {
             file.makeDirectory(invfolder);
         }
+        jess.didsave = jmess.toString();
         file.resetDirectory();
         return JSON.stringify(jess);
     }
@@ -377,14 +453,10 @@ ApplicationWindow {
                 var index = -1;
                 for (var b = 0; b < obj.items.length; b++){
                     var item = obj.items[b];
-                    console.log(item.tag);
-                    console.log(jobj.tag);
                     if (item.tag == jobj.tag){
                         index = b;
                     }
                 }
-                console.log(index);
-
                 if (index != -1) {
                     obj.items.splice(index, 1);
                     if (file.writeFile(JSON.stringify(obj),invtotal)){

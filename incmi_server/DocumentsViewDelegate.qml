@@ -1,16 +1,10 @@
 import QtQuick 2.0
-import QtQuick.Controls.Material 2.1
 import QtQuick.Controls 2.1
-import QtQuick.Layouts 1.1
 
 Item {
-    x: 5
-    width: parent.width - 10
-    height: 45
     property int xd: 1
-    property int fonts: 8
+    property int fonts: 10
     property int pad: 10
-    property int rpad: 9
     function checkVisibility() {
         var vis = true;
         if (type == "inv") {
@@ -19,7 +13,7 @@ Item {
         return vis;
     }
 
-    function formatText(text) {
+    function formatDate(text) {
         var ntext = text.replace(":","/");
         ntext = ntext.replace(":","/");
         return ntext;
@@ -44,24 +38,21 @@ Item {
         return ntext;
     }
 
+    x: xd * 2
+    height: 38
+    width: parent.width - 2*x
     Rectangle {
-        color: {
-            if (listView.currentIndex == index) {
-                return "#e4e4e4"
-            }
-            else {
-                return "white"
-            }
-        }
-        border.color: "grey"
-        border.width: 1
-        radius: 3
+        border.color: "lightgrey"
         anchors.fill: parent
+        height: parent.height
+        width: parent.width
+        color: typeview.currentIndex == index ? "gainsboro" : "white"
+        anchors.margins: 2
+        border.width: 1
         Label {
             id: cod
             height: parent.height;
             x: xd;
-            font.bold: true
             elide: "ElideRight"
             width: type == "docs" ? ((parent.width - 8) / 4) : parent.width;
             text: type == "docs" ? matricule + "::" + filename : "Changement inventaires:  " + matricule + "::" + filename
@@ -73,8 +64,8 @@ Item {
         Rectangle {
             visible: checkVisibility()
             id: r1
-            height: parent.height - rpad*2;
-            y: rpad;
+            height: parent.height - 16;
+            y: 8;
             x: cod.x + cod.width + xd;
             width: 1;
             color: "grey";
@@ -88,15 +79,15 @@ Item {
             x: xd + r1.width + r1.x;
             font.pointSize: fonts
             width: ((parent.width - 8) / 4);
-            text: type == "docs" ? formatText(date) : ""
+            text: type == "docs" ? formatDate(date) : ""
             horizontalAlignment: Text.AlignHCenter;
             verticalAlignment: Text.AlignVCenter;
         }
         Rectangle {
             visible: checkVisibility()
             id: r2
-            height: parent.height - rpad*2;
-            y: rpad;
+            height: parent.height - 16;
+            y: 8;
             x: dat.x + dat.width + xd;
             width: 1;
             color: "grey";
@@ -117,8 +108,8 @@ Item {
         Rectangle {
             visible: checkVisibility()
             id: r3
-            height: parent.height - rpad*2;
-            y: rpad;
+            height: parent.height - 16;
+            y: 8;
             x: lieu.x + lieu.width + xd;
             width: 1;
             color: "grey";
@@ -140,7 +131,11 @@ Item {
     MouseArea {
         anchors.fill: parent
         onClicked: {
-            listView.currentIndex = index;
+            typeview.currentIndex = index;
+            if (type == "docs") {
+                currentfilename = filename;
+                pload.active = true;
+            }
         }
     }
 }

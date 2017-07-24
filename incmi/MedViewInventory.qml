@@ -3,89 +3,39 @@ import QtQuick.Window 2.0
 import QtQuick.Controls.Material 2.1
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
-import Qt.WebSockets 1.0
+import QtWebSockets 1.1
 
 Rectangle {
     width: 360
     height: 640
-    Connections {
-        target: socket
+    BaseSocket {
+        id: invsocket
         onTextMessageReceived: {
             var obj = JSON.parse(message);
             if (obj.messageindex == "0"){
                 //Correct object..
                 for (var i = 0; i < obj.items.length; i++) {
                     var item = obj.items[i];
-                    mod.append(JSON.parse('{"name":"'+item.name+'","count":"'+item.count+'","recommendedCount":"'+item.rcount+'","tag":"'+item.tag+'"}'));
+                    mod.append(item);
                 }
+                invsocket.active = false;
             }
-            socket.active = false;
+
         }
         onStatusChanged: {
             switch (status) {
             case WebSocket.Open:
-                socket.sendTextMessage('{"messageindex": "0"}');
+                invsocket.sendTextMessage('{"messageindex": "0"}');
                 break;
             }
 
         }
     }
 
-    Component.onCompleted: {
-        socket.active = true;
-    }
-
     ColumnLayout {
         id: columnLayout
         spacing: 8
         anchors.fill: parent
-
-        Pane {
-            width: 360
-            height: 100
-            Layout.minimumHeight: 50
-            Layout.fillHeight: true
-            Layout.maximumHeight: 100
-            Layout.fillWidth: true
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
-            Material.elevation: 4
-            Material.background: colorp
-            GridLayout {
-                anchors.fill: parent
-                Image {
-                    fillMode: Image.PreserveAspectFit
-                    source: "Images/ucmu_100h.png"
-                    Layout.minimumWidth: 100
-                    Layout.maximumWidth: 250
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-
-                }
-
-                ColumnLayout {
-                    width: 100
-                    height: 100
-                    Layout.maximumWidth: 500
-                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-
-                    Button {
-                        text: qsTr("+ Inventaire")
-                        Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                        Layout.fillHeight: true
-                        Layout.fillWidth: true
-                        Material.foreground: colorlt
-                        Material.background: colordp
-                        onClicked: {
-                            winchange(adjinv);
-                        }
-                    }
-                }
-            }
-        }
-
         ListView {
             clip: true
             id: invListView
@@ -102,19 +52,22 @@ Rectangle {
             Layout.fillWidth: true
             delegate: MedInvViewDelegate {}
             model: MedInvViewModel { id: mod}
+            add: Transition { NumberAnimation { properties: "x,y"; from: width; duration: 300; easing.type: Easing.OutQuad }}
+            Component.onCompleted: {
+                invsocket.active = true;
+            }
         }
 
         Pane {
             width: 360
-            height: 80
+            height: 70
             Layout.minimumHeight: 50
             Layout.fillHeight: true
-            Layout.maximumHeight: 80
+            Layout.maximumHeight: 70
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
             Material.background: "#0288D1"
-            Material.elevation: 4
-            GridLayout {
+            RowLayout {
                 anchors.fill: parent
                 Button {
                     text: qsTr("Retour")
@@ -126,6 +79,18 @@ Rectangle {
                     Material.background: colordp
                     onClicked: {
                         winchange(medimain);
+                    }
+                }
+                Button {
+                    text: qsTr("+ Inventaire")
+                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                    Layout.maximumWidth: 150
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    Material.foreground: colorlt
+                    Material.background: colordp
+                    onClicked: {
+                        winchange(adjinv);
                     }
                 }
             }

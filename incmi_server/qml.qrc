@@ -15,5 +15,7 @@
         <file>AcountSettingsView.qml</file>
         <file>ServerSettingsView.qml</file>
         <file>InventoryListModel.qml</file>
+        <file>DocumentsViewDelegate.qml</file>
+        <file>DocAjustementPrint.qml</file>
     </qresource>
 </RCC>

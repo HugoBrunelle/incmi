@@ -25,8 +25,8 @@ Pane {
     Behavior on opacity {
         SequentialAnimation{
         NumberAnimation {
-            duration: 350
-            easing.type: Easing.InSine
+            duration: 240
+            easing.type: Easing.Linear
         }
         ScriptAction {
             script: checkstate();

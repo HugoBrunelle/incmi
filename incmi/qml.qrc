@@ -21,5 +21,7 @@
         <file>Images/ucmu_100h.png</file>
         <file>Images/ucmu_250h.png</file>
         <file>Images/ucmu_full.png</file>
+        <file>BaseSocket.qml</file>
+        <file>ItemModeler.qml</file>
     </qresource>
 </RCC>

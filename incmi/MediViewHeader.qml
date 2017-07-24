@@ -20,7 +20,7 @@ Item {
             Text {
                 id: theight
                 color: "#b3000000"
-                text: qsTr("Code d'evenemenets")
+                text: qsTr("Code")
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
                 anchors.verticalCenter: parent.verticalCenter
@@ -80,7 +80,7 @@ Item {
             }
             Text {
                 color: "#b3000000"
-                text: qsTr("Nature de l'evenements")
+                text: qsTr("Nature")
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
                 anchors.verticalCenter: parent.verticalCenter

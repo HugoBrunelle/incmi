@@ -15,6 +15,84 @@ Rectangle {
 
     function save() {
         // do all the saving work to create a JSON file and send it to the websocket.
+        var obj = JSON.parse('{"messageindex":"3","matricule":"","name":"","type":"docs","dateint":"","tarriver":"","nature":"",
+            "tappele":"","tdepart":"","nomoper":"","endroit":"","adresse":"","ville":"","evautre":"","vnom":"","vprenom":"","vage":"",
+            "vsex":"","vnaiss":"","vadresse":"","vville":"","vautre":"","vcodepostal":"","vtelephone":"","nabraission":"","nacr":"",
+            "nconvulsion":"","ndiabete":"","ndouleurt":"","nfaibless":"","nhypertermie":"","nhypothermie":"","nintoxication":"","nmaltete":"",
+            "nobstr":"","ntrauma":"","nautre":"","ndescription":"","epreaction":"","epvoiesr":"","eprespiration":"","eppouls":"","epnivecon":"",
+            "medicaments":"","alergies":"","ainconnu":"","alergies2":"","ana":"","amavc":"","amcardiaque":"","amdiabete":"","amepliepsie":"","amhyperhypo":"",
+            "amautre":"","amdescription":"","o":"","p":"","q":"","r":"","s":"","t":""}');
+        obj.matricule = tfieldMatricule.text;
+        obj.nature = naturedoc;
+        obj.name = namewritten.text;
+        obj.dateint = datenv1.currentItem.text + ":" + datenv2.currentItem.text + ":" + datenv3.currentItem.text;
+        obj.tarriver = tarriver1.currentItem.text + ":" + tarriver2.currentItem.text;
+        obj.tappele = tappele1.currentItem.text + ":" + tappele2.currentItem.text;
+        obj.tdepart = tdepart1.currentItem.text + ":" + tdepart2.currentItem.text;
+        obj.nomoper = nomoper.text;
+        obj.endroit = endroit.text;
+        obj.adresse = adresse.text;
+        obj.ville = ville.text;
+        obj.evautre = evautre.text;
+        obj.vnom = vnom.text;
+        obj.vprenom = vprenom.text;
+        obj.vage = vage.text;
+        if (sexm.checked) obj.vsex = "m";
+        if (sexf.checked) obj.vsex = "f";
+        obj.vnaiss = vnaissjj.text + ":" + vnaissmm.text + ":" + vnaissyyyy.text;
+        obj.vadresse = vadresse.text;
+        obj.vville = vville.text;
+        obj.vautre = vautre.text;
+        obj.vcodepostal = vcodepostal.text;
+        obj.vtelephone = vtelephone.text;
+        obj.nabraisson = nabrassion.checked.toString();
+        obj.nacr = nacr.checked.toString();
+        obj.nconvulsion = nconvulsion.checked.toString();
+        obj.ndiabete = ndiabete.checked.toString();
+        obj.ndouleurt = ndouleurt.checked.toString();
+        obj.nfaibless = nfaibless.checked.toString();
+        obj.nhypertermie = nhyperthermie.checked.toString();
+        obj.nhypothermie = nhypothermie.checked.toString();
+        obj.nintoxication = nintoxication.checked.toString();
+        obj.nmaltete = nmaltete.checked.toString();
+        obj.nobstr = nobstr.checked.toString();
+        obj.ntrauma = ntrauma.checked.toString();
+        obj.nautre = nautre.checked.toString();
+        if (nautre.checked) obj.ndescription = ndescription.text;
+        if (epreaction1.checked) obj.epreaction = "0";
+        if (epreaction2.checked) obj.epreaction = "1";
+        if (epvoiesr1.checked) obj.epvoiesr = "0";
+        if (epvoiesr2.checked) obj.epvoiesr = "1";
+        if (eprespiration1.checked) obj.eprespiration = "0";
+        if (eprespiration2.checked) obj.eprespiration = "1";
+        if (eppouls1.checked) obj.eppouls = "0";
+        if (eppouls2.checked) obj.eppouls = "1";
+        if (epnivecon1.checked) obj.epnivecon = "0";
+        if (epnivecon2.checked) obj.epnivecon = "1";
+        if (epnivecon3.checked) obj.epnivecon = "2";
+        if (epnivecon4.checked) obj.epnivecon = "3";
+        if (epnivecon5.checked) obj.epnivecon = "4";
+        obj.medicaments = medicaments.text;
+        obj.alergies = alergies1.text;
+        obj.alergies2 = alergies2.text;
+        obj.ainconnu = ainconnu.checked.toString();
+        obj.ana = ana.checked.toString();
+        obj.amavc = amavc.checked.toString();
+        obj.amcardiaque = amcardiaque.checked.toString();
+        obj.amdiabete = amdiabete.checked.toString();
+        obj.amepliepsie = amepliepsie.checked.toString();
+        obj.amhyperhypo = amhyperhyp.checked.toString();
+        obj.amautre = amautre.checked.toString();
+        if (amautre.checked) obj.amdescription = amdescription.text;
+        obj.o = o.text;
+        obj.p = p.text;
+        obj.q = q.text;
+        obj.r = r.text;
+        obj.s = s.text;
+        obj.t = t.text;
+        mess.push(JSON.stringify(obj));
+        settings.messages = mess;
+        sendSavedInformation();
     }
 
 
@@ -42,29 +120,6 @@ Rectangle {
         id: mview
         spacing: 0
         anchors.fill: parent
-        Pane {
-            id: header
-            width: 360
-            height: 100
-            Layout.minimumHeight: 50
-            Layout.fillHeight: true
-            Layout.maximumHeight: 100
-            Layout.fillWidth: true
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
-            Material.elevation: 4
-            Material.background: colorp
-            GridLayout {
-                id: gridLayout
-                anchors.fill: parent
-                Image {
-                    fillMode: Image.PreserveAspectFit
-                    source: "Images/ucmu_100h.png"
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                }
-            }
-        }
         SwipeView {
             id: view
             clip: true
@@ -110,7 +165,7 @@ Rectangle {
                                 }
 
                                 Tumbler {
-                                    id: tumbl
+                                    id: datenv1
                                     Layout.maximumHeight: parent.height - 8
                                     Layout.maximumWidth: 25
                                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
@@ -141,7 +196,7 @@ Rectangle {
                                 }
 
                                 Tumbler {
-                                    id: tumbler1
+                                    id: datenv2
                                     Layout.maximumHeight: parent.height - 8
                                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                                     Layout.maximumWidth: 25
@@ -158,11 +213,11 @@ Rectangle {
                                         font.pixelSize: 14
                                     }
                                     onCurrentIndexChanged: {
-                                        if(tumbl.currentItem != null){
-                                            var dat = new Date(tumbler2.currentIndex, currentIndex, 0).getDate();
-                                            var index = tumbl.currentIndex
-                                            tumbl.model = dat
-                                            tumbl.currentIndex = index
+                                        if(datenv1.currentItem != null){
+                                            var dat = new Date(datenv3.currentIndex, currentIndex, 0).getDate();
+                                            var index = datenv1.currentIndex
+                                            datenv1.model = dat
+                                            datenv1.currentIndex = index
                                         }
                                     }
                                 }
@@ -180,7 +235,7 @@ Rectangle {
                                 }
 
                                 Tumbler {
-                                    id: tumbler2
+                                    id: datenv3
                                     Layout.maximumHeight: parent.height - 8
                                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                                     Layout.maximumWidth: 32
@@ -196,11 +251,11 @@ Rectangle {
                                         font.pixelSize: 14
                                     }
                                     onCurrentIndexChanged: {
-                                        if(tumbl.currentItem != null){
-                                            var dat = new Date(currentIndex, tumbler1.currentIndex, 0).getDate();
-                                            var index = tumbl.currentIndex
-                                            tumbl.model = dat
-                                            tumbl.currentIndex = index
+                                        if(datenv1.currentItem != null){
+                                            var dat = new Date(currentIndex, datenv2.currentIndex, 0).getDate();
+                                            var index = datenv1.currentIndex
+                                            datenv1.model = dat
+                                            datenv1.currentIndex = index
                                         }
                                     }
 
@@ -265,6 +320,7 @@ Rectangle {
                                         }
 
                                         Tumbler {
+                                            id: tarriver1
                                             Layout.maximumHeight: parent.height - 8
                                             Layout.maximumWidth: 25
                                             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
@@ -294,6 +350,7 @@ Rectangle {
                                         }
 
                                         Tumbler {
+                                            id: tarriver2
                                             Layout.maximumHeight: parent.height - 8
                                             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                                             Layout.maximumWidth: 25
@@ -333,6 +390,7 @@ Rectangle {
                                         }
 
                                         Tumbler {
+                                            id: tappele1
                                             Layout.maximumHeight: parent.height - 8
                                             Layout.maximumWidth: 25
                                             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
@@ -362,6 +420,7 @@ Rectangle {
                                         }
 
                                         Tumbler {
+                                            id: tappele2
                                             Layout.maximumHeight: parent.height - 8
                                             Layout.minimumWidth: 25
                                             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
@@ -401,6 +460,7 @@ Rectangle {
                                         }
 
                                         Tumbler {
+                                            id: tdepart1
                                             Layout.maximumHeight: parent.height - 8
                                             Layout.maximumWidth: 25
                                             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
@@ -430,6 +490,7 @@ Rectangle {
                                         }
 
                                         Tumbler {
+                                            id: tdepart2
                                             Layout.maximumHeight: parent.height - 8
                                             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                                             Layout.maximumWidth: 25
@@ -477,13 +538,14 @@ Rectangle {
                                     radius: 3
                                     antialiasing: false
                                     border.width: 1
-                                TextInput {
-                                    anchors.fill: parent
-                                    anchors.margins: 4
-                                    leftPadding: 5
-                                    verticalAlignment: Text.AlignVCenter
-                                    font.pointSize: 11
-                                }
+                                    TextInput {
+                                        id: nomoper
+                                        anchors.fill: parent
+                                        anchors.margins: 4
+                                        leftPadding: 5
+                                        verticalAlignment: Text.AlignVCenter
+                                        font.pointSize: 11
+                                    }
                                 }
                             }
                         }
@@ -514,13 +576,14 @@ Rectangle {
                                     border.color: "silver"
                                     border.width: 1
                                     antialiasing: false
-                                TextInput {
-                                    anchors.fill: parent
-                                    anchors.margins: 4
-                                    leftPadding: 5
-                                    verticalAlignment: Text.AlignVCenter
-                                    font.pointSize: 11
-                                }
+                                    TextInput {
+                                        id: endroit
+                                        anchors.fill: parent
+                                        anchors.margins: 4
+                                        leftPadding: 5
+                                        verticalAlignment: Text.AlignVCenter
+                                        font.pointSize: 11
+                                    }
                                 }
                             }
                         }
@@ -551,13 +614,14 @@ Rectangle {
                                     border.color: "silver"
                                     border.width: 1
                                     antialiasing: false
-                                TextInput {
-                                    anchors.fill: parent
-                                    anchors.margins: 4
-                                    leftPadding: 5
-                                    verticalAlignment: Text.AlignVCenter
-                                    font.pointSize: 11
-                                }
+                                    TextInput {
+                                        id: adresse
+                                        anchors.fill: parent
+                                        anchors.margins: 4
+                                        leftPadding: 5
+                                        verticalAlignment: Text.AlignVCenter
+                                        font.pointSize: 11
+                                    }
                                 }
                             }
                         }
@@ -588,13 +652,14 @@ Rectangle {
                                     border.color: "silver"
                                     border.width: 1
                                     antialiasing: false
-                                TextInput {
-                                    anchors.fill: parent
-                                    anchors.margins: 4
-                                    leftPadding: 5
-                                    verticalAlignment: Text.AlignVCenter
-                                    font.pointSize: 11
-                                }
+                                    TextInput {
+                                        id: ville
+                                        anchors.fill: parent
+                                        anchors.margins: 4
+                                        leftPadding: 5
+                                        verticalAlignment: Text.AlignVCenter
+                                        font.pointSize: 11
+                                    }
                                 }
                             }
                         }
@@ -625,13 +690,14 @@ Rectangle {
                                     border.color: "silver"
                                     border.width: 1
                                     antialiasing: false
-                                TextInput {
-                                    anchors.fill: parent
-                                    anchors.margins: 4
-                                    leftPadding: 5
-                                    verticalAlignment: Text.AlignVCenter
-                                    font.pointSize: 11
-                                }
+                                    TextInput {
+                                        id: evautre
+                                        anchors.fill: parent
+                                        anchors.margins: 4
+                                        leftPadding: 5
+                                        verticalAlignment: Text.AlignVCenter
+                                        font.pointSize: 11
+                                    }
                                 }
                             }
                         }
@@ -708,13 +774,14 @@ Rectangle {
                                     border.color: "silver"
                                     border.width: 1
                                     antialiasing: false
-                                TextInput {
-                                    anchors.fill: parent
-                                    anchors.margins: 4
-                                    leftPadding: 5
-                                    verticalAlignment: Text.AlignVCenter
-                                    font.pointSize: 11
-                                }
+                                    TextInput {
+                                        id: vnom
+                                        anchors.fill: parent
+                                        anchors.margins: 4
+                                        leftPadding: 5
+                                        verticalAlignment: Text.AlignVCenter
+                                        font.pointSize: 11
+                                    }
                                 }
                             }
                         }
@@ -745,13 +812,14 @@ Rectangle {
                                     border.color: "silver"
                                     border.width: 1
                                     antialiasing: false
-                                TextInput {
-                                    anchors.fill: parent
-                                    anchors.margins: 4
-                                    leftPadding: 5
-                                    verticalAlignment: Text.AlignVCenter
-                                    font.pointSize: 11
-                                }
+                                    TextInput {
+                                        id: vprenom
+                                        anchors.fill: parent
+                                        anchors.margins: 4
+                                        leftPadding: 5
+                                        verticalAlignment: Text.AlignVCenter
+                                        font.pointSize: 11
+                                    }
                                 }
                             }
                         }
@@ -782,17 +850,18 @@ Rectangle {
                                     border.color: "silver"
                                     border.width: 1
                                     antialiasing: false
-                                TextInput {
-                                    anchors.fill: parent
-                                    anchors.margins: 4
-                                    leftPadding: 5
-                                    verticalAlignment: Text.AlignVCenter
-                                    font.pointSize: 11
-                                }
+                                    TextInput {
+                                        id: vage
+                                        anchors.fill: parent
+                                        anchors.margins: 4
+                                        leftPadding: 5
+                                        verticalAlignment: Text.AlignVCenter
+                                        font.pointSize: 11
+                                    }
                                 }
 
                                 RadioButton {
-                                    id: radioButton
+                                    id: sexm
                                     text: qsTr("M")
                                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                                     Layout.fillHeight: true
@@ -801,7 +870,7 @@ Rectangle {
                                 }
 
                                 RadioButton {
-                                    id: radioButton1
+                                    id: sexf
                                     text: qsTr("F")
                                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                                     Layout.maximumWidth: 50
@@ -839,13 +908,14 @@ Rectangle {
                                     border.color: "silver"
                                     border.width: 1
                                     antialiasing: false
-                                TextInput {
-                                    anchors.fill: parent
-                                    anchors.margins: 2
-                                    leftPadding: 5
-                                    verticalAlignment: Text.AlignVCenter
-                                    font.pointSize: 11
-                                }
+                                    TextInput {
+                                        id: vnaissjj
+                                        anchors.fill: parent
+                                        anchors.margins: 2
+                                        leftPadding: 5
+                                        verticalAlignment: Text.AlignVCenter
+                                        font.pointSize: 11
+                                    }
                                 }
                                 Label {
                                     text: qsTr("/")
@@ -867,13 +937,14 @@ Rectangle {
                                     border.color: "silver"
                                     border.width: 1
                                     antialiasing: false
-                                TextInput {
-                                    anchors.fill: parent
-                                    anchors.margins: 2
-                                    leftPadding: 5
-                                    verticalAlignment: Text.AlignVCenter
-                                    font.pointSize: 11
-                                }
+                                    TextInput {
+                                        id: vnaissmm
+                                        anchors.fill: parent
+                                        anchors.margins: 2
+                                        leftPadding: 5
+                                        verticalAlignment: Text.AlignVCenter
+                                        font.pointSize: 11
+                                    }
                                 }
                                 Label {
                                     text: qsTr("/")
@@ -895,13 +966,14 @@ Rectangle {
                                     border.color: "silver"
                                     border.width: 1
                                     antialiasing: false
-                                TextInput {
-                                    anchors.fill: parent
-                                    anchors.margins: 2
-                                    leftPadding: 4
-                                    verticalAlignment: Text.AlignVCenter
-                                    font.pointSize: 11
-                                }
+                                    TextInput {
+                                        id: vnaissyyyy
+                                        anchors.fill: parent
+                                        anchors.margins: 2
+                                        leftPadding: 4
+                                        verticalAlignment: Text.AlignVCenter
+                                        font.pointSize: 11
+                                    }
                                 }
                             }
                         }
@@ -932,13 +1004,14 @@ Rectangle {
                                     border.color: "silver"
                                     border.width: 1
                                     antialiasing: false
-                                TextInput {
-                                    anchors.fill: parent
-                                    anchors.margins: 4
-                                    leftPadding: 5
-                                    verticalAlignment: Text.AlignVCenter
-                                    font.pointSize: 11
-                                }
+                                    TextInput {
+                                        id: vadresse
+                                        anchors.fill: parent
+                                        anchors.margins: 4
+                                        leftPadding: 5
+                                        verticalAlignment: Text.AlignVCenter
+                                        font.pointSize: 11
+                                    }
                                 }
                             }
                         }
@@ -969,13 +1042,14 @@ Rectangle {
                                     border.color: "silver"
                                     border.width: 1
                                     antialiasing: false
-                                TextInput {
-                                    anchors.fill: parent
-                                    anchors.margins: 4
-                                    leftPadding: 5
-                                    verticalAlignment: Text.AlignVCenter
-                                    font.pointSize: 11
-                                }
+                                    TextInput {
+                                        id: vville
+                                        anchors.fill: parent
+                                        anchors.margins: 4
+                                        leftPadding: 5
+                                        verticalAlignment: Text.AlignVCenter
+                                        font.pointSize: 11
+                                    }
                                 }
                             }
                         }
@@ -1006,13 +1080,14 @@ Rectangle {
                                     border.color: "silver"
                                     border.width: 1
                                     antialiasing: false
-                                TextInput {
-                                    anchors.fill: parent
-                                    anchors.margins: 4
-                                    leftPadding: 5
-                                    verticalAlignment: Text.AlignVCenter
-                                    font.pointSize: 11
-                                }
+                                    TextInput {
+                                        id: vautre
+                                        anchors.fill: parent
+                                        anchors.margins: 4
+                                        leftPadding: 5
+                                        verticalAlignment: Text.AlignVCenter
+                                        font.pointSize: 11
+                                    }
                                 }
                             }
                         }
@@ -1043,13 +1118,14 @@ Rectangle {
                                     border.color: "silver"
                                     border.width: 1
                                     antialiasing: false
-                                TextInput {
-                                    anchors.fill: parent
-                                    anchors.margins: 4
-                                    leftPadding: 5
-                                    verticalAlignment: Text.AlignVCenter
-                                    font.pointSize: 11
-                                }
+                                    TextInput {
+                                        id: vcodepostal
+                                        anchors.fill: parent
+                                        anchors.margins: 4
+                                        leftPadding: 5
+                                        verticalAlignment: Text.AlignVCenter
+                                        font.pointSize: 11
+                                    }
                                 }
                             }
                         }
@@ -1080,13 +1156,14 @@ Rectangle {
                                     border.color: "silver"
                                     border.width: 1
                                     antialiasing: false
-                                TextInput {
-                                    anchors.fill: parent
-                                    anchors.margins: 4
-                                    leftPadding: 5
-                                    verticalAlignment: Text.AlignVCenter
-                                    font.pointSize: 11
-                                }
+                                    TextInput {
+                                        id: vtelephone
+                                        anchors.fill: parent
+                                        anchors.margins: 4
+                                        leftPadding: 5
+                                        verticalAlignment: Text.AlignVCenter
+                                        font.pointSize: 11
+                                    }
                                 }
                             }
                         }
@@ -1180,7 +1257,7 @@ Rectangle {
                                 anchors.fill: parent
 
                                 CheckBox {
-                                    id: checkBox12
+                                    id: nabrassion
                                     text: qsTr("Abrassion")
                                     Layout.fillWidth: true
                                     Layout.fillHeight: true
@@ -1188,7 +1265,7 @@ Rectangle {
                                 }
 
                                 CheckBox {
-                                    id: checkBox11
+                                    id: nacr
                                     text: qsTr("Acr / Code")
                                     Layout.fillWidth: true
                                     Layout.fillHeight: true
@@ -1196,7 +1273,7 @@ Rectangle {
                                 }
 
                                 CheckBox {
-                                    id: checkBox10
+                                    id: nconvulsion
                                     text: qsTr("Convulsion")
                                     Layout.fillHeight: true
                                     Layout.fillWidth: true
@@ -1204,7 +1281,7 @@ Rectangle {
                                 }
 
                                 CheckBox {
-                                    id: checkBox9
+                                    id: ndiabete
                                     text: qsTr("Diabète")
                                     Layout.fillHeight: true
                                     Layout.fillWidth: true
@@ -1212,7 +1289,7 @@ Rectangle {
                                 }
 
                                 CheckBox {
-                                    id: checkBox8
+                                    id: ndouleurt
                                     text: qsTr("Douleur Thoracique")
                                     Layout.fillHeight: false
                                     Layout.fillWidth: true
@@ -1220,7 +1297,7 @@ Rectangle {
                                 }
 
                                 CheckBox {
-                                    id: checkBox7
+                                    id: nfaibless
                                     text: qsTr("Faibless")
                                     Layout.fillHeight: true
                                     Layout.fillWidth: true
@@ -1228,7 +1305,7 @@ Rectangle {
                                 }
 
                                 CheckBox {
-                                    id: checkBox6
+                                    id: nhyperthermie
                                     text: qsTr("Hyperthermie")
                                     Layout.fillHeight: true
                                     Layout.fillWidth: true
@@ -1236,7 +1313,7 @@ Rectangle {
                                 }
 
                                 CheckBox {
-                                    id: checkBox5
+                                    id: nhypothermie
                                     text: qsTr("Hypothermie")
                                     Layout.fillHeight: true
                                     Layout.fillWidth: true
@@ -1244,7 +1321,7 @@ Rectangle {
                                 }
 
                                 CheckBox {
-                                    id: checkBox4
+                                    id: nintoxication
                                     text: qsTr("Intoxication")
                                     Layout.fillHeight: true
                                     Layout.fillWidth: true
@@ -1252,7 +1329,7 @@ Rectangle {
                                 }
 
                                 CheckBox {
-                                    id: checkBox3
+                                    id: nmaltete
                                     text: qsTr("Mal de Tête")
                                     spacing: 7
                                     Layout.fillHeight: true
@@ -1261,7 +1338,7 @@ Rectangle {
                                 }
 
                                 CheckBox {
-                                    id: checkBox2
+                                    id: nobstr
                                     text: qsTr("Obstr. Voies Resp.")
                                     Layout.fillHeight: true
                                     Layout.fillWidth: true
@@ -1269,7 +1346,7 @@ Rectangle {
                                 }
 
                                 CheckBox {
-                                    id: checkBox1
+                                    id: ntrauma
                                     text: qsTr("Trauma")
                                     Layout.fillHeight: true
                                     Layout.fillWidth: true
@@ -1277,7 +1354,7 @@ Rectangle {
                                 }
 
                                 CheckBox {
-                                    id: checkBox
+                                    id: nautre
                                     text: qsTr("Autre:")
                                     Layout.fillWidth: true
                                     Layout.fillHeight: true
@@ -1290,12 +1367,12 @@ Rectangle {
                             x: xd/2
                             y: p3r4.height + p3r4.y
                             width: parent.width - xd
-                            height: textArea.implicitHeight > 130 ? textArea.implicitHeight : 130
+                            height: ndescription.implicitHeight > 130 ? ndescription.implicitHeight : 130
                             color: "#efefef"
                             radius: 8
                             TextInput {
-                                enabled: checkBox.checked
-                                id: textArea
+                                enabled: nautre.checked
+                                id: ndescription
                                 text: qsTr("")
                                 padding: 5
                                 wrapMode: Text.WordWrap
@@ -1395,6 +1472,7 @@ Rectangle {
                                         Layout.fillWidth: true
 
                                         RadioButton {
+                                            id:epreaction1
                                             width: 120
                                             text: qsTr("Reaction")
                                             Layout.maximumWidth: 120
@@ -1409,6 +1487,7 @@ Rectangle {
                                         }
 
                                         RadioButton {
+                                            id:epreaction2
                                             width: 120
                                             text: qsTr("Aucune Reaction")
                                             Layout.minimumWidth: 120
@@ -1464,6 +1543,7 @@ Rectangle {
                                         Layout.fillHeight: true
                                         Layout.fillWidth: true
                                         RadioButton {
+                                            id: epvoiesr1
                                             text: qsTr("Ouvertes")
                                             Layout.minimumWidth: 120
                                             rightPadding: 4
@@ -1477,6 +1557,7 @@ Rectangle {
                                         }
 
                                         RadioButton {
+                                            id: epvoiesr2
                                             text: qsTr("Obstruées")
                                             Layout.minimumWidth: 120
                                             rightPadding: 4
@@ -1531,6 +1612,7 @@ Rectangle {
                                         Layout.fillHeight: true
                                         Layout.fillWidth: true
                                         RadioButton {
+                                            id: eprespiration1
                                             text: qsTr("Adéquate")
                                             Layout.minimumWidth: 120
                                             rightPadding: 4
@@ -1544,6 +1626,7 @@ Rectangle {
                                             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                                         }
                                         RadioButton {
+                                            id: eprespiration2
                                             text: qsTr("Inadéquate")
                                             Layout.minimumWidth: 120
                                             rightPadding: 4
@@ -1598,6 +1681,7 @@ Rectangle {
                                         Layout.fillHeight: true
                                         Layout.fillWidth: true
                                         RadioButton {
+                                            id: eppouls1
                                             text: qsTr("Présent")
                                             Layout.minimumWidth: 120
                                             rightPadding: 4
@@ -1611,6 +1695,7 @@ Rectangle {
                                         }
 
                                         RadioButton {
+                                            id: eppouls2
                                             text: qsTr("Abscent")
                                             Layout.minimumWidth: 120
                                             rightPadding: 4
@@ -1677,6 +1762,7 @@ Rectangle {
                                     Layout.fillWidth: true
 
                                     RadioButton {
+                                        id: epnivecon1
                                         text: qsTr("Alerte")
                                         Layout.maximumWidth: 125
                                         Layout.minimumWidth: 125
@@ -1690,6 +1776,7 @@ Rectangle {
                                     }
 
                                     RadioButton {
+                                        id: epnivecon2
                                         text: qsTr("Verbal")
                                         leftPadding: 4
                                         Layout.fillWidth: true
@@ -1703,6 +1790,7 @@ Rectangle {
                                     }
 
                                     RadioButton {
+                                        id: epnivecon3
                                         text: qsTr("Stimuli Verbal")
                                         leftPadding: 4
                                         Layout.fillWidth: true
@@ -1716,6 +1804,7 @@ Rectangle {
                                     }
 
                                     RadioButton {
+                                        id: epnivecon4
                                         text: qsTr("Stimuli Douleur")
                                         leftPadding: 4
                                         Layout.fillWidth: true
@@ -1729,6 +1818,7 @@ Rectangle {
                                     }
 
                                     RadioButton {
+                                        id: epnivecon5
                                         text: qsTr("Reaction")
                                         leftPadding: 4
                                         Layout.fillWidth: true
@@ -1792,11 +1882,11 @@ Rectangle {
                             x: xd
                             y: p5r2.height + p5r2.y
                             width: parent.width - xd*2
-                            height: p5tarea1.implicitHeight > 100 ? p5tarea1.implicitHeight : 100
+                            height: medicaments.implicitHeight > 100 ? medicaments.implicitHeight : 100
                             color: "#efefef"
                             radius: 8
                             TextInput {
-                                id: p5tarea1
+                                id: medicaments
                                 text: qsTr("")
                                 padding: 5
                                 wrapMode: Text.WordWrap
@@ -1848,6 +1938,7 @@ Rectangle {
                                 anchors.fill: parent
                                 ColumnLayout{
                                     TextField {
+                                        id: alergies1
                                         leftPadding: 5
                                         bottomPadding: 8
                                         Layout.maximumHeight: 40
@@ -1858,6 +1949,7 @@ Rectangle {
                                         Material.accent: colora
                                     }
                                     TextField {
+                                        id: alergies2
                                         leftPadding: 5
                                         bottomPadding: 8
                                         Layout.maximumHeight: 40
@@ -1870,6 +1962,7 @@ Rectangle {
                                 }
                                 ColumnLayout{
                                     RadioButton {
+                                        id: ainconnu
                                         text: qsTr("?")
                                         font.pointSize: 8
                                         Layout.minimumWidth: 70
@@ -1880,6 +1973,7 @@ Rectangle {
                                     }
 
                                     RadioButton {
+                                        id: ana
                                         text: qsTr("N/A")
                                         font.pointSize: 8
                                         Layout.minimumWidth: 70
@@ -1937,6 +2031,7 @@ Rectangle {
                                 anchors.fill: parent
 
                                 CheckBox {
+                                    id: amavc
                                     text: qsTr("AVC")
                                     Layout.fillWidth: true
                                     Layout.fillHeight: true
@@ -1944,6 +2039,7 @@ Rectangle {
                                 }
 
                                 CheckBox {
+                                    id: amcardiaque
                                     text: qsTr("Cardiaque")
                                     Layout.fillWidth: true
                                     Layout.fillHeight: true
@@ -1951,6 +2047,7 @@ Rectangle {
                                 }
 
                                 CheckBox {
+                                    id: amdiabete
                                     text: qsTr("Diabète")
                                     Layout.fillHeight: true
                                     Layout.fillWidth: true
@@ -1958,6 +2055,7 @@ Rectangle {
                                 }
 
                                 CheckBox {
+                                    id: amepliepsie
                                     text: qsTr("Épliepsie")
                                     Layout.fillHeight: true
                                     Layout.fillWidth: true
@@ -1965,6 +2063,7 @@ Rectangle {
                                 }
 
                                 CheckBox {
+                                    id: amhyperhyp
                                     text: qsTr("Hyper/Hypo Tension")
                                     Layout.fillHeight: false
                                     Layout.fillWidth: true
@@ -1972,7 +2071,7 @@ Rectangle {
                                 }
 
                                 CheckBox {
-                                    id: abox
+                                    id: amautre
                                     text: qsTr("Autre")
                                     Layout.fillHeight: true
                                     Layout.fillWidth: true
@@ -1985,12 +2084,12 @@ Rectangle {
                             x: xd
                             y: p5r7.height + p5r7.y
                             width: parent.width - xd*2
-                            height: p5tarea2.implicitHeight > 90 ? p5tarea2.implicitHeight : 90
+                            height: amdescription.implicitHeight > 90 ? amdescription.implicitHeight : 90
                             color: "#efefef"
                             radius: 8
                             TextInput {
-                                id: p5tarea2
-                                enabled: abox.checked
+                                id: amdescription
+                                enabled: amautre.checked
                                 text: qsTr("")
                                 padding: 5
                                 wrapMode: Text.WordWrap
@@ -2068,6 +2167,7 @@ Rectangle {
 
                                 }
                                 TextField {
+                                    id: o
                                     leftPadding: 5
                                     bottomPadding: 8
                                     Layout.maximumHeight: 40
@@ -2102,6 +2202,7 @@ Rectangle {
 
                                 }
                                 TextField {
+                                    id: p
                                     leftPadding: 5
                                     bottomPadding: 8
                                     Layout.maximumHeight: 40
@@ -2136,6 +2237,7 @@ Rectangle {
 
                                 }
                                 TextField {
+                                    id:q
                                     leftPadding: 5
                                     bottomPadding: 8
                                     Layout.maximumHeight: 40
@@ -2170,6 +2272,7 @@ Rectangle {
 
                                 }
                                 TextField {
+                                    id: r
                                     leftPadding: 5
                                     bottomPadding: 8
                                     Layout.maximumHeight: 40
@@ -2204,6 +2307,7 @@ Rectangle {
 
                                 }
                                 TextField {
+                                    id: s
                                     leftPadding: 5
                                     bottomPadding: 8
                                     Layout.maximumHeight: 40
@@ -2238,6 +2342,7 @@ Rectangle {
 
                                 }
                                 TextField {
+                                    id: t
                                     leftPadding: 5
                                     bottomPadding: 8
                                     Layout.maximumHeight: 40
@@ -2314,7 +2419,7 @@ Rectangle {
         y: parent.height / 4.5
         width: parent.width - 2*x
         height: parent.height - 2*y
-        Material.background: Material.Amber
+        Material.background: colora
         Material.elevation: 8
         ColumnLayout {
             anchors.fill: parent
@@ -2331,20 +2436,33 @@ Rectangle {
                 spacing: 2.0
                 Label {
                     text: qsTr("Nom:")
+                    Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignLeft
-                    Layout.fillHeight: true
                     Layout.fillWidth: true
+                    Layout.fillHeight: true
                     font.pointSize: 12
+                    Material.foreground: colorlt
                 }
                 // Replace with a combobox populated by the matricule
-                TextField {
-                    text: qsTr("")
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                Rectangle {
+                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                     Layout.fillHeight: true
                     Layout.fillWidth: true
-                    Layout.maximumWidth: tfieldMatricule.width
+                    Layout.maximumHeight: tfieldMatricule.implicitHeight + 15
+                    Layout.maximumWidth: trectmatricule.width
+                    Layout.minimumWidth: trectmatricule.width
+                    color: "white"
+                    radius:3
+                TextInput {
+                    id: namewritten
+                    text: qsTr("")
+                    anchors.fill: parent
+                    anchors.leftMargin: 10
+                    anchors.margins: 2
+                    verticalAlignment: Text.AlignVCenter
                     font.pointSize: 12
+                }
                 }
             }
             RowLayout {
@@ -2357,19 +2475,29 @@ Rectangle {
                     text: qsTr("Matricule:")
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignLeft
-                    Layout.fillWidth: true
                     Layout.fillHeight: true
                     font.pointSize: 12
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    rightPadding: 15
+                    Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+                    Material.foreground: colorlt
                 }
-                // Replace with a combobox populated by the matricule
-                TextField {
+                Rectangle {
+                    id: trectmatricule
+                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                    Layout.fillHeight: true
+                    Layout.maximumHeight: tfieldMatricule.implicitHeight + 15
+                    Layout.fillWidth: true
+                    color: "white"
+                    radius:3
+                TextInput {
                     id: tfieldMatricule
                     text: qsTr("")
-                    Layout.fillHeight: true
-                    Layout.fillWidth: true
+                    anchors.fill: parent
+                    anchors.margins: 3
+                    anchors.leftMargin: 10
+                    verticalAlignment: Text.AlignVCenter
                     font.pointSize: 12
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+                }
                 }
             }
             RowLayout{
@@ -2384,7 +2512,7 @@ Rectangle {
                     Layout.fillHeight: true
                     Layout.fillWidth: true
                     Material.foreground: colorlt
-                    Material.background: colordp
+                    Material.background: colorp
 
                     onClicked: {
                         mview.enabled = true;
@@ -2396,9 +2524,10 @@ Rectangle {
                     Layout.fillHeight: true
                     Layout.fillWidth: true
                     Material.foreground: colorlt
-                    Material.background: colordp
+                    Material.background: colorp
                     onClicked: {
                         save();
+                        winchange(medimain);
                     }
                 }
             }
@@ -2410,7 +2539,7 @@ Rectangle {
         y: parent.height / 4.0
         width: parent.width - 2*x
         height: parent.height - 2*y
-        Material.background: Material.Amber
+        Material.background: colora
         Material.elevation: 8
         ColumnLayout {
             anchors.fill: parent
@@ -2419,16 +2548,17 @@ Rectangle {
             anchors.bottomMargin: (parent.height/20) * 3
             anchors.topMargin: (parent.height/20) * 3
             spacing: 5
-                Label {
-                    text: qsTr("Êtes vous sur de vouloir quitter? Les changements non sauvegarder seronts effacer..")
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignLeft
-                    wrapMode: Text.WordWrap
-                    Layout.maximumHeight: 50
-                    Layout.fillHeight: true
-                    Layout.fillWidth: true
-                    font.pointSize: 14
-                }
+            Label {
+                text: qsTr("Êtes vous sur de vouloir quitter? Les changements non sauvegarder seronts effacer..")
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignLeft
+                wrapMode: Text.WordWrap
+                Layout.maximumHeight: 50
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                font.pointSize: 14
+                Material.foreground: colorlt
+            }
             RowLayout{
                 spacing: 15
                 Layout.fillHeight: true
@@ -2440,7 +2570,7 @@ Rectangle {
                     Layout.fillHeight: true
                     Layout.fillWidth: true
                     Material.foreground: colorlt
-                    Material.background: colordp
+                    Material.background: colorp
                     onClicked: {
                         mview.enabled = true;
                         promptconfirmleave.hide();
@@ -2452,7 +2582,7 @@ Rectangle {
                     Layout.fillHeight: true
                     Layout.fillWidth: true
                     Material.foreground: colorlt
-                    Material.background: colordp
+                    Material.background: colorp
                     onClicked: {
                         winchange(medimain);
                     }

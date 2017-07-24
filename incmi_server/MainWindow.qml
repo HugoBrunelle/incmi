@@ -10,9 +10,9 @@ Item {
     Pane {
         id:header
         width: parent.width
-        height: (parent.height/32)*5
-        Material.background: colorp
-        Material.elevation: 4
+        height: (parent.height/32)*3.5
+        Material.background: colordp
+        Material.elevation: 1
         GridLayout {
             anchors.rightMargin: parent.width / 5
             anchors.leftMargin: parent.width / 5
@@ -27,7 +27,7 @@ Item {
             }
             Label {
                 text: "IncMi Server"
-                font.pointSize: 30
+                font.pointSize: 28
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
                 Layout.fillHeight: true
@@ -53,7 +53,7 @@ Item {
         id: loadrec
         y: header.height + 8
         width: parent.width
-        height: (parent.height/32)*22
+        height: (parent.height/32)*24
         StackView {
             id: ld
             anchors.fill: parent
@@ -65,7 +65,7 @@ Item {
     Pane {
         y: loadrec.height + loadrec.y - 8
         width: parent.width
-        height: ((parent.height/32)*5)
+        height: ((parent.height/32)*4.5)
         Material.background: "#0288D1"
         Material.elevation: 4
         RowLayout {
