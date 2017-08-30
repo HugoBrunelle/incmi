@@ -17,7 +17,7 @@ Item {
         height: (parent.height / 8) - 2*xd
         Label {
             x: xd * 5
-            text: "Account and Password Settings"
+            text: "Server Settings"
             font.pointSize: 14
             width: parent.width - 2*x
             height: parent.height
@@ -135,7 +135,7 @@ Item {
                     anchors.leftMargin: 15
                     verticalAlignment: Text.AlignVCenter
                     KeyNavigation.tab: host
-                    text: ""
+                    text: settings.smpush
                 }
             }
         }

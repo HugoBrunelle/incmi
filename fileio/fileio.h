@@ -27,7 +27,7 @@ public:
     Q_INVOKABLE void resetDirectory();
     Q_INVOKABLE QStringList getFilteredNames(const QString& filterString,const QString& sortString);
     Q_INVOKABLE bool fileExists(QString fileName);
-    Q_INVOKABLE bool printToPDF(const QString &imgfilename, const QString &filename);
+    Q_INVOKABLE bool printToPDF(const QString &filename);
     QString sourceDir() { return sDir; };
 
 public slots:

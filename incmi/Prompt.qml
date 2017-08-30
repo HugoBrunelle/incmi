@@ -5,22 +5,51 @@ import QtQuick.Controls 2.1
 Pane {
     id: base
     visible: false
-    opacity: 0.0
+    y: parent.height
+    opacity: 1.0
+    state: "hidden"
 
     function checkstate(){
-        if (opacity == 0.0){
+        if (state == "hidden"){
             visible = false;
         }
     }
 
     function show() {
         visible = true;
-        opacity = 1.0;
+        state = "visible"
     }
 
     function hide() {
-        opacity = 0.0;
+        state = "hidden"
     }
+    states: [
+        State { name: "visible";  PropertyChanges {target: base; y: parent.height / 4.5}},
+        State { name: "hidden"; PropertyChanges {target: base; y: parent.height}}
+    ]
+
+    transitions: [
+        Transition {
+            from: "visible"
+            to: "hidden"
+            SequentialAnimation {
+            NumberAnimation { properties: "y"; duration: 300; easing.type: Easing.OutQuad }
+            ScriptAction {
+                script: checkstate();
+            }
+            }
+        },
+        Transition {
+            from: "hidden"
+            to: "visible"
+            SequentialAnimation {
+            NumberAnimation { properties: "y"; duration: 300; easing.type: Easing.OutQuad }
+            ScriptAction {
+                script: checkstate();
+            }
+            }
+        }
+    ]
 
     Behavior on opacity {
         SequentialAnimation{

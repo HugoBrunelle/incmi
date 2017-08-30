@@ -1,80 +1,200 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.2
+import QtQuick.Controls.Material 2.2
+import QtQuick.Layouts 1.3
 
 Item {
-    height: 45
+    height: 640
     width: 360
-    property int xd: 1
-
+    property int spad: 8
     Rectangle {
-        anchors.fill: parent;
+        id: body
+        x: 0
+        y: 0
+        width: parent.width
+        height: parent.height - footer.height
 
-        Label {
-            id: code
-            height: parent.height;
-            x: xd;
-            width: ((parent.width - 8) / 4);
-            text: test;
-            leftPadding: 5
-            horizontalAlignment: Text.AlignLeft;
-            verticalAlignment: Text.AlignVCenter;
+        Item {
+            id: i1
+            x: 0
+            y: 0
+            height: parent.height / 4
+            width: parent.width
+            Rectangle {
+                anchors.fill: parent
+                anchors.margins: spad
+                color: "white"
+                border.color: "grey"
+                border.width: 1
+                Item {
+                    id: ii1
+                    x: 0
+                    y: spad
+                    height: (parent.height / 2) - 2*spad
+                    width: parent.width
+                    Label {
+                        id: clab1
+                        x: 0
+                        y: 0
+                        leftPadding: spad * 2
+                        height: parent.height
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignLeft
+                        text: "Host:"
+                        width: parent.width / 3
+                    }
+                    Rectangle {
+                        x: clab1.width + spad
+                        width: (parent.width * 2 / 3) - 2*spad
+                        height: parent.height - spad
+                        y: spad / 2
+                        radius: 3
+                        border.width: 1
+                        border.color: "grey"
+                        TextInput {
+                            anchors.fill: parent
+                            anchors.leftMargin: spad
+                            text: ""
+                        }
+                    }
+                }
+                Item {
+                    id: ii2
+                    x: 0
+                    y: ii1.height + ii1.y + 2*spad
+                    height: (parent.height / 2) - 2*spad
+                    width: parent.width
+                    Label {
+                        id: clab2
+                        x: 0
+                        y: 0
+                        leftPadding: spad * 2
+                        height: parent.height
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignLeft
+                        text: "Port:"
+                        width: parent.width / 3
+                    }
+                    Rectangle {
+                        x: clab2.width + spad
+                        width: (parent.width * 2 / 3) - 2*spad
+                        height: parent.height - spad
+                        y: spad / 2
+                        radius: 3
+                        border.width: 1
+                        border.color: "grey"
+                        TextInput {
+                            anchors.fill: parent
+                            anchors.leftMargin: spad
+                            text: ""
+                        }
+                    }
+                }
+            }
         }
-        Rectangle {
-            id: r1
-            height: parent.height - 6;
-            y: 3;
-            x: code.x + code.width + xd;
-            width: 1;
-            color: "grey";
 
+        Item {
+            id: i2
+            x: 0
+            y: i1.height
+            height: parent.height / 4
+            width: parent.width
+            Rectangle {
+                anchors.fill: parent
+                anchors.margins: spad
+                color: "white"
+                border.color: "grey"
+                border.width: 1
+                Item {
+                    id: ii3
+                    x: 0
+                    y: spad
+                    height: (parent.height / 2) - 2*spad
+                    width: parent.width
+                    Label {
+                        id: clab3
+                        x: 0
+                        y: 0
+                        leftPadding: spad * 2
+                        height: parent.height
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignLeft
+                        text: "Nom:"
+                        width: parent.width / 3
+                    }
+                    Rectangle {
+                        x: clab3.width + spad
+                        width: (parent.width * 2 / 3) - 2*spad
+                        height: parent.height - spad
+                        y: spad / 2
+                        radius: 3
+                        border.width: 1
+                        border.color: "grey"
+                        TextInput {
+                            anchors.fill: parent
+                            anchors.leftMargin: spad
+                            text: ""
+                        }
+                    }
+                }
+                Item {
+                    id: ii4
+                    x: 0
+                    y: ii3.height + ii3.y + 2*spad
+                    height: (parent.height / 2) - 2*spad
+                    width: parent.width
+                    Label {
+                        id: clab4
+                        x: 0
+                        y: 0
+                        leftPadding: spad * 2
+                        height: parent.height
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignLeft
+                        text: "Matricule:"
+                        width: parent.width / 3
+                    }
+                    Rectangle {
+                        x: clab4.width + spad
+                        width: (parent.width * 2 / 3) - 2*spad
+                        height: parent.height - spad
+                        y: spad / 2
+                        radius: 3
+                        border.width: 1
+                        border.color: "grey"
+                        TextInput {
+                            anchors.fill: parent
+                            anchors.leftMargin: spad
+                            text: ""
+                        }
+                    }
+                }
+            }
         }
-        Label {
-            id: date
-            height: parent.height;
-            x: xd + r1.width + r1.x;
-            width: ((parent.width - 8) / 4);
-            leftPadding: 5
-            text: test;
-            horizontalAlignment: Text.AlignLeft;
-            verticalAlignment: Text.AlignVCenter;
-        }
-        Rectangle {
-            id: r2
-            height: parent.height - 6;
-            y: 3;
-            x: date.x + date.width + xd;
-            width: 1;
-            color: "grey";
+    }
 
-        }
-        Label {
-            id: lieu
-            height: parent.height;
-            x: xd + r2.width + r2.x;
-            width: ((parent.width - 8) / 4);
-            leftPadding: 5
-            text: test;
-            horizontalAlignment: Text.AlignLeft;
-            verticalAlignment: Text.AlignVCenter;
-        }
-        Rectangle {
-            id: r3
-            height: parent.height - 6;
-            y: 3;
-            x: lieu.x + lieu.width + xd;
-            width: 1;
-            color: "grey";
 
-        }
-        Label {
-            id: nature
-            height: parent.height;
-            x: xd + r3.width + r3.x;
-            leftPadding: 5
-            width: ((parent.width - 8) / 4);
-            text: test;
-            horizontalAlignment: Text.AlignLeft;
-            verticalAlignment: Text.AlignVCenter;
+    Pane {
+        id: footer
+        width: 360
+        y: body.height
+        height: 70
+        Material.background: "#0288D1"
+        GridLayout {
+            anchors.fill: parent
+            CButton {
+                text: qsTr("Retour")
+                Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+                Layout.maximumWidth: 150
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                source: "Icons/ic_backspace_white_24dp.png"
+                Material.foreground: colorlt
+                Material.background: colordp
+                onClicked: {
+                    winchange(inform);
+                }
+            }
         }
     }
 }

@@ -37,6 +37,21 @@ Rectangle {
                 color: colorlt
                 font.bold: true
             }
+
+            ImageButton {
+                Layout.fillHeight: true
+                Layout.maximumHeight: header.height / 2
+                Layout.maximumWidth: Layout.maximumHeight
+                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                source: "Icons/ic_settings_applications_white_24dp.png"
+                Material.background: colorp
+                Material.foreground: colorlt
+                onClicked: {
+                    winchange(sets);
+                }
+            }
+
+
         }
     }
 

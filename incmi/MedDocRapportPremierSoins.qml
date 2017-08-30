@@ -11,6 +11,21 @@ Rectangle {
     height: 640
     Material.accent: colora
 
+
+    Component.onCompleted: {
+        switch (naturedoc) {
+        case "1":
+            view.removeItem(5);
+            view.removeItem(4);
+            view.removeItem(3);
+            break;
+
+        case "2":
+            view.removeItem(6);
+            break;
+        }
+    }
+
     
 
     function save() {
@@ -21,7 +36,7 @@ Rectangle {
             "nconvulsion":"","ndiabete":"","ndouleurt":"","nfaibless":"","nhypertermie":"","nhypothermie":"","nintoxication":"","nmaltete":"",
             "nobstr":"","ntrauma":"","nautre":"","ndescription":"","epreaction":"","epvoiesr":"","eprespiration":"","eppouls":"","epnivecon":"",
             "medicaments":"","alergies":"","ainconnu":"","alergies2":"","ana":"","amavc":"","amcardiaque":"","amdiabete":"","amepliepsie":"","amhyperhypo":"",
-            "amautre":"","amdescription":"","o":"","p":"","q":"","r":"","s":"","t":""}');
+            "amautre":"","amdescription":"","o":"","p":"","q":"","r":"","s":"","t":"","descriptioncas":""}');
         obj.matricule = tfieldMatricule.text;
         obj.nature = naturedoc;
         obj.name = namewritten.text;
@@ -90,6 +105,7 @@ Rectangle {
         obj.r = r.text;
         obj.s = s.text;
         obj.t = t.text;
+        obj.descriptioncas = descriptioncas.text
         mess.push(JSON.stringify(obj));
         settings.messages = mess;
         sendSavedInformation();
@@ -116,6 +132,8 @@ Rectangle {
         var data = modelData;
         return data.toString().length < 2 ? "0" + data : data;
     }
+
+
     ColumnLayout {
         id: mview
         spacing: 0
@@ -127,7 +145,7 @@ Rectangle {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             Layout.fillHeight: true
             Layout.fillWidth: true
-            currentIndex: 2
+            currentIndex: 0
             onCurrentIndexChanged: {
                 currentItem.forceActiveFocus();
             }
@@ -2109,7 +2127,7 @@ Rectangle {
                 Flickable{
                     anchors.fill: parent
                     contentWidth: parent.width
-                    contentHeight: p3rec.childrenRect.height
+                    contentHeight: p6rec.childrenRect.height
                     Rectangle {
                         id: p6rec
                         y: 0
@@ -2357,6 +2375,54 @@ Rectangle {
                     }
                 }
             }
+            Item {
+                id: minorpage1
+                Flickable {
+                    anchors.fill: parent
+                    contentWidth: parent.width
+                    contentHeight: p7rec.childrenRect.height
+                    Rectangle {
+                        id: p7rec
+                        height: childrenRect.height
+                        width: parent.width
+                        Rectangle {
+                            id: p7r1
+                            x: xd/2
+                            width: parent.width - xd
+                            height: 140
+                            Label {
+                                id: lab
+                                text: "Descriptions du cas"
+                                width: parent.width
+                                height: implicitHeight
+                                font.pointSize: 11
+
+                            }
+                            Rectangle {
+                                y: lab.height + xd/6
+                                width: parent.width
+                                height: parent.height - lab.height - xd/3
+                                color: "#efefef"
+                                radius: 8
+                                TextInput {
+                                    id: descriptioncas
+                                    text: qsTr("")
+                                    padding: 5
+                                    wrapMode: Text.WordWrap
+                                    font.pointSize: 11
+                                    anchors.bottomMargin: xd/6
+                                    anchors.rightMargin: xd/2
+                                    anchors.leftMargin: xd/2
+                                    anchors.topMargin: xd/6
+                                    anchors.fill: parent
+
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
         }
 
 
@@ -2373,17 +2439,17 @@ Rectangle {
         Pane {
             id: footer
             width: parent.width
-            height: 80
+            height: 70
             Layout.minimumHeight: 50
             Layout.fillHeight: true
-            Layout.maximumHeight: 80
+            Layout.maximumHeight: 70
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
             Material.background: "#0288D1"
             Material.elevation: 4
             GridLayout {
                 anchors.fill: parent
-                Button {
+                CButton {
                     id: cancelbutton
                     text: qsTr("Annuler")
                     Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
@@ -2392,19 +2458,21 @@ Rectangle {
                     Layout.fillHeight: true
                     Material.foreground: colorlt
                     Material.background: "#006da9"
+                    source: "Icons/ic_highlight_off_white_24dp.png"
                     onClicked: {
                         mview.enabled = false;
                         promptconfirmleave.show();
                     }
                 }
-                Button {
-                    text: qsTr("Sauvegarder")
+                CButton {
+                    text: qsTr("Envoyer")
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                     Layout.fillHeight: true
                     Layout.fillWidth: true
                     Layout.maximumWidth: 150
                     Material.foreground: colorlt
                     Material.background: "#006da9"
+                    source: "Icons/ic_cloud_upload_white_24dp.png"
                     onClicked: {
                         mview.enabled = false;
                         promptconfirmsave.show();
@@ -2418,7 +2486,7 @@ Rectangle {
         x: parent.width / 10
         y: parent.height / 4.5
         width: parent.width - 2*x
-        height: parent.height - 2*y
+        height: parent.height - 2*(parent.height/4.5)
         Material.background: colora
         Material.elevation: 8
         ColumnLayout {
@@ -2538,7 +2606,7 @@ Rectangle {
         x: parent.width / 14
         y: parent.height / 4.0
         width: parent.width - 2*x
-        height: parent.height - 2*y
+        height: parent.height - 2*(parent.height/4.5)
         Material.background: colora
         Material.elevation: 8
         ColumnLayout {

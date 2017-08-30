@@ -30,6 +30,8 @@ Rectangle {
     }
 
     BaseSocket {
+        port: settings.port
+        host: settings.host
         id: adjsocket
         onTextMessageReceived: {
             var obj = JSON.parse(message);
@@ -90,8 +92,9 @@ Rectangle {
             RowLayout {
                 id: gridLayout
                 anchors.fill: parent
-                Button {
+                CButton {
                     text: qsTr("Annuler")
+                    source: "Icons/ic_highlight_off_white_24dp.png"
                     Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
                     Layout.maximumWidth: 150
                     Layout.fillWidth: true
@@ -103,8 +106,9 @@ Rectangle {
                         promptconfirmleave.show();
                     }
                 }
-                Button {
-                    text: qsTr("Sauvegarder")
+                CButton {
+                    text: qsTr("Envoyer")
+                    source: "Icons/ic_cloud_upload_white_24dp.png"
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                     Layout.fillHeight: true
                     Layout.fillWidth: true
@@ -124,7 +128,7 @@ Rectangle {
         x: parent.width / 10
         y: parent.height / 4.5
         width: parent.width - 2*x
-        height: parent.height - 2*y
+        height: parent.height - 2*(parent.height/4.5)
         Material.background: colora
         Material.elevation: 8
         ColumnLayout {
@@ -243,7 +247,7 @@ Rectangle {
         x: parent.width / 14
         y: parent.height / 4.0
         width: parent.width - 2*x
-        height: parent.height - 2*y
+        height: parent.height - 2*(parent.height/4.5)
         Material.background: colora
         Material.elevation: 8
         ColumnLayout {
@@ -269,7 +273,7 @@ Rectangle {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
-                Layout.maximumHeight: 80
+                Layout.maximumHeight: 50
                 Button {
                     text: qsTr("Non")
                     Layout.fillHeight: true

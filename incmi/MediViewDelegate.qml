@@ -61,7 +61,6 @@ Item {
             id: cod
             height: parent.height;
             x: xd;
-            font.bold: true
             elide: "ElideRight"
             width: type == "docs" ? ((parent.width - 8) / 4) : parent.width;
             text: type == "docs" ? matricule + "::" + filename : "Changement inventaires:  " + matricule + "::" + filename
@@ -141,6 +140,13 @@ Item {
         anchors.fill: parent
         onClicked: {
             listView.currentIndex = index;
+        }
+
+        onDoubleClicked: {
+            if (type == "docs") {
+                listView.currentIndex = index;
+                getDocImage(filename);
+            }
         }
     }
 }

@@ -38,6 +38,8 @@ Window {
     property color colordp: "#006da9"
     property color colora: "#607D8B"
     property string naturedoc: "0"
+    property string currentfilename: ""
+    property string imgurl: ""
     property variant mess: []
 
     //Saves the applications setting for what type of user is the admin or not
@@ -46,7 +48,9 @@ Window {
         //Setting for the type of user. 0 - default, 1 - base, 2 - admin
         property int acess: 0
         property string port: "2565"
-        property string host: "192.168.0.108"
+        property string host: "192.168.1.147"
+        property string name: ""
+        property string matricule: ""
         property variant messages: []
     }
 
@@ -60,6 +64,12 @@ Window {
     }
 
     function winchange(win){
+        switch (win) {
+        case medinventory:
+
+            break;
+        }
+
         currentwindow = win;
         changes = true;
         windowloader.opacity = 0.0;
@@ -74,7 +84,6 @@ Window {
     }
     Rectangle {
         anchors.fill: parent
-        Material.background: colorlt
     }
 
 
@@ -97,12 +106,11 @@ Window {
         Behavior on opacity {
             SequentialAnimation {
                 NumberAnimation {
-                    duration: 450
+                    duration: 275
                     easing.type: Easing.InCubic
                 }
                 ScriptAction {
                     script: {
-                        console.log("End of loader animation")
                         if (windowloader.opacity == 0.0 && changes) {
                             windowloader.sourceComponent = currentwindow;
                             changes = false;
@@ -138,6 +146,47 @@ Window {
     Component {
         id:meddocrs
         MedDocRapportPremierSoins { }
+    }
+
+    Component {
+        id:viewer
+        DocumentViewer {}
+    }
+
+    Component {
+        id:pcom
+        DocumentPrintViewer {}
+    }
+
+    Component {
+        id: sets
+        SettingsWindow {}
+    }
+
+    function getDocImage(filename) {
+        currentfilename = filename;
+        imgloader.active = true;
+    }
+
+    function gToImage() {
+          if (imgloader.active) {
+                imgloader.item.grabToImage(function(obj) {imageRendered(obj);});
+          }
+    }
+
+    function imageRendered(obj) {
+        if (imgloader.active) {
+            imgurl = obj.url;
+            imgloader.active = false;
+            winchange(viewer);
+        }
+    }
+
+    Loader {
+       id: imgloader
+       visible: false
+       active: false
+       sourceComponent: pcom
     }
 
 

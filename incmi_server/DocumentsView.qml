@@ -35,6 +35,7 @@ Item {
 
     function imageRendered(obj) {
         if (pload.active) {
+            obj.saveToFile(currentfilename + ".png");
             currentimageurl = obj.url;
             pload.active = false;
         }
@@ -154,12 +155,22 @@ Item {
                 height: (parent.height/10) - 2*xd
                 width: parent.width * 1 / 5 - 5*xd
                 y: titem.height - height - 2*xd
+                Image {
+                    id: imzoom
+                    fillMode: Image.Stretch
+                    width: clab.implicitHeight
+                    x: 5
+                    height: width
+                    source: "Icons/ic_zoom_in_black_24dp.png"
+                }
+
                 Label {
                     id: clab
-                    leftPadding: 20
+                    leftPadding: 5
                     font.pointSize: 12
-                    text: "Zoom: " + Math.floor(((sli.position/1) * 100)).toString() + "%"
-                    width: parent.width
+                    text: Math.floor(((sli.position/1) * 100)).toString() + "%"
+                    x: imzoom.width + imzoom.x
+                    width: parent.width - implicitHeight - 5
                     height: implicitHeight
                 }
 
@@ -185,7 +196,10 @@ Item {
                 Material.background: colordp
 
                 onClicked: {
-                    file.printToPDF(currentimageurl, currentfilename);
+                    var result = file.printToPDF(currentfilename);
+                    if (result) {
+                        removeTempImage();
+                    }
                 }
             }
 

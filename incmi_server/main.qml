@@ -139,6 +139,15 @@ ApplicationWindow {
         id: file
     }
 
+    function removeTempImage() {
+        var items = file.getFileNames();
+        for (var i = 0; i < items.length; i++) {
+            if (items[i] == currentfilename + ".png") {
+                file.removeFile(items[i]);
+            }
+        }
+    }
+
 
 
     function messReceived(message, socket){
@@ -215,7 +224,7 @@ ApplicationWindow {
         if (file.dirExist(docsfolder)){
             file.cd(docsfolder);
             var fs = file.getFilteredNames("files","time");
-            for(var i = 0; i < fs.length; i++){
+            for(var i = 0; i < fs.length && i < parseInt(settings.smpush); i++){
                 //Check the file type to make certain no idiot placed a weird item to fuck the loop
                 var ff = fs[i];
                 if (ff.split(".")[1] === "incmi"){
@@ -255,7 +264,7 @@ ApplicationWindow {
         if (file.dirExist(docsfolder)){
             file.cd(docsfolder);
             var fs = file.getFilteredNames("files","time");
-            for(var i = 0; i < fs.length; i++){
+            for(var i = 0; i < fs.length && i < parseInt(settings.smpush); i++){
                 //Check the file type to make certain no idiot placed a weird item to fuck the loop
                 var ff = fs[i];
                 if (ff.split(".")[1] === "incmi"){
@@ -538,14 +547,5 @@ ApplicationWindow {
         }
         file.resetDirectory();
         return tag;
-    }
-
-    function generateDocument(obj) {
-        // Generate the document using a QtObject or a component
-
-    }
-
-    function exportDocument(obj) {
-        // Export the document to pdf, and ask the server where to save the object
     }
 }

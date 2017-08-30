@@ -167,6 +167,8 @@ Item {
             Material.foreground: colorlt
             onClicked: {
                 sview.currentItem.save();
+                load.enabled = true;
+                options.hide();
             }
         }
 

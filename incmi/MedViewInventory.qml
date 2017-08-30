@@ -9,6 +9,8 @@ Rectangle {
     width: 360
     height: 640
     BaseSocket {
+        port: settings.port
+        host: settings.host
         id: invsocket
         onTextMessageReceived: {
             var obj = JSON.parse(message);
@@ -69,7 +71,7 @@ Rectangle {
             Material.background: "#0288D1"
             RowLayout {
                 anchors.fill: parent
-                Button {
+                CButton {
                     text: qsTr("Retour")
                     Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
                     Layout.maximumWidth: 150
@@ -77,16 +79,18 @@ Rectangle {
                     Layout.fillHeight: true
                     Material.foreground: colorlt
                     Material.background: colordp
+                    source: "Icons/ic_backspace_white_24dp.png"
                     onClicked: {
                         winchange(medimain);
                     }
                 }
-                Button {
-                    text: qsTr("+ Inventaire")
+                CButton {
+                    text: qsTr("Inventaire")
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                     Layout.maximumWidth: 150
                     Layout.fillWidth: true
                     Layout.fillHeight: true
+                    source: "Icons/ic_add_circle_white_24dp.png"
                     Material.foreground: colorlt
                     Material.background: colordp
                     onClicked: {

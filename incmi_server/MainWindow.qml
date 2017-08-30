@@ -228,13 +228,14 @@ Item {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
 
-                Button {
+                CButton {
                     id: obutton
                     x: 15
                     y: parent.height - obutton.height - 5
                     height: parent.height *3 / 5
                     width: parent.width - 30
                     text: qsTr("Options")
+                    source: "Icons/ic_settings_applications_white_24dp.png"
                     Material.foreground: colorlt
                     Material.background: colordp
                     onClicked: {
@@ -259,12 +260,4 @@ Item {
         id: doc
         DocumentsView {id: ldoc}
     }
-
-
-
-
-
-
-
-
 }

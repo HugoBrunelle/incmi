@@ -53,17 +53,18 @@ Rectangle {
         anchors.fill: parent
         spacing: 15
 
-        Button {
+        CButton {
             y: 160
             height: 59
-            text: qsTr("Utilisateur de Base")
+            text: qsTr("Intervenant")
             font.family: "Arial"
-            font.pointSize: 16
+            font.pointSize: 13
             Layout.fillHeight: true
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
             Material.foreground: colorlt
             Material.background: colordp
+            source: "Icons/ic_account_box_white_24dp.png"
             onClicked: {
 
                 // Set access settings
@@ -71,16 +72,17 @@ Rectangle {
             }
         }
 
-        Button {
+        CButton {
             height: 60
             text: qsTr("Administrateur")
             Layout.minimumHeight: 0
-            font.pointSize: 16
+            font.pointSize: 13
             Layout.fillHeight: true
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
             Material.foreground: colorlt
             Material.background: colordp
+            source: "Icons/ic_supervisor_account_white_24dp.png"
             onClicked: {
                 mview.enabled = false;
                 acodebox.show();
@@ -96,7 +98,7 @@ Rectangle {
         x: parent.width / 8
         y: parent.height / 4.5
         width: parent.width - 2*x
-        height: parent.height - 2*y
+        height: parent.height - 2*(parent.height/4.5)
         Material.background: colora
         Material.elevation: 8
         ColumnLayout {

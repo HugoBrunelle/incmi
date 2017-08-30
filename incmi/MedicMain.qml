@@ -23,7 +23,6 @@ Rectangle {
             }
         }
         onTextMessageReceived: {
-            console.log(message);
             var obj = JSON.parse(message);
             for (var i = 0; i < obj.items.length; i++) {
                 var item = JSON.parse(obj.items[i]);
@@ -74,25 +73,27 @@ Rectangle {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     spacing: 0
-                    Button {
+                    CButton {
                         text: qsTr("Inventaire")
                         Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                         Layout.fillHeight: true
                         Layout.fillWidth: true
+                        source: "Icons/ic_list_white_24dp.png"
                         Material.foreground: colorlt
-                        Material.background: colorp
+                        Material.background: colora
                         onClicked: {
                             winchange(medinventory);
                         }
                     }
 
-                    Button {
+                    CButton {
                         text: qsTr("Nouveau Dossier")
                         Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                         Layout.fillHeight: true
                         Layout.fillWidth: true
+                        source: "Icons/ic_line_style_white_24dp.png"
                         Material.foreground: colorlt
-                        Material.background: colorp
+                        Material.background: colora
                         onClicked: {
                             mview.enabled = false;
                             newdprompt.show();
@@ -132,12 +133,13 @@ Rectangle {
             Material.background: "#0288D1"
             GridLayout {
                 anchors.fill: parent
-                Button {
+                CButton {
                     text: qsTr("Retour")
                     Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
                     Layout.maximumWidth: 150
                     Layout.fillWidth: true
                     Layout.fillHeight: true
+                    source: "Icons/ic_backspace_white_24dp.png"
                     Material.foreground: colorlt
                     Material.background: colordp
                     onClicked: {
@@ -155,7 +157,7 @@ Rectangle {
         x: parent.width / 12
         y: parent.height / 7
         width: parent.width - 2*x
-        height: parent.height - 2*y
+        height: parent.height - 2*(parent.height/4.5)
         GridLayout {
             anchors.rightMargin: parent.width / 16
             anchors.leftMargin: parent.width / 16

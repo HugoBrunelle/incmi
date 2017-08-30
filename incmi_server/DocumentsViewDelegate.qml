@@ -133,6 +133,7 @@ Item {
         onClicked: {
             typeview.currentIndex = index;
             if (type == "docs") {
+                removeTempImage();
                 currentfilename = filename;
                 pload.active = true;
             }
