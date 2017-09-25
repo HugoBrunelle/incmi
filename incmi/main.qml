@@ -18,17 +18,6 @@ Window {
     //                              All global properties
     property var currentwindow
     property bool changes
-
-    /*  Main material color scheme (to be applied to all controls.
-        colorb  Border color / seperator /
-        colorst Secondary text color
-        colort  primary text color
-        colorp  primary back color
-        colorlp primary light color
-        colordp dark primary back color
-        colora  accentuated object color (accent)
-    */
-
     property color colorb: "#BDBDBD"
     property color colorst: "#757575"
     property color colort: "#212121"
@@ -41,17 +30,60 @@ Window {
     property string currentfilename: ""
     property string imgurl: ""
     property variant mess: []
+    property string currenttype
+    property string peoplebase: '{"firstname":"","lastname":"","email":"","matricule":"","role":"","filename":"","isadmin":"false"}'
+    property string inventoryitembase: '{"name":"", "count":"", "rcount":"", "tag":""}'
+    property string eventitembase: '{"date":"","hour":"","lieu":"","details":"","people":[],"tag":""}'
+    property string serversettingsbase: '{"sport":"","shost":"","saccount":"","spass":"","smpush":"","semaccount":"","sempassword":"","scnew":"","scedit":"","scremind":"","scremove":"","scadmincommit":"","scbackup":""}'
+    property string incdocumentbase: '{"date":"","name":"","matricule":"","time":"","adresse":"","ville":"","type":"","people":[],"other":[],"femme":"","homme":"","enfant":"","materiel":[]}'
 
-    //Saves the applications setting for what type of user is the admin or not
+
+    /*  Main material color scheme (to be applied to all controls.
+        colorb  Border color / seperator /
+        colorst Secondary text color
+        colort  primary text color
+        colorp  primary back color
+        colorlp primary light color
+        colordp dark primary back color
+        colora  accentuated object color (accent)
+    */
+
+
+
+    //Saves the applications settings
     Settings {
         id: settings
         //Setting for the type of user. 0 - default, 1 - base, 2 - admin
-        property int acess: 0
+        property bool isadmin: false;
         property string port: "2565"
         property string host: "192.168.1.147"
-        property string name: ""
-        property string matricule: ""
         property variant messages: []
+        property string user: ""
+        property bool isfirstboot: true;
+    }
+
+    function resetSettings() {
+        settings.isadmin = false;
+        settings.user = "";
+        settings.isfirstboot = true;
+    }
+
+    function getFullName() {
+        var n = ""
+        if (settings.user != "") {
+        var obj = JSON.parse(settings.user);
+            n = obj.firstname + " " + obj.lastname;
+        }
+        return n;
+    }
+
+    function getMatricule() {
+        var n = ""
+        if (settings.user != ""){
+            var obj = JSON.parse(settings.user);
+            n = obj.matricule;
+        }
+        return n;
     }
 
 
@@ -64,59 +96,34 @@ Window {
     }
 
     function winchange(win){
-        switch (win) {
-        case medinventory:
-
-            break;
-        }
-
-        currentwindow = win;
-        changes = true;
-        windowloader.opacity = 0.0;
+        windowloader.replace(windowloader.get(0),win,StackView.ReplaceTransition);
+        windowloader.pop(null);
     }
 
-    function setAccess() {
-        if (settings.acess != 0){
-
-        }else{
-            windowloader.sourceComponent = login;
-        }
-    }
+    signal doEvents();
     Rectangle {
         anchors.fill: parent
     }
 
-
-    // Window events
-    Component.onCompleted:
-    {
-        setAccess();
+    Component.onCompleted: {
+        doEvents();
     }
 
-    Loader {
+
+    // Window events
+    onDoEvents: {
+        mess = settings.messages;
+        sendSavedInformation();
+    }
+
+    StackView {
         id: windowloader
-        asynchronous: true
-        opacity: 0.0
-        anchors.fill: parent;
-        onStatusChanged: {
-            if (status == Loader.Ready) {
-                opacity = 1.0;
-            }
-        }
-        Behavior on opacity {
-            SequentialAnimation {
-                NumberAnimation {
-                    duration: 275
-                    easing.type: Easing.InCubic
-                }
-                ScriptAction {
-                    script: {
-                        if (windowloader.opacity == 0.0 && changes) {
-                            windowloader.sourceComponent = currentwindow;
-                            changes = false;
-                        }
-                    }
-                }
+        height: parent.height
+        width: parent.width
+        initialItem: login
+        onBusyChanged: {
+            if (!busy) {
+                doEvents();
             }
         }
     }
@@ -126,10 +133,6 @@ Window {
     Component {
         id : login
         MainForm { }
-    }
-    Component {
-        id: inform
-        IntroForm { }
     }
     Component {
         id: medimain
@@ -154,17 +157,57 @@ Window {
     }
 
     Component {
+        id:events
+        EventView {}
+    }
+
+    Component {
         id:pcom
         DocumentPrintViewer {}
     }
 
     Component {
-        id: sets
-        SettingsWindow {}
+        id: pinvtot
+        InventoryPrint {}
     }
 
-    function getDocImage(filename) {
+    Component {
+        id: pinv
+        InvAdjustmentPrint {}
+    }
+
+    Component {
+        id: incm
+        IncendieMain {}
+    }
+
+    Component {
+        id: incrapdoc
+        IncRapportDocument {}
+    }
+
+    Component {
+        id: pinc
+        IncRapportDocumentPrint {}
+    }
+
+    function getDocImage(filename,typ) {
+        switch (typ) {
+        case "docs":
+            imgloader.sourceComponent = pcom;
+            break;
+        case "inv":
+            imgloader.sourceComponent = pinv;
+            break;
+        case "inc":
+            imgloader.sourceComponent = pinc;
+            break;
+        case "invtot":
+            imgloader.sourceComponent = pinvtot;
+            break;
+        }
         currentfilename = filename;
+        currenttype = typ;
         imgloader.active = true;
     }
 
@@ -201,7 +244,7 @@ Window {
                     msocket.sendTextMessage(mess[i]);
                 }
                 for (var b = mess.length; b > 0; b--) {
-                    mess.splice(b-1,1);
+                    mess = mess.splice(b,1);
                 }
                 settings.messages = mess;
                 msocket.active = false;

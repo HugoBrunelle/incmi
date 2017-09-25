@@ -64,13 +64,25 @@ Item {
                 height: parent.height
             }
             ListView {
+                clip: true
                 id: typeview
                 interactive: false
                 x:0
                 y:5
                 width: parent.width / 3
                 height: parent.height - 10
-                model: SettingsCategoryModel {}
+                model: ListModel {
+                    id: mod
+                    ListElement{
+                        type: "Access and Password"
+                    }
+                    ListElement{
+                        type: "Server Settings"
+                    }
+                    ListElement{
+                        type: "People Management"
+                    }
+                }
                 delegate: settypedel
 
                 onCurrentIndexChanged: {
@@ -81,6 +93,8 @@ Item {
                     case 1:
                         sview.push(servview,StackView.Immediate);
                         break;
+                    case 2:
+                        sview.push(pplmanview,StackView.Immediate);
                     }
                 }
             }
@@ -131,6 +145,7 @@ Item {
                 height: parent.height
             }
             StackView {
+                clip: true
                 id: sview
                 x: typeview.width + 1
                 width: (parent.width*2)/3 - 1
@@ -151,6 +166,14 @@ Item {
                 ServerSettingsView {
                     id: spage
                 anchors.fill: parent
+                }
+            }
+
+            Component {
+                id: pplmanview
+                PeopleSettingsView {
+                    id: ppage
+                    anchors.fill: parent
                 }
             }
 

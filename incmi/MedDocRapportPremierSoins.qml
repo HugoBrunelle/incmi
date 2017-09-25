@@ -7,8 +7,10 @@ import QtQml 2.2
 
 Rectangle {
     property int xd: 30
-    width: 360
-    height: 640
+    property int labellength
+    property int lrectheight: 40
+    width: parent == null ? 360:parent.width
+    height: parent == null ? 640:parent.height
     Material.accent: colora
 
 
@@ -37,9 +39,9 @@ Rectangle {
             "nobstr":"","ntrauma":"","nautre":"","ndescription":"","epreaction":"","epvoiesr":"","eprespiration":"","eppouls":"","epnivecon":"",
             "medicaments":"","alergies":"","ainconnu":"","alergies2":"","ana":"","amavc":"","amcardiaque":"","amdiabete":"","amepliepsie":"","amhyperhypo":"",
             "amautre":"","amdescription":"","o":"","p":"","q":"","r":"","s":"","t":"","descriptioncas":""}');
-        obj.matricule = tfieldMatricule.text;
+        obj.matricule = getMatricule();
         obj.nature = naturedoc;
-        obj.name = namewritten.text;
+        obj.name = getFullName();
         obj.dateint = datenv1.currentItem.text + ":" + datenv2.currentItem.text + ":" + datenv3.currentItem.text;
         obj.tarriver = tarriver1.currentItem.text + ":" + tarriver2.currentItem.text;
         obj.tappele = tappele1.currentItem.text + ":" + tappele2.currentItem.text;
@@ -74,38 +76,42 @@ Rectangle {
         obj.ntrauma = ntrauma.checked.toString();
         obj.nautre = nautre.checked.toString();
         if (nautre.checked) obj.ndescription = ndescription.text;
-        if (epreaction1.checked) obj.epreaction = "0";
-        if (epreaction2.checked) obj.epreaction = "1";
-        if (epvoiesr1.checked) obj.epvoiesr = "0";
-        if (epvoiesr2.checked) obj.epvoiesr = "1";
-        if (eprespiration1.checked) obj.eprespiration = "0";
-        if (eprespiration2.checked) obj.eprespiration = "1";
-        if (eppouls1.checked) obj.eppouls = "0";
-        if (eppouls2.checked) obj.eppouls = "1";
-        if (epnivecon1.checked) obj.epnivecon = "0";
-        if (epnivecon2.checked) obj.epnivecon = "1";
-        if (epnivecon3.checked) obj.epnivecon = "2";
-        if (epnivecon4.checked) obj.epnivecon = "3";
-        if (epnivecon5.checked) obj.epnivecon = "4";
-        obj.medicaments = medicaments.text;
-        obj.alergies = alergies1.text;
-        obj.alergies2 = alergies2.text;
-        obj.ainconnu = ainconnu.checked.toString();
-        obj.ana = ana.checked.toString();
-        obj.amavc = amavc.checked.toString();
-        obj.amcardiaque = amcardiaque.checked.toString();
-        obj.amdiabete = amdiabete.checked.toString();
-        obj.amepliepsie = amepliepsie.checked.toString();
-        obj.amhyperhypo = amhyperhyp.checked.toString();
-        obj.amautre = amautre.checked.toString();
-        if (amautre.checked) obj.amdescription = amdescription.text;
-        obj.o = o.text;
-        obj.p = p.text;
-        obj.q = q.text;
-        obj.r = r.text;
-        obj.s = s.text;
-        obj.t = t.text;
-        obj.descriptioncas = descriptioncas.text
+        if (naturedoc == "2") {
+            if (epreaction1.checked) obj.epreaction = "0";
+            if (epreaction2.checked) obj.epreaction = "1";
+            if (epvoiesr1.checked) obj.epvoiesr = "0";
+            if (epvoiesr2.checked) obj.epvoiesr = "1";
+            if (eprespiration1.checked) obj.eprespiration = "0";
+            if (eprespiration2.checked) obj.eprespiration = "1";
+            if (eppouls1.checked) obj.eppouls = "0";
+            if (eppouls2.checked) obj.eppouls = "1";
+            if (epnivecon1.checked) obj.epnivecon = "0";
+            if (epnivecon2.checked) obj.epnivecon = "1";
+            if (epnivecon3.checked) obj.epnivecon = "2";
+            if (epnivecon4.checked) obj.epnivecon = "3";
+            if (epnivecon5.checked) obj.epnivecon = "4";
+            obj.medicaments = medicaments.text;
+            obj.alergies = alergies1.text;
+            obj.alergies2 = alergies2.text;
+            obj.ainconnu = ainconnu.checked.toString();
+            obj.ana = ana.checked.toString();
+            obj.amavc = amavc.checked.toString();
+            obj.amcardiaque = amcardiaque.checked.toString();
+            obj.amdiabete = amdiabete.checked.toString();
+            obj.amepliepsie = amepliepsie.checked.toString();
+            obj.amhyperhypo = amhyperhyp.checked.toString();
+            obj.amautre = amautre.checked.toString();
+            if (amautre.checked) obj.amdescription = amdescription.text;
+            obj.o = o.text;
+            obj.p = p.text;
+            obj.q = q.text;
+            obj.r = r.text;
+            obj.s = s.text;
+            obj.t = t.text;
+        }
+        if (naturedoc == "1"){
+            obj.descriptioncas = descriptioncas.text
+        }
         mess.push(JSON.stringify(obj));
         settings.messages = mess;
         sendSavedInformation();
@@ -2483,8 +2489,8 @@ Rectangle {
     }
     Prompt {
         id: promptconfirmsave
-        x: parent.width / 10
-        y: parent.height / 4.5
+        x: parent.width / 14
+        y: parent.height / 4.0
         width: parent.width - 2*x
         height: parent.height - 2*(parent.height/4.5)
         Material.background: colora
@@ -2496,78 +2502,20 @@ Rectangle {
             anchors.bottomMargin: (parent.height/20) * 3
             anchors.topMargin: (parent.height/20) * 3
             spacing: 5
-            RowLayout{
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-                Layout.maximumHeight: 50
-                spacing: 2.0
                 Label {
-                    text: qsTr("Nom:")
-                    Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+                    text: settings.user == "" ? qsTr("Vous devez configurer votre compte avant tout... \n Merci!"): qsTr(
+                                                    "Êtes vous sur de vouloir sauvegarder les changements?\nNom: " +
+                                                    JSON.parse(settings.user).firstname + " " + JSON.parse(settings.user).lastname +
+                                                    "\nMatricule: " + JSON.parse(settings.user).matricule);
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignLeft
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    font.pointSize: 12
                     Material.foreground: colorlt
-                }
-                // Replace with a combobox populated by the matricule
-                Rectangle {
-                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                    wrapMode: Text.WordWrap
+                    Layout.maximumHeight: 50
                     Layout.fillHeight: true
                     Layout.fillWidth: true
-                    Layout.maximumHeight: tfieldMatricule.implicitHeight + 15
-                    Layout.maximumWidth: trectmatricule.width
-                    Layout.minimumWidth: trectmatricule.width
-                    color: "white"
-                    radius:3
-                TextInput {
-                    id: namewritten
-                    text: qsTr("")
-                    anchors.fill: parent
-                    anchors.leftMargin: 10
-                    anchors.margins: 2
-                    verticalAlignment: Text.AlignVCenter
-                    font.pointSize: 12
+                    font.pointSize: 14
                 }
-                }
-            }
-            RowLayout {
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                Layout.maximumHeight: 50
-                spacing: 2.0
-                Label {
-                    text: qsTr("Matricule:")
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignLeft
-                    Layout.fillHeight: true
-                    font.pointSize: 12
-                    rightPadding: 15
-                    Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-                    Material.foreground: colorlt
-                }
-                Rectangle {
-                    id: trectmatricule
-                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                    Layout.fillHeight: true
-                    Layout.maximumHeight: tfieldMatricule.implicitHeight + 15
-                    Layout.fillWidth: true
-                    color: "white"
-                    radius:3
-                TextInput {
-                    id: tfieldMatricule
-                    text: qsTr("")
-                    anchors.fill: parent
-                    anchors.margins: 3
-                    anchors.leftMargin: 10
-                    verticalAlignment: Text.AlignVCenter
-                    font.pointSize: 12
-                }
-                }
-            }
             RowLayout{
                 spacing: 15
                 Layout.fillHeight: true
@@ -2575,24 +2523,24 @@ Rectangle {
                 Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
                 Layout.maximumHeight: 50
                 Button {
-                    text: qsTr("Annuler")
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    text: settings.user == "" ? qsTr("Ok") : qsTr("Non")
                     Layout.fillHeight: true
                     Layout.fillWidth: true
                     Material.foreground: colorlt
                     Material.background: colorp
-
                     onClicked: {
                         mview.enabled = true;
                         promptconfirmsave.hide();
                     }
                 }
                 Button {
-                    text: qsTr("Soumettre")
+                    text: qsTr("Oui")
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     Layout.fillHeight: true
                     Layout.fillWidth: true
                     Material.foreground: colorlt
                     Material.background: colorp
+                    enabled: settings.user == "" ? false: true;
                     onClicked: {
                         save();
                         winchange(medimain);

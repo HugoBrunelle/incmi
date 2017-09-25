@@ -25,15 +25,12 @@ public:
     Q_INVOKABLE bool dirExist(const QString &dirname);
     Q_INVOKABLE QString getCurrentDirName();
     Q_INVOKABLE void resetDirectory();
-    Q_INVOKABLE QStringList getFilteredNames(const QString& filterString,const QString& sortString);
+    Q_INVOKABLE QStringList getFilteredNames(const QString &filterString,const QString &sortString);
     Q_INVOKABLE bool fileExists(QString fileName);
     Q_INVOKABLE bool printToPDF(const QString &filename);
-    QString sourceDir() { return sDir; };
-
-public slots:
-      void setSourceDir(const QString& source) { sDir = source; };
+    Q_INVOKABLE bool sendEmail(const QString &username, const QString &password, const QStringList &recepients, const QString &subject, const QString &body);
+    Q_INVOKABLE bool sendEmailWithAttachment(const QString &username, const QString &password, const QStringList &recepients, const QString &subject, const QString &body, const QStringList &filepathwithname);
 private:
-        QString sDir;
         QDir cDir = QDir::current();
         bool removeDirectoryFromDir(QDir dir);
         std::map<QString, QDir::Filter> m_filterFlags = {

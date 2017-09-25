@@ -4,15 +4,84 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.2
 
 Item {
-    height: 640
-    width: 360
+    width: parent == null ? 360:parent.width
+    height: parent == null ? 640:parent.height
     property int mscale: 1
+    property int nrectheight: 45
+    property int pad: 5
+
+    Component.onCompleted: {
+        switch (currenttype) {
+        case "invtot":
+            cb.enabled = false;
+            break;
+        }
+    }
+
+
+    function sendByEmail() {
+        var index;
+        switch (currenttype) {
+        case "docs":
+            index = "9";
+            break;
+        case "inv":
+            index = "9";
+            break;
+        case "inc":
+            index = "23";
+            break;
+        case "invtot":
+            index = "24";
+            break;
+        }
+        var message = '{"messageindex":"'+index+'","filename":"' + currentfilename + '"}';
+        mess.push(message);
+        settings.messages = mess;
+        sendSavedInformation();
+    }
+
+    function deleteDocument() {
+        var index;
+        switch (currenttype) {
+        case "docs":
+            index = "10";
+            break;
+        case "inv":
+            index = "10";
+            break;
+        case "inc":
+            index = "25";
+            break;
+        }
+        var message = '{"messageindex":"'+index+'","filename":"' + currentfilename + '"}';
+        mess.push(message);
+        settings.messages = mess;
+        sendSavedInformation();
+        winchange(medimain);
+    }
+
+    function back() {
+        switch (currenttype) {
+        case "docs":
+            winchange(medimain);
+            break;
+        case "inv":
+            winchange(medimain);
+            break;
+        case "invtot":
+            winchange(medinventory);
+            break;
+        case "inc":
+            winchange(incm);
+        }
+    }
 
     Rectangle {
         id: m
-        height: parent.height - 70
+        height: settings.isadmin ? parent.height - 70 - nrectheight : parent.height - 70
         width: parent.width
-        color: "lightgrey"
+        color: "grey"
         Flickable {
                 id: flick
                 anchors.fill: parent
@@ -50,7 +119,7 @@ Item {
                         color: "white"
                         Image {
                                 anchors.fill: parent
-                                fillMode: Image.Stretch
+                                fillMode: Image.PreserveAspectFit
                                 source: imgurl
                             MouseArea {
                                 anchors.fill: parent
@@ -64,10 +133,48 @@ Item {
                 }
             }
     }
+    Item {
+        height: nrectheight
+        width: parent.width
+        y: parent.height - nrectheight - 70
+        visible: settings.isadmin
+        Rectangle {
+            anchors.fill: parent
+            anchors.margins: 3
+            border.color: "grey"
+            border.width: 1
+            CButton {
+                id: cb
+                width: implicitWidth + 20
+                height: parent.height
+                x: parent.width - width - pad
+                text: "Effacer"
+                source: "Icons/ic_forward_white_24dp.png"
+                Material.background: colordp
+                Material.foreground: colorlt
+                onClicked: {
+                    deleteDocument();
+                }
+            }
+            CButton {
+                id: ce
+                width: implicitWidth + 20
+                height: parent.height
+                x: cb.x - width - 2*pad
+                text: "Envoyer par Email"
+                source: "Icons/ic_forward_white_24dp.png"
+                Material.background: colordp
+                Material.foreground: colorlt
+                onClicked: {
+                    sendByEmail();
+                }
+            }
+        }
+    }
 
     Pane {
         width: parent.width
-        y: m.height
+        y: parent.height - height
         height: 70
         Material.background: "#0288D1"
         GridLayout {
@@ -82,7 +189,7 @@ Item {
                 Material.foreground: colorlt
                 Material.background: colordp
                 onClicked: {
-                    winchange(medimain);
+                    back();
                 }
             }
         }

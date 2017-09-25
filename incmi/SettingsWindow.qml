@@ -2,12 +2,96 @@ import QtQuick 2.0
 import QtQuick.Controls 2.2
 import QtQuick.Controls.Material 2.2
 import QtQuick.Layouts 1.3
+import QtWebSockets 1.1
 
 Item {
-    height: 640
-    width: 360
+    height: parent.height
+    width: parent.width
     property int spad: 8
     property int ffont: 12
+    property int pad: 5
+    property int textboxheight: 30
+    property string selectedmember: ""
+    property string members: ""
+    Material.accent: colora
+
+    function ready() {
+        selectedmember = settings.user
+        settingssocket.active = true;
+    }
+
+    function checkChanged(condition, obj) {
+        if (condition) {
+            if (selectedmember == JSON.stringify(obj)) return;
+            selectedmember = JSON.stringify(obj);
+        }else {
+            selectedmember = "";
+        }
+        setData();
+    }
+
+    function setData() {
+        if (members != "") {
+            mod.clear();
+            var obj = JSON.parse(members);
+            for (var i = 0; i < obj.items.length; i++){
+                var t = obj.items[i];
+                var sign = "false";
+                console.log(selectedmember);
+                if (selectedmember != ""){
+                    var c = JSON.parse(selectedmember)
+                    if (c.filename === t.filename) {
+                        sign = "true";
+                    }
+                }
+                if (t.isadmin){
+                    if (settings.isadmin) mod.append(JSON.parse(JSON.stringify(t).slice(0,-1) + ',"ccheck":'+sign+'}'));
+                }else {
+                    mod.append(JSON.parse(JSON.stringify(t).slice(0,-1) + ',"ccheck":'+sign+'}'));
+                }
+            }
+        }
+    }
+
+    BaseSocket {
+        port: settings.port
+        host: settings.host
+        id: settingssocket
+        onTextMessageReceived: {
+            mod.clear();
+            var obj = JSON.parse(message);
+            console.log(message);
+            for (var i = 0; i < obj.items.length; i++){
+                var t = obj.items[i];
+                var sign = "false";
+                console.log(selectedmember);
+                if (selectedmember != ""){
+                    var c = JSON.parse(selectedmember)
+                    if (c.filename === t.filename) {
+                        sign = "true";
+                    }
+                }
+                if (t.isadmin){
+                    if (settings.isadmin) mod.append(JSON.parse(JSON.stringify(t).slice(0,-1) + ',"ccheck":'+sign+'}'));
+                }else {
+                    mod.append(JSON.parse(JSON.stringify(t).slice(0,-1) + ',"ccheck":'+sign+'}'));
+                }
+            }
+            members = message;
+        }
+        onStatusChanged: {
+            switch (status) {
+            case WebSocket.Open:
+                settingssocket.sendTextMessage('{"messageindex": "5"}');
+                break;
+            case WebSocket.Error:
+                console.log("Error");
+                settingssocket.active = false;
+                break;
+            }
+        }
+    }
+
     Rectangle {
         id: body
         x: 0
@@ -19,89 +103,85 @@ Item {
             id: i1
             x: 0
             y: 0
-            height: parent.height / 4
+            height:137
             width: parent.width
             Rectangle {
                 anchors.fill: parent
                 anchors.margins: spad
-                color: "white"
                 border.color: "grey"
                 border.width: 1
                 Item {
-                    id: ii1
-                    x: 0
-                    y: spad
-                    height: (parent.height / 2) - 2*spad
-                    width: parent.width
+                    anchors.fill: parent
+                    anchors.margins: pad
                     Label {
-                        id: clab1
-                        x: 0
-                        y: 0
-                        leftPadding: spad * 2
-                        height: parent.height
+                        id: lb
+                        y: pad
+                        x: pad
+                        text: "Host : "
                         verticalAlignment: Text.AlignVCenter
-                        horizontalAlignment: Text.AlignLeft
-                        text: "Host:"
-                        width: parent.width / 3
+                        height: r1.height
                     }
                     Rectangle {
-                        x: clab1.width + spad
-                        width: (parent.width * 2 / 3) - 2*spad
-                        height: parent.height - spad
-                        y: spad / 2
-                        radius: 3
-                        border.width: 1
+                        id: r1
+                        x: lb.x + lb.width + pad
+                        y: pad
+                        width: parent.width - 3*pad - lb.width
+                        height: textboxheight
+                        color: "white"
                         border.color: "grey"
+                        border.width: 1
+                        radius: 3
                         TextInput {
-                            id: t1
-                            font.pointSize: ffont
-                            verticalAlignment: Text.AlignVCenter
+                            selectByMouse: true
                             anchors.fill: parent
-                            anchors.leftMargin: spad
+                            anchors.margins: 3
+                            anchors.leftMargin: 15
+                            verticalAlignment: Text.AlignVCenter
                             text: settings.host
                             onTextChanged: {
                                 settings.host = text;
                             }
-                            KeyNavigation.tab: t2
                         }
                     }
-                }
-                Item {
-                    id: ii2
-                    x: 0
-                    y: ii1.height + ii1.y + 2*spad
-                    height: (parent.height / 2) - 2*spad
-                    width: parent.width
                     Label {
-                        id: clab2
-                        x: 0
-                        y: 0
-                        leftPadding: spad * 2
-                        height: parent.height
+                        y: r2.y
+                        x: pad
+                        text: "Port : "
                         verticalAlignment: Text.AlignVCenter
-                        horizontalAlignment: Text.AlignLeft
-                        text: "Port:"
-                        width: parent.width / 3
+                        height: r1.height
                     }
                     Rectangle {
-                        x: clab2.width + spad
-                        width: (parent.width * 2 / 3) - 2*spad
-                        height: parent.height - spad
-                        y: spad / 2
-                        radius: 3
-                        border.width: 1
+                        id: r2
+                        x: lb.x + lb.width + pad
+                        y: pad + r1.height + r1.y
+                        width: parent.width - 3*pad - lb.width
+                        height: textboxheight
+                        color: "white"
                         border.color: "grey"
+                        border.width: 1
+                        radius: 3
                         TextInput {
-                            id: t2
-                            font.pointSize: ffont
-                            verticalAlignment: Text.AlignVCenter
+                            selectByMouse: true
                             anchors.fill: parent
-                            anchors.leftMargin: spad
+                            anchors.margins: 3
+                            anchors.leftMargin: 15
+                            verticalAlignment: Text.AlignVCenter
                             text: settings.port
                             onTextChanged: {
                                 settings.port = text;
                             }
-                            KeyNavigation.tab: t3
+                        }
+                    }
+                    Button {
+                        width: implicitWidth
+                        x: parent.width - pad - width
+                        y: parent.height - textboxheight - 2*pad
+                        height: textboxheight + 15
+                        Material.background: colordp
+                        Material.foreground: colorlt
+                        text: "Configure Access"
+                        onClicked: {
+                            pressedConfigureAccess();
                         }
                     }
                 }
@@ -112,7 +192,7 @@ Item {
             id: i2
             x: 0
             y: i1.height
-            height: parent.height / 4
+            height: parent.height - i1.height
             width: parent.width
             Rectangle {
                 anchors.fill: parent
@@ -120,109 +200,52 @@ Item {
                 color: "white"
                 border.color: "grey"
                 border.width: 1
-                Item {
-                    id: ii3
-                    x: 0
-                    y: spad
-                    height: (parent.height / 2) - 2*spad
-                    width: parent.width
-                    Label {
-                        id: clab3
-                        x: 0
-                        y: 0
-                        leftPadding: spad * 2
-                        height: parent.height
-                        verticalAlignment: Text.AlignVCenter
-                        horizontalAlignment: Text.AlignLeft
-                        text: "Nom:"
-                        width: parent.width / 3
-                    }
-                    Rectangle {
-                        x: clab3.width + spad
-                        width: (parent.width * 2 / 3) - 2*spad
-                        height: parent.height - spad
-                        y: spad / 2
-                        radius: 3
-                        border.width: 1
-                        border.color: "grey"
-                        TextInput {
-                            id: t3
-                            font.pointSize: ffont
-                            verticalAlignment: Text.AlignVCenter
-                            anchors.fill: parent
-                            anchors.leftMargin: spad
-                            text: settings.name
-                            onTextChanged: {
-                                settings.name = text;
-                            }
-                            KeyNavigation.tab: t4
-                        }
-                    }
+
+                ListView {
+                    anchors.fill: parent
+                    anchors.margins: 5
+                    clip: true
+                    interactive: true
+                    spacing: 1
+                    model: ListModel { id: mod}
+                    delegate: MemberListDelegate {}
                 }
-                Item {
-                    id: ii4
-                    x: 0
-                    y: ii3.height + ii3.y + 2*spad
-                    height: (parent.height / 2) - 2*spad
-                    width: parent.width
-                    Label {
-                        id: clab4
-                        x: 0
-                        y: 0
-                        leftPadding: spad * 2
-                        height: parent.height
-                        verticalAlignment: Text.AlignVCenter
-                        horizontalAlignment: Text.AlignLeft
-                        text: "Matricule:"
-                        width: parent.width / 3
-                    }
-                    Rectangle {
-                        x: clab4.width + spad
-                        width: (parent.width * 2 / 3) - 2*spad
-                        height: parent.height - spad
-                        y: spad / 2
-                        radius: 3
-                        border.width: 1
-                        border.color: "grey"
-                        TextInput {
-                            id: t4
-                            font.pointSize: ffont
-                            verticalAlignment: Text.AlignVCenter
-                            anchors.fill: parent
-                            anchors.leftMargin: spad
-                            text: settings.matricule
-                            onTextChanged: {
-                                settings.matricule = text;
-                            }
-                            KeyNavigation.tab: t1
-                        }
-                    }
-                }
+
             }
         }
     }
 
 
-    Pane {
+    Rectangle {
         id: footer
-        width: 360
+        width: parent.width
         y: body.height
-        height: 70
-        Material.background: "#0288D1"
-        GridLayout {
-            anchors.fill: parent
-            CButton {
-                text: qsTr("Retour")
-                Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-                Layout.maximumWidth: 150
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                source: "Icons/ic_backspace_white_24dp.png"
-                Material.foreground: colorlt
-                Material.background: colordp
-                onClicked: {
-                    winchange(inform);
-                }
+        height: 50
+        CButton {
+            id: confb
+            text: qsTr("Confirmer");
+            width: implicitWidth + 15
+            x: parent.width - width - 10
+            height: parent.height - 6
+            source: "Icons/ic_play_for_work_white_24dp.png"
+            Material.foreground: colorlt
+            Material.background: colordp
+            onClicked: {
+                confirmSettings(selectedmember);
+            }
+        }
+
+        CButton {
+            text: qsTr("Conf. Serveur");
+            width: implicitWidth + 15
+            x: confb.x - width - 2*pad
+            height: parent.height - 6
+            source: "Icons/ic_play_for_work_white_24dp.png"
+            Material.foreground: colorlt
+            Material.background: colordp
+            visible: settings.isadmin
+            onClicked: {
+                serverSettings();
             }
         }
     }

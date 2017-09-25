@@ -5,18 +5,20 @@ import QtQuick.Controls.Material 2.2
 Item {
     width: 580
     height: 431
-    property int xd: 5
+    property int xd: 3
+    property int pad: 5
+    property int textboxheight: 30
 
     Pane {
         id: title
-        x: xd
-        y: xd
-        width: parent.width - 2*xd
-        height: (parent.height / 8) - 2*xd
-        Material.background: colorp
+        x: pad
+        y: pad
+        width: parent.width - 2*pad
+        height: (parent.height / 8) - 2*pad
+        Material.background: colordp
         Material.elevation: 5
         Label {
-            x: xd * 5
+            x: pad * 5
             text: "Account and Password Settings"
             font.pointSize: 14
             width: parent.width - 2*x
@@ -38,7 +40,7 @@ Item {
             x: xd
             width: parent.width - 2*x
             y: xd
-            height: parent.height / 4
+            height: parent.height - 2*y
             Label {
                 id: l1
                 x: xd
@@ -46,7 +48,7 @@ Item {
                 text: "Username:"
                 font.pointSize: 10
                 width: (parent.width/4) - 2*x
-                height: (parent.height / 2) - 2*xd
+                height: textboxheight
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignRight
                 rightPadding: xd*3
@@ -58,63 +60,126 @@ Item {
                 text: "Password:"
                 font.pointSize: 10
                 width: (parent.width/4) - 2*x
-                height: (parent.height / 2) - 2*xd
+                height: textboxheight
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignRight
                 rightPadding: xd*3
             }
             Rectangle{
-                x: l1.width + l1.x + xd*2
+                x: l3.width + l3.x + xd
                 y: l1.y
-                width: (parent.width*3/4) - 2*xd
-                height: (parent.height/2)-2*xd
+                width: parent.width - l3.width - 3*xd
+                height: textboxheight
                 color: "white"
                 border.color: "lightgrey"
                 border.width: 1
-                radius: 9
-            TextInput {
-                id: acc
-                selectByMouse: true
-                anchors.fill: parent
-                anchors.margins: 3
-                anchors.leftMargin: 15
-                verticalAlignment: Text.AlignVCenter
-                font.pointSize: 10
-                KeyNavigation.tab: pass
-                text: settings.saccount
-            }
+                radius: 3
+                TextInput {
+                    id: acc
+                    selectByMouse: true
+                    anchors.fill: parent
+                    anchors.margins: 3
+                    anchors.leftMargin: 15
+                    verticalAlignment: Text.AlignVCenter
+                    font.pointSize: 10
+                    KeyNavigation.tab: pass
+                    text: settings.saccount
+                }
             }
             Rectangle {
-                x: l2.width + l2.x + xd*2
+                x: l3.width + l3.x + xd
                 y: l2.y
-                width: (parent.width*3/4) - 2*xd
-                height: (parent.height/2)-2*xd
+                width: parent.width - l3.width - 3*xd
+                height: textboxheight
                 color: "white"
                 border.color: "lightgrey"
                 border.width: 1
-                radius: 9
-            TextInput{
-                id: pass
-                selectByMouse: true
-                anchors.fill: parent
-                anchors.margins: 3
-                anchors.leftMargin: 15
-                verticalAlignment: Text.AlignVCenter
-                font.pointSize: 10
-                KeyNavigation.tab: acc
-                text: settings.spass
+                radius: 3
+                TextInput{
+                    id: pass
+                    selectByMouse: true
+                    anchors.fill: parent
+                    anchors.margins: 3
+                    anchors.leftMargin: 15
+                    verticalAlignment: Text.AlignVCenter
+                    font.pointSize: 10
+                    KeyNavigation.tab: acc
+                    text: settings.spass
+                }
             }
+            Label {
+                id: l3
+                x: xd
+                y: l2.height + l2.y + 2*xd
+                text: "Server Email Account:"
+                font.pointSize: 10
+                width: (parent.width/4) - 2*x
+                height: textboxheight
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignRight
+                rightPadding: xd*3
+            }
+            Rectangle{
+                x: l3.width + l3.x + xd
+                y: l3.y
+                width: parent.width - l3.width - 3*xd
+                height: textboxheight
+                color: "white"
+                border.color: "lightgrey"
+                border.width: 1
+                radius: 3
+                TextInput {
+                    id: eaccount
+                    selectByMouse: true
+                    anchors.fill: parent
+                    anchors.margins: 3
+                    anchors.leftMargin: 15
+                    verticalAlignment: Text.AlignVCenter
+                    font.pointSize: 10
+                    KeyNavigation.tab: pass
+                    text: settings.semaccount
+                }
+            }
+            Label {
+                id: l4
+                x: xd
+                y: l3.height + l3.y + 2*xd
+                text: "Email Password:"
+                font.pointSize: 10
+                width: (parent.width/4) - 2*x
+                height: textboxheight
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignRight
+                rightPadding: xd*3
+            }
+            Rectangle{
+                x: l3.width + l3.x + xd
+                y: l4.y
+                width: parent.width - l3.width - 3*xd
+                height: textboxheight
+                color: "white"
+                border.color: "lightgrey"
+                border.width: 1
+                radius: 3
+                TextInput {
+                    id: epassword
+                    selectByMouse: true
+                    anchors.fill: parent
+                    anchors.margins: 3
+                    anchors.leftMargin: 15
+                    verticalAlignment: Text.AlignVCenter
+                    font.pointSize: 10
+                    KeyNavigation.tab: pass
+                    text: settings.sempassword
+                }
             }
         }
     }
 
     function save() {
-        console.log("Saving");
         settings.saccount = acc.text;
         settings.spass = pass.text;
+        settings.semaccount = eaccount.text;
+        settings.sempassword = epassword.text;
     }
-
-
-
-
 }

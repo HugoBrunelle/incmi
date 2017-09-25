@@ -9,7 +9,6 @@ Item {
     width: parent.width
     Pane {
         height: parent.height - 4
-        font.pointSize: 15
         anchors.fill: parent
         anchors.bottomMargin: 5
         Material.elevation: 1

@@ -77,9 +77,21 @@ Item {
     }
     MouseArea {
         anchors.fill: parent
-        onClicked: {
-            invListView.currentIndex = index;
+        onDoubleClicked: {
+            if (settings.isadmin){
+                invListView.currentIndex = index;
+                itemDoubleClicked(getObj());
+            }
         }
+    }
+
+    function getObj() {
+        var obj = JSON.parse(inventoryitembase);
+        obj.count = count;
+        obj.rcount = rcount;
+        obj.tag = tag;
+        obj.name = name;
+        return obj;
     }
 
     Component.onCompleted: {

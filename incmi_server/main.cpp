@@ -2,6 +2,7 @@
 #include <QQmlApplicationEngine>
 #include <systeminfo.h>
 #include <qquickwindow.h>
+#include <QSslSocket>
 
 int main(int argc, char *argv[])
 {

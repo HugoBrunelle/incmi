@@ -10,7 +10,7 @@ Item {
     Pane {
         id:header
         width: parent.width
-        height: (parent.height/32)*3.5
+        height: 78
         Material.background: colordp
         Material.elevation: 1
         GridLayout {
@@ -53,8 +53,9 @@ Item {
         id: loadrec
         y: header.height + 8
         width: parent.width
-        height: (parent.height/32)*24
+        height: parent.height - header.height - footer.height - 16
         StackView {
+            clip: true
             id: ld
             anchors.fill: parent
             initialItem: log
@@ -63,11 +64,11 @@ Item {
 
 
     Pane {
-        y: loadrec.height + loadrec.y - 8
+        id: footer
+        y: parent.height - height
         width: parent.width
-        height: ((parent.height/32)*4.5)
+        height: 100
         Material.background: "#0288D1"
-        Material.elevation: 4
         RowLayout {
             id: frlayout
             spacing: 0
@@ -93,8 +94,9 @@ Item {
                             enabled: !senabled
                             Material.foreground: colorlt
                             Material.background: colordp
+                            Material.elevation: 0
                             onClicked: {
-                                senabled = true;
+                                setServerState(true);
                             }
                         }
                         Button {
@@ -105,8 +107,9 @@ Item {
                             enabled: senabled
                             Material.foreground: colorlt
                             Material.background: colordp
+                            Material.elevation: 0
                             onClicked: {
-                                senabled = false;
+                                setServerState(false);
                             }
                         }
                     }
@@ -194,18 +197,20 @@ Item {
                     contentHeight: parent.height
                     anchors.fill: parent
                     Material.accent: colorlt
+                    Material.foreground: "white"
                     TabButton {
                         text: qsTr("Log")
-                        Material.foreground: "white"
                     }
                     TabButton {
                         text: qsTr("Inventory")
-                        Material.foreground: "white"
                     }
                     TabButton {
                         text: qsTr("Documents")
-                        Material.foreground: "white"
                     }
+                    TabButton {
+                        text: qsTr("Calendar & Users")
+                    }
+
                     onCurrentIndexChanged: {
                         switch(tabBar.currentIndex){
                         case 0:
@@ -216,6 +221,9 @@ Item {
                             break;
                         case 2:
                             ld.push(doc);
+                            break;
+                        case 3:
+                            ld.push(cal);
                             break;
                         }
                     }
@@ -238,6 +246,7 @@ Item {
                     source: "Icons/ic_settings_applications_white_24dp.png"
                     Material.foreground: colorlt
                     Material.background: colordp
+                    Material.elevation: 0
                     onClicked: {
                         load.enabled = false;
                         options.show();
@@ -254,10 +263,15 @@ Item {
     }
     Component {
         id: inv
-        InventoryView {id: linv}
+        InventoryView {}
     }
+
     Component {
         id: doc
         DocumentsView {id: ldoc}
+    }
+    Component {
+        id: cal
+        CalendarView { id: lcal }
     }
 }

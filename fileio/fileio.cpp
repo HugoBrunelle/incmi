@@ -5,6 +5,7 @@
 #include <QTextCodec>
 #include <QtPrintSupport/qprinter.h>
 #include <qpainter.h>
+#include <smtp.h>
 
 // Static methods, no overide required:
 QString FileIO::getApplicationPath(){
@@ -14,29 +15,28 @@ QString FileIO::getApplicationPath(){
 // All methods linked to the working directory
 QString FileIO::readFile(const QString &filename)
 {
-QFile file(cDir.path() + cDir.separator() + filename);
-if (!file.open(QIODevice::ReadOnly))
-    return "cant read";
-QByteArray data = file.readAll();
-QString result = QString(data);
-return result;
+    QFile file(cDir.path() + cDir.separator() + filename);
+    if (!file.open(QIODevice::ReadOnly))
+        return "cant read";
+    QByteArray data = file.readAll();
+    QString result = QString(data);
+    return result;
 }
-
 bool FileIO::writeFile(const QString& data, const QString& filename)
 {
-if (filename.isEmpty())
-    return false;
+    if (filename.isEmpty())
+        return false;
 
-QFile file(cDir.path() + cDir.separator() + filename);
-if (!file.open(QFile::WriteOnly | QFile::Truncate))
-    return false;
+    QFile file(cDir.path() + cDir.separator() + filename);
+    if (!file.open(QFile::WriteOnly | QFile::Truncate))
+        return false;
 
-QTextStream out(&file);
-out << data;
+    QTextStream out(&file);
+    out << data;
 
-file.close();
+    file.close();
 
-return true;
+    return true;
 }
 
 QString FileIO::getPath(){
@@ -132,7 +132,7 @@ bool FileIO::fileExists(QString fileName)
 // Insert all methods with overloads to do the functions but from a specified path...
 
 bool FileIO::removeDirectory(const QString& dirpath){
-     QDir dir = QDir(dirpath);
+    QDir dir = QDir(dirpath);
     return removeDirectoryFromDir(dir);
 }
 
@@ -152,5 +152,20 @@ bool FileIO::printToPDF(const QString& filename) {
     QPainter paint(&printer);
     paint.drawImage(trect,img);
     paint.end();
+    return true;
+}
+bool FileIO::sendEmail(const QString &username, const QString &password, const QStringList &recepients, const QString &subject, const QString &body){
+    for (int i = 0; i < recepients.count(); i++){
+        Smtp* smpt = new Smtp(username,password,"smtp.gmail.com",465,50000);
+        smpt->sendMail(username,recepients[i],subject,body);
+    }
+    return true;
+}
+
+bool FileIO::sendEmailWithAttachment(const QString &username, const QString &password, const QStringList &recepients, const QString &subject, const QString &body, const QStringList &filepathwithname){
+    for (int i = 0; i < recepients.count(); i++){
+        Smtp* smpt = new Smtp(username,password,"smtp.gmail.com",465,50000);
+        smpt->sendMailWithAttachments(username,recepients[i],subject,body, filepathwithname);
+    }
     return true;
 }

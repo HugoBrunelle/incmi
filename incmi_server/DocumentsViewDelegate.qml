@@ -2,7 +2,7 @@ import QtQuick 2.0
 import QtQuick.Controls 2.1
 
 Item {
-    property int xd: 1
+    property int xd: 2
     property int fonts: 10
     property int pad: 10
     function checkVisibility() {
@@ -42,7 +42,7 @@ Item {
     height: 38
     width: parent.width - 2*x
     Rectangle {
-        border.color: "lightgrey"
+        border.color: "grey"
         anchors.fill: parent
         height: parent.height
         width: parent.width
@@ -132,11 +132,7 @@ Item {
         anchors.fill: parent
         onClicked: {
             typeview.currentIndex = index;
-            if (type == "docs") {
-                removeTempImage();
-                currentfilename = filename;
-                pload.active = true;
-            }
+            showPreview(type,filename);
         }
     }
 }

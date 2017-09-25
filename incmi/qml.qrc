@@ -10,7 +10,6 @@
         <file>MediViewDelegate.qml</file>
         <file>MediViewHeader.qml</file>
         <file>Prompt.qml</file>
-        <file>MediViewModel.qml</file>
         <file>DebugColorPicker.qml</file>
         <file>MedInvViewDelegate.qml</file>
         <file>MedInvViewHeader.qml</file>
@@ -576,5 +575,37 @@
         <file>DocumentViewer.qml</file>
         <file>SettingsWindow.qml</file>
         <file>ImageButton.qml</file>
+        <file>AccessTypePicker.qml</file>
+        <file>MemberListDelegate.qml</file>
+        <file>MedViewInventoryList.qml</file>
+        <file>MedViewInventoryEdit.qml</file>
+        <file>MedViewInventoryNew.qml</file>
+        <file>InventoryPrint.qml</file>
+        <file>InventoryPrintDelegate.qml</file>
+        <file>EventView.qml</file>
+        <file>PreviousEvent.qml</file>
+        <file>EventDelegate.qml</file>
+        <file>UpcomingEvent.qml</file>
+        <file>ConfigureEvent.qml</file>
+        <file>AddMembersEvent.qml</file>
+        <file>EventMemberListDelegate.qml</file>
+        <file>InvAdjustmentPrint.qml</file>
+        <file>InvAdjustmentPrintDelegate.qml</file>
+        <file>ServerSettingsView.qml</file>
+        <file>PeopleListSettings.qml</file>
+        <file>PeopleListDelegate.qml</file>
+        <file>PeopleEditorSettings.qml</file>
+        <file>IncendieMain.qml</file>
+        <file>IncendieMainDelegate.qml</file>
+        <file>IncendieMainHeader.qml</file>
+        <file>IncRapportDocument.qml</file>
+        <file>IncRapportFirstPage.qml</file>
+        <file>IncRapportSecondPage.qml</file>
+        <file>IncRapportThirdPage.qml</file>
+        <file>IncRapportFourthPage.qml</file>
+        <file>IncRapportDocumentPrint.qml</file>
+        <file>IncRapportDocumentPrintPeopleDelegate.qml</file>
+        <file>IncRapportDocumentPrintServiceDelegate.qml</file>
+        <file>IncRapportDocumentPrintMaterielDelegate.qml</file>
     </qresource>
 </RCC>

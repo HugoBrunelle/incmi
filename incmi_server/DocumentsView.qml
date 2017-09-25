@@ -6,50 +6,92 @@ Item {
     width: parent.width
     height: parent.height
 
+
     property real mscale: sli.position
+    property string bmodel
+    property string sname
+    property string surl
 
     function delDocument() {
-
+        var file = mod.get(typeview.currentIndex).filename;
+        var md = JSON.parse(bmodel);
+        for (var i = 0; i< md.items.length; i++){
+            var item = JSON.parse(md.items[i]);
+            if (item.filename == file){
+                md.items.splice(i,1);
+            }
+        }
+        removeDocumentServer(file);
+        bmodel = JSON.stringify(md);
+        typeview.currentIndex = -1;
+        checkChanged();
     }
 
-    function checkVisibility() {
-        var vis = false;
-        switch (type) {
-        case "inv":
-            vis = true;
-            break;
-        case "docs":
-            vis = false;
-            break;
-        }
-        return vis;
+    function getModel() {
+        bmodel = createServerChangesList();
     }
 
     function setModel() {
-        var message = JSON.parse(createServerChangesList());
-        for (var i = 0; i < message.items.length; i++) {
-            var item = JSON.parse(message.items[i]);
+        var md = JSON.parse(bmodel);
+        for (var i = 0; i < md.items.length; i++) {
+            var item = JSON.parse(md.items[i]);
             mod.append(item);
         }
     }
 
     function imageRendered(obj) {
         if (pload.active) {
-            obj.saveToFile(currentfilename + ".png");
-            currentimageurl = obj.url;
+            obj.saveToFile(sname + ".png");
+            surl = obj.url;
             pload.active = false;
         }
+    }
+
+    function checkChanged() {
+        mod.clear();
+        setModel();
+        if (!meddocscheck.checked){
+            for (var b = mod.count; b > 0; b--){
+                var objb = mod.get(b - 1);
+                if (objb.type == "docs"){
+                    mod.remove(b-1);
+                }
+            }
+        }
+        if (!invdocscheck.checked){
+            for (var c = mod.count; c > 0; c--){
+                var obj = mod.get(c - 1);
+                if (obj.type == "inv"){
+                    mod.remove(c-1);
+                }
+            }
+        }
+        //mod = mc;
+    }
+
+    function showPreview(type, filename) {
+        sname = filename;
+        switch (type) {
+        case "docs":
+            pload.sourceComponent = pdocajust;
+            break;
+        case "inv":
+            pload.sourceComponent = pinvadjust;
+            break;
+        }
+        pload.active = true;
     }
 
     Loader {
         visible: false;
         active: false;
         id: pload;
-        sourceComponent: pcom
+        sourceComponent: pdocajust
 
         onStatusChanged: {
             if (status == Loader.Ready) {
                 if (active) {
+                    pload.item.setData(sname);
                     pload.item.grabToImage(function(obj) {imageRendered(obj);});
                 }
             }
@@ -57,8 +99,8 @@ Item {
     }
 
     Component.onCompleted: {
+        getModel();
         setModel();
-
     }
     property int xd: 2
     Rectangle{
@@ -67,159 +109,202 @@ Item {
         anchors.fill: parent
 
         Rectangle{
-            x:0
-            y:0
-            color: "lightgrey"
-            border.color: "black"
-            border.width: 1
-            opacity: 0.2
-            width: parent.width/2
-            height: parent.height
-        }
-        ListView {
-            id: typeview
-            interactive: true
-            x:0
-            y:5
-            clip: true
-            width: parent.width/2
-            height: parent.height - 20
-            model: ListModel {id: mod}
-            delegate: DocumentsViewDelegate {}
-            onCurrentIndexChanged: {
-                // Change the values of the boxes.
-            }
-        }
-        Rectangle{
-            x: typeview.width + 1
-            y:0
-            color: "darkgrey"
+            id: lframe
+            color: "whitesmoke"
             border.color: "grey"
             border.width: 1
-            opacity: 0.5
-            width: parent.width/2 - 1
+            width: parent.width/2
             height: parent.height
-        }
-        Item {
-            id: titem
-            x: typeview.width + 1
-            width: parent.width/2 - 1
-            height: parent.height - 1
+            ListView {
+                id: typeview
+                interactive: true
+                y: xd
+                x: xd
+                height: parent.height - 2*xd - lfooter.height
+                width: parent.width - 2*xd
+                clip: true
+                model: ListModel {id: mod}
+                currentIndex: -1
+                delegate: DocumentsViewDelegate {}
+                onCurrentIndexChanged: {
+                    if (currentIndex != -1){
+                        c.enabled = true;
+                    }else {
+                        c.enabled = false;
+                    }
 
-            Pane {
-                id: h1
-                x: xd * 3
-                y: xd * 2
-                width: parent.width - 2*x
-                height: (parent.height / 10) - 4*xd
-                Material.background: colorp
-                Material.elevation: 3
-                Label {
-                    anchors.fill: parent
-                    leftPadding: xd*2
-                    font.pointSize: 11
-                    Material.foreground: colorlt
-                    text: "Current Document"
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignLeft
+                    // Change the values of the boxes.
                 }
             }
 
-            Pane {
-                x: xd* 10
-                y: xd * 10 + h1.height
-                width: parent.width - 2*x
-                height: parent.height - b.height - h1.height - 18*xd
-                Material.background: "whitesmoke"
-                Material.elevation: 8
-                ScrollView {
+            Item {
+                id: lfooter
+                width: parent.width - 2*xd
+                x: xd
+                height: 50
+                y: parent.height - lfooter.height - xd
+                Rectangle{
                     anchors.fill: parent
-                    clip: true
-                    contentHeight: rec.height
-                    contentWidth: rec.width
-                    Rectangle {
-                        id: rec
-                        width: docpreivew.sourceSize.width * mscale
-                        height: docpreivew.sourceSize.height * mscale
-                        Image {
-                            fillMode: Image.Stretch
-                            anchors.fill: parent
-                            id: docpreivew
-                            source: currentimageurl
+                    color: "whitesmoke"
+                    border.color: "grey"
+                    border.width: 1
+                    CheckBox {
+                        id: meddocscheck
+                        y: xd * 2
+                        x: xd * 2
+                        width: parent.width / 4 - 4*xd
+                        height: parent.height - 4*xd
+                        text: "Med Documents"
+                        checked: true
+                        onCheckedChanged: {
+                            checkChanged();
+                        }
+                    }
+                    CheckBox {
+                        id: invdocscheck
+                        y: xd * 2
+                        x: parent.width / 4 + 2*xd
+                        width: parent.width / 4 - 4 * xd
+                        height: parent.height - 4*xd
+                        text: "Inv Documents"
+                        checked: true
+                        onCheckedChanged: {
+                            checkChanged();
+                        }
+
+                    }
+                }
+            }
+        }
+
+        Rectangle{
+            x: lframe.width + 1
+            y:0
+            color: "lightgrey"
+            border.color: "grey"
+            border.width: 1
+            width: parent.width/2 - 1
+            height: parent.height
+            Item {
+                id: titem
+                anchors.fill: parent
+                anchors.margins: 1
+                Pane {
+                    id: h1
+                    x: xd * 3
+                    y: xd * 2
+                    width: parent.width - 2*x
+                    height: 50 - 4*xd
+                    Material.background: colordp
+                    Material.elevation: 3
+                    Label {
+                        anchors.fill: parent
+                        leftPadding: xd*2
+                        font.pointSize: 11
+                        Material.foreground: colorlt
+                        text: "Current Document"
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignLeft
+                    }
+                }
+
+                Pane {
+                    x: xd* 10
+                    y: xd * 10 + h1.height
+                    width: parent.width - 2*x
+                    height: parent.height - b.height - h1.height - 18*xd
+                    Material.background: "whitesmoke"
+                    Material.elevation: 8
+                    ScrollView {
+                        anchors.fill: parent
+                        clip: true
+                        contentHeight: rec.height
+                        contentWidth: rec.width
+                        Rectangle {
+                            id: rec
+                            width: docpreivew.sourceSize.width * mscale
+                            height: docpreivew.sourceSize.height * mscale
+                            Image {
+                                fillMode: Image.Stretch
+                                anchors.fill: parent
+                                id: docpreivew
+                                source: surl
+                            }
                         }
                     }
                 }
-            }
-            Item {
-                x: 2.5*xd
-                height: (parent.height/10) - 2*xd
-                width: parent.width * 1 / 5 - 5*xd
-                y: titem.height - height - 2*xd
-                Image {
-                    id: imzoom
-                    fillMode: Image.Stretch
-                    width: clab.implicitHeight
-                    x: 5
-                    height: width
-                    source: "Icons/ic_zoom_in_black_24dp.png"
+                Item {
+                    id: cq
+                    x: 2.5*xd
+                    height: 45 - 2*xd
+                    width: parent.width * 1 / 5 - 5*xd
+                    y: titem.height - height - 2*xd
+                    Image {
+                        id: imzoom
+                        fillMode: Image.Stretch
+                        width: clab.implicitHeight
+                        x: 5
+                        height: width
+                        source: "Icons/ic_zoom_in_black_24dp.png"
+                    }
+
+                    Label {
+                        id: clab
+                        leftPadding: 5
+                        font.pointSize: 12
+                        text: Math.floor(((sli.position/1) * 100)).toString() + "%"
+                        x: imzoom.width + imzoom.x
+                        width: parent.width - implicitHeight - 5
+                        height: implicitHeight
+                    }
+
+                    Slider {
+                        id: sli
+                        y: clab.height
+                        height: parent.height - clab.height
+                        width: parent.width
+                        Material.accent: colora
+                        value: 0.5
+                    }
+
                 }
 
-                Label {
-                    id: clab
-                    leftPadding: 5
-                    font.pointSize: 12
-                    text: Math.floor(((sli.position/1) * 100)).toString() + "%"
-                    x: imzoom.width + imzoom.x
-                    width: parent.width - implicitHeight - 5
-                    height: implicitHeight
+                Button {
+                    id : b
+                    x: (parent.width/5) + 2.5*xd
+                    width: parent.width*2/5 - 5*xd
+                    height: 48 - 2*xd
+                    y: titem.height - height - 2*xd
+                    text: "Exporter"
+                    Material.foreground: colorlt
+                    Material.background: colordp
+
+                    onClicked: {
+                        file.printToPDF(sname);
+                        Qt.openUrlExternally(file.getApplicationPath() + "/" + sname + ".pdf");
+                    }
                 }
 
-                Slider {
-                    id: sli
-                    y: clab.height
-                    height: parent.height - clab.height
-                    width: parent.width
-                    Material.accent: colora
-                    value: 0.5
-                }
 
-            }
+                Button {
+                    id : c
+                    x: (parent.width*3/5)
+                    width: parent.width*2/5 - 5*xd
+                    height: 48 - 2*xd
+                    y: titem.height - height - 2*xd
+                    text: "Effacer"
+                    Material.foreground: colorlt
+                    Material.background: colordp
+                    enabled: false;
 
-            Button {
-                id : b
-                x: (parent.width/5) + 2.5*xd
-                width: parent.width*2/5 - 5*xd
-                height: (parent.height/10) - 2*xd
-                y: titem.height - height - 2*xd
-                text: "Exporter"
-                Material.foreground: colorlt
-                Material.background: colordp
-
-                onClicked: {
-                    var result = file.printToPDF(currentfilename);
-                    if (result) {
-                        removeTempImage();
+                    onClicked: {
+                        mrect.enabled = false;
+                        prm.show();
                     }
                 }
             }
-
-
-            Button {
-                id : c
-                x: (parent.width*3/5)
-                width: parent.width*2/5 - 5*xd
-                height: (parent.height/10) - 2*xd
-                y: titem.height - height - 2*xd
-                text: "Effacer"
-                Material.foreground: colorlt
-                Material.background: colordp
-
-                onClicked: {
-                    mrect.enabled = false;
-                    prm.show();
-                }
-            }
         }
+
     }
 
     Prompt {
@@ -253,6 +338,8 @@ Item {
 
             onClicked: {
                 delDocument();
+                prm.hide();
+                mrect.enabled = true;
             }
         }
         Button {

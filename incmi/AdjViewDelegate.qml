@@ -21,7 +21,7 @@ Item {
 
     function add() {
         var val = (parseInt(tvcount.text) + 1).toString()
-        change = val;
+        difference = val;
         vcolor(val);
         tvcount.text = val;
     }
@@ -33,7 +33,7 @@ Item {
             val += 1;
         }
         vcolor(val);
-        change = val.toString();
+        difference = val.toString();
         tvcount.text = val.toString();
     }
 

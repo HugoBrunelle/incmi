@@ -6,10 +6,49 @@ import QtQuick.Layouts 1.3
 import QtWebSockets 1.1
 
 Rectangle {
-    width: 360
-    height: 640
+    width: parent == null ? 360:parent.width
+    height: parent == null ? 640:parent.height
+    property int pad: 5
+    property int checkiheight: 50
+    property string bmodel
+    Material.accent: colora
 
+    Connections {
+        id: c
+        target: window
+        onDoEvents: {
+            medsocket.active = true;
+        }
+    }
 
+    function setModel() {
+        var md = JSON.parse(bmodel);
+        for (var i = 0; i < md.items.length; i++) {
+            var item = JSON.parse(md.items[i]);
+            mod.append(item);
+        }
+    }
+
+    function checkChanged() {
+        mod.clear();
+        setModel();
+        if (!cdocs.checked){
+            for (var b = mod.count; b > 0; b--){
+                var objb = mod.get(b - 1);
+                if (objb.type == "docs"){
+                    mod.remove(b-1);
+                }
+            }
+        }
+        if (!cinv.checked){
+            for (var c = mod.count; c > 0; c--){
+                var obj = mod.get(c - 1);
+                if (obj.type == "inv"){
+                    mod.remove(c-1);
+                }
+            }
+        }
+    }
 
     BaseSocket {
         id: medsocket
@@ -24,86 +63,82 @@ Rectangle {
         }
         onTextMessageReceived: {
             var obj = JSON.parse(message);
+            bmodel = message;
             for (var i = 0; i < obj.items.length; i++) {
                 var item = JSON.parse(obj.items[i]);
                 mod.append(item);
             }
             medsocket.active = false;
-
         }
     }
+    Pane {
+        id: header
+        height: 110
+        width: parent.width + 10
+        x: - 5
+        Material.elevation: 2
+        Material.background: colordp
+        GridLayout {
+            anchors.fill: parent
+            Image {
+                Layout.maximumWidth: 150
+                fillMode: Image.PreserveAspectFit
+                source: "Images/ucmu_100h.png"
+                Layout.minimumWidth: 100
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+            }
 
-    Component.onCompleted: {
-        medsocket.active = true;
+            ColumnLayout {
+                width: 100
+                height: 100
+                Layout.maximumWidth: 300
+                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                spacing: 0
+                CButton {
+                    text: qsTr("Inventaire")
+                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                    source: "Icons/ic_list_white_24dp.png"
+                    Material.foreground: colorlt
+                    Material.background: colordp
+                    Material.elevation: 1
+                    onClicked: {
+                        winchange(medinventory);
+                    }
+                }
+
+                CButton {
+                    text: qsTr("Nouveau Dossier")
+                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                    source: "Icons/ic_line_style_white_24dp.png"
+                    Material.foreground: colorlt
+                    Material.background: colordp
+                    Material.elevation: 1
+                    onClicked: {
+                        mview.enabled = false;
+                        newdprompt.show();
+                    }
+                }
+            }
+
+        }
     }
 
 
 
     ColumnLayout {
         id: mview
-        spacing: 6
-        anchors.fill: parent
-        Pane {
-            width: 360
-            height: 110
-            Layout.minimumHeight: 50
-            Layout.fillHeight: true
-            Layout.maximumHeight: 110
-            Layout.fillWidth: true
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
-            Material.background: colordp
-            Material.elevation: 2
-            GridLayout {
-                anchors.fill: parent
-                Image {
-                    Layout.maximumWidth: 150
-                    fillMode: Image.PreserveAspectFit
-                    source: "Images/ucmu_100h.png"
-                    Layout.minimumWidth: 100
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-                }
-
-                ColumnLayout {
-                    width: 100
-                    height: 100
-                    Layout.maximumWidth: 300
-                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    spacing: 0
-                    CButton {
-                        text: qsTr("Inventaire")
-                        Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                        Layout.fillHeight: true
-                        Layout.fillWidth: true
-                        source: "Icons/ic_list_white_24dp.png"
-                        Material.foreground: colorlt
-                        Material.background: colora
-                        onClicked: {
-                            winchange(medinventory);
-                        }
-                    }
-
-                    CButton {
-                        text: qsTr("Nouveau Dossier")
-                        Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                        Layout.fillHeight: true
-                        Layout.fillWidth: true
-                        source: "Icons/ic_line_style_white_24dp.png"
-                        Material.foreground: colorlt
-                        Material.background: colora
-                        onClicked: {
-                            mview.enabled = false;
-                            newdprompt.show();
-                        }
-                    }
-                }
-
-            }
-        }
-
+        y: header.height + pad
+        width: parent.width
+        height: parent.height - header.height - pad
+        spacing: 0.5
         ListView {
             clip: true
             id: listView
@@ -119,11 +154,49 @@ Rectangle {
             Layout.fillHeight: true
             Layout.fillWidth: true
             delegate: MediViewDelegate {}
-            model: MediViewModel {id: mod}
-            add: Transition { NumberAnimation { properties: "x,y"; from: width; duration: 300; easing.type: Easing.OutQuad }}
+            model: ListModel {id: mod}
+            add: Transition { NumberAnimation { properties: "x"; from: width; duration: 300; easing.type: Easing.OutQuad }}
         }
+
+        Item {
+            Layout.minimumHeight: checkiheight
+            Layout.maximumHeight: checkiheight
+            Layout.fillHeight: true;
+            Layout.fillWidth: true;
+            Rectangle {
+                anchors.fill: parent
+                anchors.margins: 3
+                border.color: "grey"
+                border.width: 1
+                CheckBox {
+                    id: cdocs
+                    height: parent.height
+                    width: implicitWidth
+                    x: parent.width - pad - width
+                    checked: true
+                    text: "Docs"
+                    onCheckedChanged: {
+                        checkChanged();
+                    }
+                }
+
+                CheckBox {
+                    id: cinv
+                    height: parent.height
+                    width: implicitWidth
+                    x: cdocs.x - width - 2*pad
+                    checked: true
+                    text: "Inv"
+                    onCheckedChanged: {
+                        checkChanged();
+                    }
+
+                }
+            }
+        }
+
         Pane {
-            width: 360
+            width: parent.width
             height: 70
             Layout.minimumHeight: 50
             Layout.fillHeight: true
@@ -134,16 +207,16 @@ Rectangle {
             GridLayout {
                 anchors.fill: parent
                 CButton {
-                    text: qsTr("Retour")
                     Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
                     Layout.maximumWidth: 150
                     Layout.fillWidth: true
                     Layout.fillHeight: true
+                    text: qsTr("Retour")
                     source: "Icons/ic_backspace_white_24dp.png"
                     Material.foreground: colorlt
                     Material.background: colordp
                     onClicked: {
-                        winchange(inform);
+                        winchange(login);
                     }
                 }
             }

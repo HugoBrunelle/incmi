@@ -7,6 +7,7 @@ Item {
     width: 2550
     property int headerfont: 24
     property int tleftpad: 15
+    property bool vis: false
 
     function stoBool(string){
         switch(string.toLowerCase().trim()){
@@ -21,6 +22,17 @@ Item {
         case "true": case "yes": case "1": return Qt.Checked;
                                  case "false": case "no": case "0": case null: return Qt.Unchecked;
                                                                     default: return Qt.Unchecked;
+        }
+    }
+
+    function checkVisible(nature){
+        switch (nature) {
+        case "1":
+            vis = false;
+            break;
+        case "2":
+            vis = true;
+            break;
         }
     }
 
@@ -39,7 +51,6 @@ Item {
                 dsocket.active = false;
                 imgloader.active = false;
             }
-
         }
         onTextMessageReceived: {
             setData(message);
@@ -48,8 +59,8 @@ Item {
     }
 
     function setData(data) {
-        console.log(data)
         var obj = JSON.parse(data);
+        checkVisible(obj.nature);
         var dat = obj.dateint.replace(":","/");
         dat = dat.replace(":","/");
         dateint.text = dat;
@@ -93,61 +104,66 @@ Item {
         ntrauma.checked = stoBool(obj.ntrauma);
         nautre.checked = stoBool(obj.nautre);
         ndescription.text = obj.ndescription;
-        if (stoBool(obj.epreaction)) {
-            epreaction2.checked = true;
-        }else {
-            epreaction1.checked = true;
+        if (obj.nature === "2"){
+            if (stoBool(obj.epreaction)) {
+                epreaction2.checked = true;
+            }else {
+                epreaction1.checked = true;
+            }
+            if (stoBool(obj.epvoiesr)) {
+                epvoiesr2.checked = true;
+            }else {
+                epvoiesr1.checked = true;
+            }
+            if (stoBool(obj.eprespiration)) {
+                eprespiration2.checked = true;
+            }else {
+                eprespiration1.checked = true;
+            }
+            if (stoBool(obj.eppouls)) {
+                eppouls2.checked = true;
+            }else {
+                eppouls1.checked = true;
+            }
+            switch (obj.epnivecon) {
+            case "0":
+                epnivecon1.checked = true;
+                break;
+            case "1":
+                epnivecon2.checked = true;
+                break;
+            case "2":
+                epnivecon3.checked = true;
+                break;
+            case "3":
+                epnivecon4.checked = true;
+                break;
+            case "4":
+                epnivecon5.checked = true;
+                break;
+            }
+            medicaments.text = obj.medicaments;
+            alergies1.text = obj.alergies;
+            alergies2.text = obj.alergies2;
+            ainconnu.checked = stoBool(obj.ainconnu);
+            ana.checked = stoBool(obj.ana);
+            amavc.checked = stoBool(obj.amavc);
+            amcardiaque.checked = stoBool(obj.amcardiaque);
+            amdiabete.checked = stoBool(obj.amdiabete);
+            amepliepsie.checked = stoBool(obj.amepliepsie);
+            amhyperhypo.checked = stoBool(obj.amhyperhypo);
+            amautre.checked = stoBool(obj.amautre);
+            amdescription.text = obj.amdescription;
+            o.text = obj.o;
+            p.text = obj.p;
+            q.text = obj.q;
+            r.text = obj.r;
+            s.text = obj.s;
+            t.text = obj.t;
         }
-        if (stoBool(obj.epvoiesr)) {
-            epvoiesr2.checked = true;
-        }else {
-            epvoiesr1.checked = true;
+        if (obj.nature === "1"){
+            descriptionscas.text = obj.descriptioncas;
         }
-        if (stoBool(obj.eprespiration)) {
-            eprespiration2.checked = true;
-        }else {
-            eprespiration1.checked = true;
-        }
-        if (stoBool(obj.eppouls)) {
-            eppouls2.checked = true;
-        }else {
-            eppouls1.checked = true;
-        }
-        switch (obj.epnivecon) {
-        case "0":
-            epnivecon1.checked = true;
-            break;
-        case "1":
-            epnivecon2.checked = true;
-            break;
-        case "2":
-            epnivecon3.checked = true;
-            break;
-        case "3":
-            epnivecon4.checked = true;
-            break;
-        case "4":
-            epnivecon5.checked = true;
-            break;
-        }
-        medicaments.text = obj.medicaments;
-        alergies1.text = obj.alergies
-        alergies2.text = obj.alergies2
-        ainconnu.checked = stoBool(obj.ainconnu);
-        ana.checked = stoBool(obj.ana);
-        amavc.checked = stoBool(obj.amavc);
-        amcardiaque.checked = stoBool(obj.amcardiaque);
-        amdiabete.checked = stoBool(obj.amdiabete);
-        amepliepsie.checked = stoBool(obj.amepliepsie);
-        amhyperhypo.checked = stoBool(obj.amhyperhypo);
-        amautre.checked = stoBool(obj.amautre);
-        amdescription.text = obj.amdescription;
-        o.text = obj.o;
-        p.text = obj.p;
-        q.text = obj.q;
-        r.text = obj.r;
-        s.text = obj.s;
-        t.text = obj.t;
         gToImage();
     }
 
@@ -182,6 +198,8 @@ Item {
                         x: 0
                         y: 0
                         height: parent.height
+                        fillMode: Image.PreserveAspectFit
+                        source: "Images/ucmu_full.png"
                         width: parent.width / 5
                     }
 
@@ -1233,6 +1251,7 @@ Item {
                         Rectangle {
                             id: col2
                             height: parent.height
+                            visible: vis
                             width: parent.width / 3
                             x: col1.width
                             border.color: "grey"
@@ -1573,6 +1592,7 @@ Item {
                         Rectangle {
                             id: col3
                             height: parent.height
+                            visible: vis
                             width: parent.width / 3
                             x: col2.x + col2.width
                             border.color: "grey"
@@ -2047,6 +2067,60 @@ Item {
 
                                 }
                             }
+                        }
+
+                        Rectangle {
+                            id: col4
+                            x: col2.x
+                            y:col2.y
+                            height: col2.height
+                            width: col2.width + col3.width
+                            visible: !vis
+                            border.color: "Grey"
+                            border.width: 1
+                            Item {
+                                id: i32
+                                width: parent.width
+                                height: parent.height
+                                Rectangle {
+                                    id: iheader7
+                                    border.color: "grey"
+                                    border.width: 1
+                                    width: parent.width
+                                    height: parent.height/ 19
+                                    color: "lightgrey"
+                                    Label {
+                                        x:0
+                                        y:0
+                                        width: parent.width
+                                        height: parent.height
+                                        leftPadding: parent.width / 30
+                                        text:"Description du cas"
+                                        font.pointSize: headerfont - 4
+                                        verticalAlignment: Text.AlignVCenter
+                                        horizontalAlignment: Text.AlignLeft
+                                    }
+                                }
+                                Rectangle {
+                                    y: iheader7.height + 10
+                                    height: parent.height / 3 - iheader7.height
+                                    x: 20
+                                    width: parent.width - 40
+                                    border.color: "grey"
+                                    border.width: 1
+                                    TextInput {
+                                        id: descriptionscas
+                                        anchors.rightMargin: 5
+                                        anchors.bottomMargin: 5
+                                        anchors.leftMargin: 5
+                                        anchors.topMargin: 5
+                                        anchors.fill: parent
+                                        anchors.margins: 5
+                                        font.pointSize: headerfont - 4
+                                    }
+                                }
+                            }
+
                         }
                     }
                 }

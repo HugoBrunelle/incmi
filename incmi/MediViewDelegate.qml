@@ -8,7 +8,6 @@ Item {
     width: parent.width - 10
     height: 45
     property int xd: 1
-    property int fonts: 8
     property int pad: 10
     property int rpad: 9
     function checkVisibility() {
@@ -65,7 +64,6 @@ Item {
             width: type == "docs" ? ((parent.width - 8) / 4) : parent.width;
             text: type == "docs" ? matricule + "::" + filename : "Changement inventaires:  " + matricule + "::" + filename
             leftPadding: pad
-            font.pointSize: fonts
             horizontalAlignment: Text.AlignLeft;
             verticalAlignment: Text.AlignVCenter;
         }
@@ -85,7 +83,6 @@ Item {
             elide: "ElideRight"
             height: parent.height;
             x: xd + r1.width + r1.x;
-            font.pointSize: fonts
             width: ((parent.width - 8) / 4);
             text: type == "docs" ? formatText(date) : ""
             horizontalAlignment: Text.AlignHCenter;
@@ -107,7 +104,6 @@ Item {
             elide: "ElideRight"
             height: parent.height;
             x: xd + r2.width + r2.x;
-            font.pointSize: fonts
             width: ((parent.width - 8) / 4);
             text: type == "docs" ? ville: ""
             horizontalAlignment: Text.AlignHCenter;
@@ -129,7 +125,6 @@ Item {
             elide: "ElideRight"
             height: parent.height;
             x: xd + r3.width + r3.x;
-            font.pointSize: fonts
             width: ((parent.width - 8) / 4);
             text: type == "docs" ? formatNate(nature) : ""
             horizontalAlignment: Text.AlignHCenter;
@@ -143,10 +138,7 @@ Item {
         }
 
         onDoubleClicked: {
-            if (type == "docs") {
-                listView.currentIndex = index;
-                getDocImage(filename);
-            }
+            getDocImage(filename,type);
         }
     }
 }

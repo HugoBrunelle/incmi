@@ -6,6 +6,9 @@ SOURCES += main.cpp \
     systeminfo.cpp
 
 RESOURCES += qml.qrc
+LIBS += -LC:/Qt/OpenSSL-Win32/
+INCLUDEPATH += C:/Qt/OpenSSL-Win32/include
+
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -28,6 +31,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+QT += network
 
 DISTFILES +=
 

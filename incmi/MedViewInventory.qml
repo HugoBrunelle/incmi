@@ -6,62 +6,95 @@ import QtQuick.Layouts 1.3
 import QtWebSockets 1.1
 
 Rectangle {
-    width: 360
-    height: 640
-    BaseSocket {
-        port: settings.port
-        host: settings.host
-        id: invsocket
-        onTextMessageReceived: {
-            var obj = JSON.parse(message);
-            if (obj.messageindex == "0"){
-                //Correct object..
-                for (var i = 0; i < obj.items.length; i++) {
-                    var item = obj.items[i];
-                    mod.append(item);
-                }
-                invsocket.active = false;
-            }
+    property string currentInvItem
+    width: parent == null ? 360:parent.width
+    height: parent == null ? 640:parent.height
 
-        }
-        onStatusChanged: {
-            switch (status) {
-            case WebSocket.Open:
-                invsocket.sendTextMessage('{"messageindex": "0"}');
-                break;
-            }
+    function itemDoubleClicked(obj) {
+        currentInvItem = JSON.stringify(obj);
+        ldview.push(ledit);
+    }
 
+    function removeInvItem(obj) {
+        var message = JSON.stringify(obj);
+        message = message.slice(0,-1) + ',"messageindex":"7"}';
+        mess.push(message);
+        settings.messages = mess;
+        sendSavedInformation();
+        ldview.push(lmain);
+    }
+
+    function editInvItem(obj) {
+        var message = JSON.stringify(obj);
+        message = message.slice(0,-1) + ',"messageindex":"6"}';
+        mess.push(message);
+        settings.messages = mess;
+        sendSavedInformation();
+        ldview.push(lmain);
+    }
+
+    function cancelInvEdit() {
+        ldview.push(lmain);
+    }
+
+    function newInvItem() {
+        ldview.push(lnew);
+    }
+
+    function cancelNew() {
+        ldview.push(lmain);
+    }
+
+    function addInvItem(obj) {
+        var message = JSON.stringify(obj);
+        message = message.slice(0,-1) + ',"messageindex":"8"}';
+        mess.push(message);
+        settings.messages = mess;
+        sendSavedInformation();
+        ldview.push(lmain);
+    }
+
+    Component {
+        id: lmain
+        MedViewInventoryList {}
+    }
+
+    Component {
+        id: ledit
+        MedViewInventoryEdit {}
+    }
+
+    Component {
+        id: lnew
+        MedViewInventoryNew {}
+    }
+
+    Connections {
+        target: window
+        onDoEvents: {
+            ldview.currentItem.ready();
         }
     }
 
     ColumnLayout {
         id: columnLayout
-        spacing: 8
+        spacing: 0.5
         anchors.fill: parent
-        ListView {
-            clip: true
-            id: invListView
-            x: 0
-            y: 0
-            headerPositioning: ListView.PullBackHeader
-            width: 110
-            height: 160
-            orientation: ListView.Vertical
-            flickableDirection: Flickable.VerticalFlick
-            header: MedInvViewHeader {}
-            spacing: 3
+        StackView {
+            id: ldview
+            clip: true;
             Layout.fillHeight: true
             Layout.fillWidth: true
-            delegate: MedInvViewDelegate {}
-            model: MedInvViewModel { id: mod}
-            add: Transition { NumberAnimation { properties: "x,y"; from: width; duration: 300; easing.type: Easing.OutQuad }}
-            Component.onCompleted: {
-                invsocket.active = true;
+            initialItem: lmain
+            onBusyChanged: {
+                if (!busy) {
+                    ldview.currentItem.ready();
+                }
             }
         }
 
         Pane {
-            width: 360
+            width: parent.width
             height: 70
             Layout.minimumHeight: 50
             Layout.fillHeight: true

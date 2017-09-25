@@ -8,13 +8,10 @@
         <file>AsyncQAnimatedLoader.qml</file>
         <file>LoginWindow.qml</file>
         <file>LogView.qml</file>
-        <file>InventoryView.qml</file>
         <file>DocumentsView.qml</file>
         <file>OptionsWindow.qml</file>
-        <file>SettingsCategoryModel.qml</file>
         <file>AcountSettingsView.qml</file>
         <file>ServerSettingsView.qml</file>
-        <file>InventoryListModel.qml</file>
         <file>DocumentsViewDelegate.qml</file>
         <file>DocAjustementPrint.qml</file>
         <file>CButton.qml</file>
@@ -570,5 +567,27 @@
         <file>Icons/ic_zoom_in_white_24dp.png</file>
         <file>Icons/ic_zoom_out_black_24dp.png</file>
         <file>Icons/ic_zoom_out_white_24dp.png</file>
+        <file>CalendarView.qml</file>
+        <file>PreviousEvent.qml</file>
+        <file>EventDelegate.qml</file>
+        <file>UpcomingEvent.qml</file>
+        <file>PeopleSettingsView.qml</file>
+        <file>PeopleListSettings.qml</file>
+        <file>PeopleListDelegate.qml</file>
+        <file>PeopleEditorSettings.qml</file>
+        <file>InventoryView.qml</file>
+        <file>NewInvItem.qml</file>
+        <file>EditInvItem.qml</file>
+        <file>ConfigureEvent.qml</file>
+        <file>AddMembersEvent.qml</file>
+        <file>MemberListDelegate.qml</file>
+        <file>InvAdjustmentPrint.qml</file>
+        <file>InvAdjustmentPrintDelegate.qml</file>
+        <file>InventairePrint.qml</file>
+        <file>InventoryPrintDelegate.qml</file>
+        <file>IncRapportDocumentPrint.qml</file>
+        <file>IncRapportDocumentPrintPeopleDelegate.qml</file>
+        <file>IncRapportDocumentPrintServiceDelegate.qml</file>
+        <file>IncRapportDocumentPrintMaterielDelegate.qml</file>
     </qresource>
 </RCC>

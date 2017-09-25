@@ -3,90 +3,58 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.2
 import QtQuick.Controls.Material 2.1
 
-Rectangle {
-    width: 360
-    height: 640
-    Pane {
-        id: header
-        width: parent.width
-        height: 100
-        Layout.minimumHeight: 50
-        Layout.fillHeight: true
-        Layout.maximumHeight: 100
-        Layout.fillWidth: true
-        Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
-        Material.elevation: 2
-        Material.background: colordp
-        GridLayout {
-            anchors.fill: parent
-            Image {
-                fillMode: Image.PreserveAspectFit
-                source: "Images/ucmu_100h.png"
-                Layout.maximumWidth: 100
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            }
-            Label {
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignLeft
-                text: "Incmi"
-                font.pointSize: 16
-                color: colorlt
-                font.bold: true
-            }
+Item {
+    width: parent.width
+    height: parent.height
+    function ready() {
 
-            ImageButton {
-                Layout.fillHeight: true
-                Layout.maximumHeight: header.height / 2
-                Layout.maximumWidth: Layout.maximumHeight
-                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                source: "Icons/ic_settings_applications_white_24dp.png"
-                Material.background: colorp
-                Material.foreground: colorlt
-                onClicked: {
-                    winchange(sets);
-                }
-            }
-
-
-        }
     }
 
-    RowLayout {
-        id: rowLayout
-        anchors.bottomMargin: parent.height / 4.5
-        anchors.rightMargin: parent.width / 12
-        anchors.leftMargin: parent.width / 12
-        anchors.topMargin: (parent.height / 4.5) + 100
-        spacing: 5
+    ColumnLayout {
+        id: mview
+        anchors.rightMargin: parent.width / 8
+        anchors.leftMargin: parent.width / 8
+        anchors.bottomMargin: parent.height / 5.5
+        anchors.topMargin: parent.height / 5.5
         anchors.fill: parent
+        spacing: 5
 
-        Button {
+        CButton {
             Material.foreground: colorlt
             Material.background: colordp
-            font.pointSize: 18
             Layout.fillHeight: true
             Layout.fillWidth: true
+            source: "Icons/ic_invert_colors_white_24dp.png"
             text: "Incendie"
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             onClicked: {
-                winchange(login);
+                pressedIncendie();
             }
         }
 
-        Button {
+        CButton {
+            source: "Icons/ic_content_paste_white_24dp.png"
             Material.foreground: colorlt
             Material.background: colordp
             text: "Medical"
-            font.pointSize: 18
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             onClicked: {
-                winchange(medimain);
+                pressedMedical();
+            }
+        }
+
+        CButton {
+            source: "Icons/ic_content_paste_white_24dp.png"
+            Material.foreground: colorlt
+            Material.background: colordp
+            text: "Calendrier"
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            onClicked: {
+                pressedEvents();
             }
         }
     }
